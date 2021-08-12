@@ -1,0 +1,3 @@
+build --config=experimental_lightweight_wfh
+query --config=experimental_lightweight_wfh
+build --config=dogfood_opt_in
