@@ -27,7 +27,7 @@ source $ZSH/oh-my-zsh.sh
 #### Load mdproxy if running on MacOS
 if [[ `uname` == 'Darwin' ]]
 then
-  [[ -e /Users/slyo/mdproxy/data/mdproxy_zshrc ]] && source /Users/slyo/mdproxy/data/mdproxy_zshrc 
+  [[ -e $HOME/mdproxy/data/mdproxy_zshrc ]] && source $HOME/mdproxy/data/mdproxy_zshrc 
 fi
 
 #### Load PowerLevel10k
