@@ -1,3 +1,5 @@
+sleep 0.15;
+
 yabai -m query --spaces --display | \
      jq -re 'map(select(."native-fullscreen" == 0)) | length > 1' \
      && yabai -m query --spaces | \

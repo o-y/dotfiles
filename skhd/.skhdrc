@@ -54,28 +54,28 @@ alt - a : yabai -m window --toggle zoom-parent
 alt - q : yabai -m window --toggle zoom-fullscreen
 
 # move current window to space n and focus
-alt + shift - 1 : yabai -m window --space 1 \
+alt + shift - 1 : yabai -m window --space 1; \
                   yabai -m space --focus 1
 
-alt + shift - 2 : yabai -m window --space 2 \
+alt + shift - 2 : yabai -m window --space 2; \
                   yabai -m space --focus 2
                   
-alt + shift - 3 : yabai -m window --space 3 \
+alt + shift - 3 : yabai -m window --space 3; \
                   yabai -m space --focus 3
                   
-alt + shift - 4 : yabai -m window --space 4 \
+alt + shift - 4 : yabai -m window --space 4; \
                   yabai -m space --focus 4
                   
-alt + shift - 5 : yabai -m window --space 5 \
+alt + shift - 5 : yabai -m window --space 5; \
                   yabai -m space --focus 5
                   
-alt + shift - 6 : yabai -m window --space 6 \
+alt + shift - 6 : yabai -m window --space 6; \
                   yabai -m space --focus 6
                   
-alt + shift - 7 : yabai -m window --space 7 \
+alt + shift - 7 : yabai -m window --space 7; \
                   yabai -m space --focus 7
                   
-alt + shift - 8 : yabai -m window --space 8 \
+alt + shift - 8 : yabai -m window --space 8; \
                   yabai -m space --focus 8
                   
 # move current window to space n without focusing
@@ -102,7 +102,7 @@ alt + fn + shift - 8 : yabai -m space --focus 8
 alt - 0x18 : yabai -m space --create
 
 # destroy empty space   - ALT + MINUS
-alt - 0x1B : "${HOME}"/.cli/yabai/destroy-empty-spaces.sh
+alt - 0x1B : "${HOME}"/dotfiles/custom/static/yabai/destroy-empty-spaces.sh
 
 # force destroy space   - ALT + SHIFT + MINUS
 alt + shift - 0x1B : yabai -m space --destroy

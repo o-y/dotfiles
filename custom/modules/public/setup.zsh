@@ -12,7 +12,7 @@
 
 PATH_TO_SCRIPT=`realpath -s "$0"`
 PATH_TO_SCRIPT_DIR=`dirname "$PATH_TO_SCRIPT"`
-LIB="$PATH_TO_SCRIPT_DIR/../lib"
+LIB="$PATH_TO_SCRIPT_DIR/../../lib"
 
 if [ $TERM_PROGRAM = "iTerm.app" ]
 then 
