@@ -44,14 +44,14 @@ fi
 
 echo "Backing up existing files..."
 mkdir -p "~/.$USER-dotfiles-backup";
-[ -f ~/.blazerc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
-[ -f ~/.p10k ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
-[ -f ~/.tmuxrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
-[ -f ~/.vimrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup"
-[ -f ~/.yabairc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.blazerc ] && mv ~/.blazerc "~/.$USER-dotfiles-backup";
+[ -f ~/.p10k ] && mv ~/.p10k "~/.$USER-dotfiles-backup";
+[ -f ~/.tmuxrc ] && mv ~/.tmuxrc "~/.$USER-dotfiles-backup";
+[ -f ~/.vimrc ] && mv ~/.vimrc "~/.$USER-dotfiles-backup"
+[ -f ~/.yabairc ] && mv ~/.yabairc "~/.$USER-dotfiles-backup";
 [ -f ~/.zshrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
-[ -f ~/.zshenv ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
-[ -f ~/.skhdrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.zshenv ] && mv ~/.zshenv "~/.$USER-dotfiles-backup";
+[ -f ~/.skhdrc ] && mv ~/.skhdrc "~/.$USER-dotfiles-backup";
 
 echo "Setting up symlinks...";
 stow blaze
