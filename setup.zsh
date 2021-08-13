@@ -1,12 +1,16 @@
-if [[ `uname` == 'Darwin' ]]
+if ! command -v stow &> /dev/null
 then
-  brew install stow
-elif [[ `uname` == 'Linux' ]]
-then
-  sudo apt-get install stow
-else
-    echo "Error! - Unrecognised OS";
-    exit 64
+    echo "Installing stow..."
+    if [[ `uname` == 'Darwin' ]]
+    then
+      brew install stow
+    elif [[ `uname` == 'Linux' ]]
+    then
+      sudo apt-get install stow
+    else
+        echo "Error! - Unrecognised OS";
+        exit 64
+    fi
 fi
 
 echo "Setting up symlinks...";
