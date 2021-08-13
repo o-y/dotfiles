@@ -1,6 +1,6 @@
 # track and calculate lifetime of gcert certificate
 
-EXPIRY_FILE="$HOME/.gcert_expiration"
+EXPIRY_FILE="/tmp/.gcert_expiration"
 
 gcert_expiry_update() {
   gcertstatus -show_expiration_time | grep LOAS2 | sed "s/LOAS2 expires at //" > "$EXPIRY_FILE"
