@@ -5,4 +5,4 @@
 - oh-my-zsh - https://ohmyz.sh/#install
 
 ## one click-installation
-- `git clone sso://user/slyo/dotfiles ~/dotfiles && ~/dotfiles/install.zsh`
+- `git clone sso://user/slyo/dotfiles ~/dotfiles && cd ~/dotfiles && ./install.zsh`

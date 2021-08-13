@@ -1,3 +1,6 @@
+echo "Press any key to install required dependencies and symlink dotfiles (or ctrl+c to cancel)";
+read;
+
 echo "Fetching submodule dependencies"
 git submodule init;
 git submodule update;
