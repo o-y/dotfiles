@@ -283,6 +283,12 @@ inoremap <leader>s <C-c>:w<cr>
 nmap sj :SplitjoinSplit<cr>
 nmap sk :SplitjoinJoin<cr>
 
+" ijkl to navigate, h to insert (sorry...)
+map h <insert>
+map i <Up>
+map j <Left>
+map k <Down>
+
 " I comment with two spaces, ever since some old programming book I read did
 " it like this. We also want multi line comments to have the comment symbols
 " flush to the left, otherwise we tend to get linting errors.
