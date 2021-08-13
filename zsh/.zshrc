@@ -30,6 +30,11 @@ then
   [[ -e $HOME/mdproxy/data/mdproxy_zshrc ]] && source $HOME/mdproxy/data/mdproxy_zshrc 
 fi
 
+if [[ `uname` == 'Linux' ]]
+then
+  source /etc/bash_completion.d/g4d
+fi
+
 #### Load PowerLevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
