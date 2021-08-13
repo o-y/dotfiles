@@ -42,6 +42,17 @@ else
     exit 64
 fi
 
+echo "Backing up existing files..."
+mkdir -p "~/.$USER-dotfiles-backup";
+[ -f ~/.blazerc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.p10k ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.tmuxrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.vimrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup"
+[ -f ~/.yabairc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.zshrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.zshenv ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+[ -f ~/.skhdrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
+
 echo "Setting up symlinks...";
 stow blaze
 stow p10k
@@ -57,6 +68,6 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 vim +'PlugInstall --sync' +qa
 
-echo "Installation complete. Press any key to restart zsh...";
+echo "Installation complete - existing files have been backed up at $HOME/.$USER-dotfiles-backup. Press any key to restart zsh...";
 read;
 zsh;
