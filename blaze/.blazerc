@@ -1,10 +1,10 @@
 # Improve build times for flaky/slow internet connections
-build --config=experimental_lightweight_wfh
-query --config=experimental_lightweight_wfh
-build --config=dogfood_opt_in
+# build --config=experimental_lightweight_wfh
+# query --config=experimental_lightweight_wfh
+# build --config=dogfood_opt_in
 
 # Dart support
-import /home/build/nonconf/google3/dart/blazerc
+# import /home/build/nonconf/google3/dart/blazerc
 
 # go/WebX support
 import %workspace%/java/com/google/android/apps/gsa/tools/blazerc
