@@ -52,7 +52,7 @@
     # =========================[ Line #1 ]=========================
     context                   # user@host
     dir                       # current directory
-    citc                      # citc status g4:(g4 client / cl number)
+    # citc                    # citc status g4:(g4 client / cl number)
     # =========================[ Line #2 ]=========================
     newline                   # \n
     prompt_char               # prompt symbol
@@ -61,7 +61,7 @@
   # Right prompt segments.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
-    gcert                     # gcert status
+    # gcert                   # gcert status
     command_execution_time    # previous command duration
     time                      # current time
     # =========================[ Line #2 ]=========================

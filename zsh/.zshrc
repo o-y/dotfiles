@@ -21,13 +21,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 #### Load Zsh
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions osx gcert citc fzf-tab)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions osx fzf-tab)
 source $ZSH/oh-my-zsh.sh
 
 #### Load mdproxy if running on MacOS
 if [[ `uname` == 'Darwin' ]]
 then
   source $HOME/mdproxy/data/mdproxy_zshrc 
+
+  #### Also mount x20/ - this is causing hanging :/
+  # export MDPROXY_EXTRA_MOUNTS="/google/data" 
 fi
 
 if [[ `uname` == 'Linux' ]]
@@ -37,10 +40,9 @@ fi
 
 #### Load PowerLevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-[[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+# if [ -f '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+# if [ -f '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
