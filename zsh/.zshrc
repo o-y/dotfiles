@@ -46,3 +46,4 @@ fi
 
 # The next line enables shell command completion for gcloud.
 # if [ -f '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+[[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
