@@ -57,6 +57,7 @@ yabai -m config window_shadow                float
 yabai -m rule --add app="^System Preferences$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
+yabai -m rule --add app="^Google Chrome$" title="^Picture in Picture$" manage=off sticky=on
 
 # Signals
 yabai -m signal --add event=space_changed action="sh ~/dotfiles/custom/static/yabai/destroy-empty-spaces.sh"

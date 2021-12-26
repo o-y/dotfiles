@@ -21,7 +21,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 #### Load Zsh
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions osx fzf-tab)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions macos fzf-tab)
 source $ZSH/oh-my-zsh.sh
 
 #### Load mdproxy if running on MacOS
@@ -41,9 +41,5 @@ fi
 #### Load PowerLevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# The next line updates PATH for the Google Cloud SDK.
-# if [ -f '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-# if [ -f '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+#### Load MDPROXY
 [[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC

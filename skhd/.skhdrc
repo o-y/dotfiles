@@ -77,32 +77,35 @@ alt + shift - 7 : yabai -m window --space 7; \
                   
 alt + shift - 8 : yabai -m window --space 8; \
                   yabai -m space --focus 8
-                  
-# move current window to space n without focusing
-alt + fn - 1 : yabai -m window --space 1
-alt + fn - 2 : yabai -m window --space 2
-alt + fn - 3 : yabai -m window --space 3
-alt + fn - 4 : yabai -m window --space 4
-alt + fn - 5 : yabai -m window --space 5
-alt + fn - 6 : yabai -m window --space 6
-alt + fn - 7 : yabai -m window --space 7
-alt + fn - 8 : yabai -m window --space 8
 
-# focus space
-alt + fn + shift - 1 : yabai -m space --focus 1
-alt + fn + shift - 2 : yabai -m space --focus 2
-alt + fn + shift - 3 : yabai -m space --focus 3
-alt + fn + shift - 4 : yabai -m space --focus 4
-alt + fn + shift - 5 : yabai -m space --focus 5
-alt + fn + shift - 6 : yabai -m space --focus 6
-alt + fn + shift - 7 : yabai -m space --focus 7
-alt + fn + shift - 8 : yabai -m space --focus 8
+# move current window and focus
+alt + fn - 1 : yabai -m space --focus 1
+alt + fn - 2 : yabai -m space --focus 2
+alt + fn - 3 : yabai -m space --focus 3
+alt + fn - 4 : yabai -m space --focus 4
+alt + fn - 5 : yabai -m space --focus 5
+alt + fn - 6 : yabai -m space --focus 6
+alt + fn - 7 : yabai -m space --focus 7
+alt + fn - 8 : yabai -m space --focus 8
+
+# move current window to space n without focusing
+alt + fn + shift - 1 : yabai -m window --space 1
+alt + fn + shift - 2 : yabai -m window --space 2
+alt + fn + shift - 3 : yabai -m window --space 3
+alt + fn + shift - 4 : yabai -m window --space 4
+alt + fn + shift - 5 : yabai -m window --space 5
+alt + fn + shift - 6 : yabai -m window --space 6
+alt + fn + shift - 7 : yabai -m window --space 7
+alt + fn + shift - 8 : yabai -m window --space 8
+
+# focus under mouse     - ALT + BACKTICK (`)
+alt - 0x32 : yabai -m window --focus mouse
 
 # create space          - ALT + PLUS
 alt - 0x18 : yabai -m space --create
 
 # destroy empty space   - ALT + MINUS
-alt - 0x1B : "${HOME}"/dotfiles/custom/static/yabai/destroy-empty-spaces.sh
+alt - 0x1B : "${DOTFILES}"/custom/static/yabai/destroy-empty-spaces.sh
 
 # force destroy space   - ALT + SHIFT + MINUS
 alt + shift - 0x1B : yabai -m space --destroy

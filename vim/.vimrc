@@ -28,8 +28,8 @@ Plug 'sheerun/vim-polyglot'
 
 " Plugins for languages
 Plug 'elzr/vim-json'            " As above.
-Plug 'othree/html5.vim'         " HTML + SVG
-Plug 'leafgarland/typescript-vim' "TypeScript
+" Plug 'othree/html5.vim'         " HTML + SVG
+" Plug 'leafgarland/typescript-vim' "TypeScript
 
 " Plugins for JavaScript.
 " Create JSDoc comments.
@@ -40,18 +40,17 @@ Plug 'mzlogin/vim-markdown-toc' " Build a TOC for markdown.
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " Plugins for writing with focus.
-Plug 'junegunn/goyo.vim'        " Go into distraction free mode (:Gojo)
-Plug 'junegunn/limelight.vim'   " Focus on the current paragraph only.
+" Plug 'junegunn/goyo.vim'        " Go into distraction free mode (:Gojo)
+" Plug 'junegunn/limelight.vim'   " Focus on the current paragraph only.
 
 " Support focus events, even when running in tmux.
-Plug 'tmux-plugins/vim-tmux-focus-events'
+" Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " Lots of mappings such as [<Space> ]<Space>.
 Plug 'tpope/vim-unimpaired'
 
 " Nice splitting / joining.
 Plug 'AndrewRadev/splitjoin.vim'
-
 
 " Highlight the yanked text briefly.
 " Plug 'machakann/vim-highlightedyank'
@@ -60,14 +59,13 @@ Plug 'AndrewRadev/splitjoin.vim'
 call plug#end()
 
 " --- Simple Vim config.
-set tabstop=4       " number of visual spaces per TAB
-set softtabstop=4   " number of spaces in tab when editing
-set expandtab       " tabs are spaces
+set tabstop=4           " number of visual spaces per TAB
+set softtabstop=4       " number of spaces in tab when editing
+set expandtab           " tabs are spaces
 set number              " show line numbers
 set showcmd             " show command in bottom bar
 set cursorline          " highlight current line
 set colorcolumn=80      " highlight column 80
-
 set hlsearch            " highlight matches
 
 " Word configuration.

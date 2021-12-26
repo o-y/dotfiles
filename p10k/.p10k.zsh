@@ -53,6 +53,8 @@
     context                   # user@host
     dir                       # current directory
     # citc                    # citc status g4:(g4 client / cl number)
+                              # look into whether p10k allows lazy-loading...disabled due to slowness
+    vcs                       # git status
     # =========================[ Line #2 ]=========================
     newline                   # \n
     prompt_char               # prompt symbol
