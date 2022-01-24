@@ -5,6 +5,7 @@ export ZSH_THEME="powerlevel10k/powerlevel10k"
 
 #### Assorted configs
 export SLYO_SET_CLIENT_AS_TITLE="true"
+export TMUX_CONNECT_AUTOMATICALLY_ON_SSH="true"
 export PROMPT_EOL_MARK=''
 export POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 export POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
@@ -40,5 +41,3 @@ fi
 
 #### Load PowerLevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-[[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC

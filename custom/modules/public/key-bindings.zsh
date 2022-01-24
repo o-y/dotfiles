@@ -72,7 +72,8 @@ fzf-g4d() {
     | fzf -d: --with-nth=2 --select-1 --exit-0)
 
   # zle -M "Opening CITC client: $client";
-  echo "g4d $client";
+  echo "Opening CITC $client";
+  g4d $client;
 
   return ""
 }
