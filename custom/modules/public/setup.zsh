@@ -25,7 +25,7 @@ then
     source "$LIB/pokemon/init.sh"
 
     #### Connect to a tmux session
-    if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]] && [[ -n "$LC_TM" ]] && [[ "$LC_TM"="TRUE" ]] && [[ "$TMUX_CONNECT_AUTOMATICALLY_ON_SSH" == "true" ]]; then
+    if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]] && [[ -n "$LC_TM" ]] && [[ "$LC_TM" == "TRUE" ]] && [[ "$TMUX_CONNECT_AUTOMATICALLY_ON_SSH" == "true" ]]; then
         tmux -CC attach-session -t tmuxssh || tmux -CC new-session -s tmuxssh
     fi
 fi
