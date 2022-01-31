@@ -7,4 +7,6 @@ function sa {
     sudo yabai --install-sa
 }
 
-
+function t {
+    tmux -CC attach-session -t tmuxssh || tmux -CC new-session -s tmuxssh
+}
