@@ -52,8 +52,7 @@
     # =========================[ Line #1 ]=========================
     context                   # user@host
     dir                       # current directory
-    # citc                    # citc status g4:(g4 client / cl number)
-                              # look into whether p10k allows lazy-loading...disabled due to slowness
+    citc                      # citc status citc:(client)
     vcs                       # git status
     # =========================[ Line #2 ]=========================
     newline                   # \n

@@ -1,9 +1,9 @@
-function extract_citc_client_from_path {
-    local pattern='\/google\/src\/cloud\/slyo\/(.*?)\/google3'
-    local string='/google/src/cloud/slyo/webx-screenshot-prototype/google3'
+function regexM { 
+    gawk 'match($0,/'$1'/, ary) {print ary['${2:-'1'}']}'; 
+}
 
-    if [[ string =~ pattern ]]; then
-        echo "${BASH_REMATCH[0]}"
-        echo "${BASH_REMATCH[1]}"
+function extract_citc_client_from_path {
+    if [[ "$(pwd)" =~ ^\/google\/src\/cloud\/slyo\/(.*?)\/google3$ ]]; then
+        echo "$(pwd)" | regexM '\/google\/src\/cloud\/slyo\/(.*?)\/google3'
     fi
 }

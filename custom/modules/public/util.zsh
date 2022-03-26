@@ -1,4 +1,4 @@
-function dsleep {
+function ds {
     sudo pmset -a sleep 0;
     open /Applications/KeepingYouAwake.app;
 }

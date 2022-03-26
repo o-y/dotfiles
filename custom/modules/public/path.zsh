@@ -1,2 +1,1 @@
-# Load Emacs binaries (doom in this case)
-export PATH="$HOME/.emacs.d/bin:$PATH"
+# Now empty, this should be used to mutate $PATH
