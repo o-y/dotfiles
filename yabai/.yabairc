@@ -11,8 +11,10 @@
 # see this wiki page for information:
 #  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)
 #
-# sudo yabai --load-sa
-# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+
+# load yabai
+sudo yabai --load-sa
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
 # global settings
 yabai -m config mouse_follows_focus          off
@@ -58,6 +60,7 @@ yabai -m rule --add app="^System Preferences$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Google Chrome$" title="^Picture in Picture$" manage=off sticky=on
+yabai -m rule --add app="^Digital Colour Meter$" manage=off sticky=on
 
 # Signals
 yabai -m signal --add event=space_changed action="sh ~/dotfiles/custom/static/yabai/destroy-empty-spaces.sh"
