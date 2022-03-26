@@ -9,7 +9,7 @@ if [[ `uname` == 'Linux' ]] then
         if [[ "$(pwd)" =~ ^\/google\/src\/cloud\/slyo\/(.*?)\/google3$ ]]; then
             citc=$(echo "$(pwd)" | regexM '\/google\/src\/cloud\/slyo\/(.*?)\/google3')
             cl=$(srcfs get_readonly)
-            p10k segment -t "citc:(%{$fg[red]%}$citc%{$reset_color%} @ %{$fg[blue]%}$cl%{$reset_color%})"
+            p10k segment -t "citc:(%{$fg[red]%}$citc%{$reset_color%} @ %{$fg[green]%}$cl%{$reset_color%})"
         fi
     }
 fi
