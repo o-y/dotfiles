@@ -18,12 +18,24 @@ then
     echo "[osx]: installing vim..."
     brew install vim
   fi
+
+  if ! command -v gawk &> /dev/null
+  then
+    echo "[glinux]: installing gawk..."
+    brew install gawk
+  fi
 elif [[ `uname` == 'Linux' ]]
 then
   if ! command -v stow &> /dev/null
   then
     echo "[glinux]: installing stow..."
     sudo apt-get install stow
+  fi
+
+  if ! command -v gawk &> /dev/null
+  then
+    echo "[glinux]: installing gawk..."
+    sudo apt-get install gawk
   fi
 
   if ! command -v jot &> /dev/null
