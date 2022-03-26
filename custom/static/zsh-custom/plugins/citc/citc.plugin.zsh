@@ -8,7 +8,7 @@ if [[ `uname` == 'Linux' ]] then
     prompt_citc() {
         if [[ "$(pwd)" =~ ^\/google\/src\/cloud\/slyo\/(.*?)\/google3$ ]]; then
             citc=$(echo "$(pwd)" | regexM '\/google\/src\/cloud\/slyo\/(.*?)\/google3')
-            p10k segment -t "citc:(%{$fg[green]%}$citc%{$reset_color%})"
+            p10k segment -t "citc:(%{$fg[red]%}$citc%{$reset_color%})"
         fi
     }
 fi
