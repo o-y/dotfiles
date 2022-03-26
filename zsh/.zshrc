@@ -26,7 +26,7 @@ fi
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 #### Load Zsh
-plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions citc macos)
+plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions citc)
 source $ZSH/oh-my-zsh.sh
 
 #### Load mdproxy if running on MacOS
