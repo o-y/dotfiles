@@ -13,9 +13,19 @@ function t {
     if [[ `uname` == 'Darwin' ]] then
         if ! read -q "choice?FYI: You're running this command on localhost, continue? [y/N] "; then
             echo -e '\r\033[0;32mOK! Exiting...\033[0m\c'
-            exit 1;
+            return 1;
         fi
     fi
 
     tmux -CC attach-session -t tmuxssh || tmux -CC new-session -s tmuxssh
+}
+
+function mkcd {
+  if [ ! -n "$1" ]; then
+    echo "Enter a directory name"
+  elif [ -d $1 ]; then
+    echo "\`$1' already exists"
+  else
+    mkdir $1 && cd $1
+  fi
 }

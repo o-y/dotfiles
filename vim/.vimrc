@@ -1,3 +1,5 @@
+set directory=~/.vim/swaps
+
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugins')
 

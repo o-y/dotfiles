@@ -1,3 +1,6 @@
+#### temp
+alias python=python3
+
 #### Set zsh directory and custom directory for plugins
 export ZSH_CUSTOM="$HOME/dotfiles/custom/static/zsh-custom"
 export ZSH="$HOME/.oh-my-zsh"
@@ -24,6 +27,7 @@ fi
 
 #### Add zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+fpath+=~/.zsh.d/
 
 #### Load Zsh
 plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions citc)
@@ -48,3 +52,4 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}
 zstyle :compinstall filename '/Users/slyo/.zshrc'
 autoload -Uz compinit
 compinit
+[[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
