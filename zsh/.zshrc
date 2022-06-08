@@ -1,6 +1,3 @@
-#### temp
-alias python=python3
-
 #### Set zsh directory and custom directory for plugins
 export ZSH_CUSTOM="$HOME/dotfiles/custom/static/zsh-custom"
 export ZSH="$HOME/.oh-my-zsh"
@@ -15,7 +12,10 @@ export POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
 export DISABLE_AUTO_TITLE="true"
 export ENABLE_CORRECTION="false"
 export COMPLETION_WAITING_DOTS="true"
-export ENABLE_CORRECTION="true"
+export ENABLE_CORRECTION="false"
+
+#### Zsh configs
+setopt HIST_IGNORE_SPACE # do not append to ~/.zsh_history if command starts with space
 
 #### Load custom scripts
 source ~/dotfiles/custom/init.zsh
@@ -50,6 +50,16 @@ fi
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.]=** r:|=** l:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=** l:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=** l:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=** l:|=*'
 zstyle :compinstall filename '/Users/slyo/.zshrc'
+bindkey "^Xa" _expand_alias
+zstyle ':completion:*' completer _expand_alias _complete _ignored
+zstyle ':completion:*' regular true
 autoload -Uz compinit
 compinit
-[[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
+
+# [[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

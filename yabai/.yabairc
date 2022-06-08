@@ -61,6 +61,7 @@ yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Google Chrome$" title="^Picture in Picture$" manage=off sticky=on
 yabai -m rule --add app="^Digital Colour Meter$" manage=off sticky=on
+yabai -m rule --add app="^JetBrains Toolbox" manage=off sticky=on opacity=0.7
 
 # Signals
 yabai -m signal --add event=space_changed action="sh ~/dotfiles/custom/static/yabai/destroy-empty-spaces.sh"
