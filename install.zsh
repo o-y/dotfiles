@@ -73,13 +73,3 @@ stow vim
 stow yabai
 stow zsh
 stow skhd
-
-echo "Installing and setting up Vim plug...";
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-vim +'PlugInstall --sync' +qa
-
-echo "Installation complete - existing files have been backed up at $HOME/.$USER-dotfiles-backup. Press any key to restart zsh...";
-read;
-zsh;

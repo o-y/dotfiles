@@ -80,4 +80,18 @@ fzf-g4d() {
 zle     -N   fzf-g4d
 bindkey '^A' fzf-g4d
 
+
+
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line -w
+  else
+    zle push-input -w
+    zle clear-screen -w
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
+
 fi
