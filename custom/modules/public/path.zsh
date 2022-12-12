@@ -1,1 +1,0 @@
-# Now empty, this should be used to mutate $PATH

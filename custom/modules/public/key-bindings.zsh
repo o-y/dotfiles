@@ -1,8 +1,11 @@
-# Key bindings
-# ------------
 if [[ $- == *i* ]]; then
  
-# CTRL-Z - Search for files/directories
+#########################################
+#########################################
+### CTRL-Z - Search for files/directories
+#########################################
+#########################################
+
 __fsel() {
   local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
     -o -type f -print \
@@ -44,8 +47,12 @@ fzf-redraw-prompt() {
   zle reset-prompt
 }
 zle -N fzf-redraw-prompt
- 
-# CTRL-X - Paste the selected command from history into the command line
+
+#########################################
+#########################################
+### CTRL-X - command line history search
+#########################################
+#########################################
 fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
@@ -63,35 +70,5 @@ fzf-history-widget() {
 }
 zle     -N   fzf-history-widget
 bindkey '^X' fzf-history-widget
-
-# CTRL-A - Fuzzy g4d searching
-fzf-g4d() {
-  client=$(p4 -F "%Access% %client%" clients -u "${1:-$USER}" \
-    | sort -r \
-    | awk '{ print $2 }' \
-    | fzf -d: --with-nth=2 --select-1 --exit-0)
-
-  # zle -M "Opening CITC client: $client";
-  echo "Opening CITC $client";
-  g4d $client;
-
-  return ""
-}
-zle     -N   fzf-g4d
-bindkey '^A' fzf-g4d
-
-
-
-fancy-ctrl-z () {
-  if [[ $#BUFFER -eq 0 ]]; then
-    BUFFER="fg"
-    zle accept-line -w
-  else
-    zle push-input -w
-    zle clear-screen -w
-  fi
-}
-zle -N fancy-ctrl-z
-bindkey '^Z' fancy-ctrl-z
 
 fi

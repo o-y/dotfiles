@@ -1,9 +1,10 @@
-#### Set zsh directory and custom directory for plugins
+export PATH=/usr/local/bin:$PATH
+
+#### set zsh directory and custom directory for plugins
 export ZSH_CUSTOM="$HOME/dotfiles/custom/static/zsh-custom"
 export ZSH="$HOME/.oh-my-zsh"
-export ZSH_THEME="powerlevel10k/powerlevel10k" # relative from ZSH_CUSTOM
 
-#### Assorted configs
+#### assorted configs
 export SLYO_SET_CLIENT_AS_TITLE="true"
 export TMUX_CONNECT_AUTOMATICALLY_ON_SSH="true"
 export PROMPT_EOL_MARK=''
@@ -14,52 +15,21 @@ export ENABLE_CORRECTION="false"
 export COMPLETION_WAITING_DOTS="true"
 export ENABLE_CORRECTION="false"
 
-#### Zsh configs
-setopt HIST_IGNORE_SPACE # do not append to ~/.zsh_history if command starts with space
+#### zsh config
+# do not append to ~/.zsh_history if command starts with space
+setopt HIST_IGNORE_SPACE
 
-#### Load custom scripts
+#### load custom scripts
 source ~/dotfiles/custom/init.zsh
 
-#### PowerLevel instant prompt - this should happen AFTER any output.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+#### load Zsh
+plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions)
 
-#### Add zsh-completions (https://github.com/zsh-users/zsh-completions/issues/603)
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-fpath+=~/.zsh.d/
-
-#### Load Zsh
-plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions citc)
 source $ZSH/oh-my-zsh.sh
-
-#### Load mdproxy if running on MacOS
-if [[ `uname` == 'Darwin' ]] then
-  [[ -e "$HOME/mdproxy/data/mdproxy_zshrc" ]] && source $HOME/mdproxy/data/mdproxy_zshrc 
-fi
-
-#### Load g4d completions on Linux
-if [[ `uname` == 'Linux' ]] then
-  [[ -e "/etc/bash_completion.d/g4d" ]] && source /etc/bash_completion.d/g4d
-fi
-
-#### Load p10k
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-#### The following lines were added by compinstall
-zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[.]=** r:|=** l:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=** l:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=** l:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=** l:|=*'
-zstyle :compinstall filename '/Users/slyo/.zshrc'
-bindkey "^Xa" _expand_alias
-zstyle ':completion:*' completer _expand_alias _complete _ignored
-zstyle ':completion:*' regular true
-autoload -Uz compinit
-compinit
-
-# [[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/zv/Downloads/chrome/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/zv/Downloads/chrome/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/slyo/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/zv/Downloads/chrome/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/zv/Downloads/chrome/google-cloud-sdk/completion.zsh.inc'; fi

@@ -1,3 +1,5 @@
+# Note: alt + space is taken
+
 # focus windows
 alt - i : yabai -m window --focus north || yabai -m display --focus north
 alt - l : yabai -m window --focus east || yabai -m display --focus east
@@ -49,14 +51,10 @@ alt - q : yabai -m window --toggle zoom-fullscreen
 
 # swap current window with largest/smallest window
 alt - 0x21 : yabai -m window --swap smallest  # [
-alt - 0x1E : yabai -m window --swap largest  # ]
+alt - 0x1E : yabai -m window --swap largest   # ]
 
 # minimise current window (cmd + m alternative)
 alt - m : yabai -m window --minimize
-
-# unminimise focused window (inverse cmd + m)
-alt - n : yabai -m window --deminimize           # TODO: remove one of these, dependent on
-alt + shift - m : yabai -m window --deminimize   # usage. Having duplicate values isn't ideal
 
 # move current window to space n and focus
 alt + shift - 1 : yabai -m window --space 1
@@ -69,16 +67,16 @@ alt + shift - 7 : yabai -m window --space 7
 alt + shift - 8 : yabai -m window --space 8
 
 # move current window and focus
-# alt - 1 : yabai -m space --focus 1
-# alt - 2 : yabai -m space --focus 2
-# alt - 3 : yabai -m space --focus 3
-# alt - 4 : yabai -m space --focus 4
-# alt - 5 : yabai -m space --focus 5
-# alt - 6 : yabai -m space --focus 6
-# alt - 7 : yabai -m space --focus 7
-# alt - 8 : yabai -m space --focus 8
+alt - 1 : yabai -m space --focus 1
+alt - 2 : yabai -m space --focus 2
+alt - 3 : yabai -m space --focus 3
+alt - 4 : yabai -m space --focus 4
+alt - 5 : yabai -m space --focus 5
+alt - 6 : yabai -m space --focus 6
+alt - 7 : yabai -m space --focus 7
+alt - 8 : yabai -m space --focus 8
 
-# focus display or window
+# focus window
 cmd + shift - i :  yabai -m display --focus north
 cmd + shift - l :  yabai -m display --focus east
 cmd + shift - j :  yabai -m display --focus west
@@ -90,11 +88,8 @@ alt - 0x32 : yabai -m window --focus mouse
 # create space          - ALT + PLUS
 alt - 0x18 : yabai -m space --create
 
-# destroy empty space   - ALT + MINUS
-alt - 0x1B : "${DOTFILES}"/custom/static/yabai/destroy-empty-spaces.sh
-
 # force destroy space   - ALT + SHIFT + MINUS
-alt + shift - 0x1B : yabai -m space --destroy
+alt - 0x1B : yabai -m space --destroy
 
 ###                                         ###
 ### somewhat experimental/uncommon keybinds ###

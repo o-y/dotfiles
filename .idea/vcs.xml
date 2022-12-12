@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/custom/static/zsh-custom/plugins/fzf-tab" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/custom/static/zsh-custom/plugins/zsh-autosuggestions" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/custom/static/zsh-custom/plugins/zsh-completions" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/custom/static/zsh-custom/plugins/zsh-syntax-highlighting" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/custom/static/zsh-custom/themes/zsh" vcs="Git" />
+  </component>
+</project>

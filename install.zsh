@@ -21,8 +21,14 @@ then
 
   if ! command -v gawk &> /dev/null
   then
-    echo "[glinux]: installing gawk..."
+    echo "[osx]: installing gawk..."
     brew install gawk
+  fi
+
+  if ! command -v realpath &> /dev/null
+  then
+    echo "[osx]: installing coreutils..."
+    brew install coreutils
   fi
 elif [[ `uname` == 'Linux' ]]
 then
