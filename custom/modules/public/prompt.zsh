@@ -7,9 +7,6 @@ COLOR_AT=$'\e[38;5;250m'
 COLOR_DIR=$'\e[38;5;38m'
 COLOR_GIT=$'\e[38;5;219m'
 
-# cool gradient...
-# 206, 219, 225
-
 NEWLINE=$'\n'
 COLOR_DEF=$'\e[38;5;250m'
 setopt PROMPT_SUBST

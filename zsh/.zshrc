@@ -26,10 +26,3 @@ source ~/dotfiles/custom/init.zsh
 plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/zv/Downloads/chrome/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/zv/Downloads/chrome/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/zv/Downloads/chrome/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/zv/Downloads/chrome/google-cloud-sdk/completion.zsh.inc'; fi

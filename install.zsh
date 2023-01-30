@@ -5,71 +5,41 @@ echo "Fetching submodule dependencies"
 git submodule init;
 git submodule update;
 
-if [[ `uname` == 'Darwin' ]]
-then
-  if ! command -v stow &> /dev/null
-  then
-    echo "[osx]: installing stow..."
-    brew install stow
-  fi
+# Define commands to check and install for each OS
+commands_darwin=(
+  "stow" "brew install stow"
+  "vim" "brew install vim"
+  "gawk" "brew install gawk"
+  "realpath" "brew install coreutils"
+  "fzf" "brew install fzf"
+)
 
-  if ! command -v vim &> /dev/null
-  then
-    echo "[osx]: installing vim..."
-    brew install vim
-  fi
+commands_linux=(
+  "stow" "sudo apt-get install stow"
+  "gawk" "sudo apt-get install gawk"
+  "jot" "sudo apt-get install athena-jot"
+  "vim" "sudo apt-get install vim"
+  "fzf" "sudo apt-get install fzf"
+)
 
-  if ! command -v gawk &> /dev/null
-  then
-    echo "[osx]: installing gawk..."
-    brew install gawk
-  fi
-
-  if ! command -v realpath &> /dev/null
-  then
-    echo "[osx]: installing coreutils..."
-    brew install coreutils
-  fi
-elif [[ `uname` == 'Linux' ]]
-then
-  if ! command -v stow &> /dev/null
-  then
-    echo "[glinux]: installing stow..."
-    sudo apt-get install stow
-  fi
-
-  if ! command -v gawk &> /dev/null
-  then
-    echo "[glinux]: installing gawk..."
-    sudo apt-get install gawk
-  fi
-
-  if ! command -v jot &> /dev/null
-  then
-    echo "[glinux]: installing jot..."
-    sudo apt-get install athena-jot
-  fi
-
-  if ! command -v vim &> /dev/null
-  then
-    echo "[glinux]: installing vim..."
-    sudo apt-get install vim
-  fi
+if [[ `uname` == 'Darwin' ]]; then
+  for ((i=0;i<${#commands_darwin[@]};i+=2)); do
+    if ! command -v ${commands_darwin[$i]} &> /dev/null; then
+      echo "[osx]: installing ${commands_darwin[$i]}..."
+      ${commands_darwin[$i+1]}
+    fi
+  done
+elif [[ `uname` == 'Linux' ]]; then
+  for ((i=0;i<${#commands_linux[@]};i+=2)); do
+    if ! command -v ${commands_linux[$i]} &> /dev/null; then
+      echo "[glinux]: installing ${commands_linux[$i]}..."
+      ${commands_linux[$i+1]}
+    fi
+  done
 else
-    echo "Error! - Unrecognised OS";
-    exit 64
+  echo "Error! - Unrecognised OS";
+  exit 64
 fi
-
-echo "Backing up existing files..."
-mkdir -p "~/.$USER-dotfiles-backup";
-[ -f ~/.blazerc ] && mv ~/.blazerc "~/.$USER-dotfiles-backup";
-[ -f ~/.p10k ] && mv ~/.p10k "~/.$USER-dotfiles-backup";
-[ -f ~/.tmuxrc ] && mv ~/.tmuxrc "~/.$USER-dotfiles-backup";
-[ -f ~/.vimrc ] && mv ~/.vimrc "~/.$USER-dotfiles-backup"
-[ -f ~/.yabairc ] && mv ~/.yabairc "~/.$USER-dotfiles-backup";
-[ -f ~/.zshrc ] && mv ~/.zshrc "~/.$USER-dotfiles-backup";
-[ -f ~/.zshenv ] && mv ~/.zshenv "~/.$USER-dotfiles-backup";
-[ -f ~/.skhdrc ] && mv ~/.skhdrc "~/.$USER-dotfiles-backup";
 
 echo "Setting up symlinks...";
 stow blaze
