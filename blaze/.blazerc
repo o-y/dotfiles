@@ -6,3 +6,6 @@ build --javacopt=-Adagger.experimentalDaggerErrorMessages=enabled
 build --nostamp
 # Increase test execution times
 build -c opt
+
+# See errors
+test_output=errors
