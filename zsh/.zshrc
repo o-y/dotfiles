@@ -23,6 +23,6 @@ setopt HIST_IGNORE_SPACE
 source ~/dotfiles/custom/init.zsh
 
 #### load Zsh
-plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions macos)
 
 source $ZSH/oh-my-zsh.sh
