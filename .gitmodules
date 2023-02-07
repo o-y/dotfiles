@@ -1,19 +1,19 @@
 [submodule "zsh-syntax-highlighting"]
 	path = custom/static/zsh-custom/plugins/zsh-syntax-highlighting
-	url = git://github.com/zsh-users/zsh-syntax-highlighting.git
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
 
 [submodule "zsh-completions"]
 	path = custom/static/zsh-custom/plugins/zsh-completions
-	url = git://github.com/zsh-users/zsh-completions.git
+	url = https://github.com/zsh-users/zsh-completions.git
 
 [submodule "zsh-autosuggestions"]
 	path = custom/static/zsh-custom/plugins/zsh-autosuggestions
-	url = git://github.com/zsh-users/zsh-autosuggestions.git
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
 
 [submodule "powerlevel10k"]
 	path = custom/static/zsh-custom/themes/powerlevel10k
-	url = git://github.com/romkatv/powerlevel10k
-	
-[submodule "custom/static/zsh-custom/plugins/fzf-tab"]
-	path = custom/static/zsh-custom/plugins/fzf-tab
+	url = https://github.com/romkatv/powerlevel10k
+
+[submodule "custom/lib/zsh-custom/plugins/fzf-tab"]
+	path = custom/lib/zsh-custom/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab

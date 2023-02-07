@@ -1,4 +1,4 @@
-# Note: alt + space is taken
+# Note: alt + space is taken for Raycast
 
 # focus windows
 alt - i : yabai -m window --focus north || yabai -m display --focus north

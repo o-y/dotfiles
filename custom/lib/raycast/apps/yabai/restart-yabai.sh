@@ -14,5 +14,4 @@
 # @raycast.author Suraj Lyons
 # @raycast.authorURL zv.wtf
 
-
 launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
