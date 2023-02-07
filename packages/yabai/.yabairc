@@ -68,4 +68,4 @@ yabai -m rule --add app="^QuickTime Player" manage=off
 # Signals
 yabai -m signal --add event=space_changed action="sh ~/dotfiles/custom/static/yabai/destroy-empty-spaces.sh"
 
-echo "yabai configuration loaded.."
+echo "yabai configuration loaded..."

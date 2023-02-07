@@ -1,7 +1,7 @@
 export PATH=/usr/local/bin:$PATH
 
 #### set zsh directory and custom directory for plugins
-export ZSH_CUSTOM="$HOME/dotfiles/custom/static/zsh-custom"
+export ZSH_CUSTOM="$HOME/dotfiles/custom/lib/zsh-custom"
 export ZSH="$HOME/.oh-my-zsh"
 
 #### assorted configs
@@ -14,10 +14,6 @@ export DISABLE_AUTO_TITLE="true"
 export ENABLE_CORRECTION="false"
 export COMPLETION_WAITING_DOTS="true"
 export ENABLE_CORRECTION="false"
-
-#### zsh config
-# do not append to ~/.zsh_history if command starts with space
-setopt HIST_IGNORE_SPACE
 
 #### load custom scripts
 source ~/dotfiles/custom/init.zsh
