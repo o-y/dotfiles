@@ -14,6 +14,6 @@
 	path = custom/static/zsh-custom/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k
 
-[submodule "custom/lib/zsh-custom/plugins/fzf-tab"]
-	path = custom/lib/zsh-custom/plugins/fzf-tab
+[submodule "fzf-tab"]
+	path = custom/static/zsh-custom/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
