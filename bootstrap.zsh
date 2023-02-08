@@ -37,7 +37,7 @@ stows_linux=(blaze)
 ################################################################################
 
 echo "[?] press any key to install required dependencies and symlink dotfiles (or ctrl+c to cancel)";
-read;
+read -r;
 
 ################ Install Oh My Zsh ################
 echo "[!] installing oh-my-zsh";
@@ -52,14 +52,14 @@ git submodule status;
 
 ################ Install dependencies ################
 echo "[~] installing required dependencies...";
-if [[ `uname` == 'Darwin' ]]; then
+if [[ $(uname) == 'Darwin' ]]; then
   for ((i=1;i<${#dependencies_darwin[@]};i+=2)); do
     if ! command -v ${dependencies_darwin[$i]} &> /dev/null; then
       echo "[!] OSX - installing dependency: ${dependencies_darwin[$i]}...";
       ${dependencies_darwin[$i+1]}
     fi
   done
-elif [[ `uname` == 'Linux' ]]; then
+elif [[ $(uname) == 'Linux' ]]; then
   for ((i=1;i<${#dependencies_linux[@]};i+=2)); do
     if ! command -v ${dependencies_linux[$i]} &> /dev/null; then
       echo "[!] gLinux - installing dependency: ${dependencies_linux[$i]}...";
@@ -74,7 +74,7 @@ fi
 ################ Setup dotfile symlinks ################
 echo "[~] setting up dotfile symlinks...";
 
-packages_directory=./packages
+packages_directory="$HOME/dotfiles/packages"
 target="$HOME"
 
 process_stows() {
@@ -87,15 +87,15 @@ process_stows() {
     fi
     echo "[!] symlinking '$package' from '$packages_directory' to '$target'"
 
-    mkdir -p $target
+    mkdir -p "$target"
     stow "$package" --dir="$packages_directory" --target="$target"
   done
 }
 
-if [[ `uname` == "Darwin" ]]; then
+if [[ $(uname) == "Darwin" ]]; then
   # MacOS Stows
   process_stows "${stows_darwin[@]}"
-elif [[ `uname` == "Linux" ]]; then
+elif [[ $(uname) == "Linux" ]]; then
   # Linux Stows
   process_stows "${stows_linux[@]}"
 fi
@@ -106,5 +106,5 @@ process_stows "${stows_common[@]}"
 ################ Post install :D ################
 echo "[~] everything successfully (probably) installed and configured! :)"
 echo "[?] press any key to continue..."
-read
+read -r
 zsh
