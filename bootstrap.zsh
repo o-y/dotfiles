@@ -45,6 +45,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 ################ Download submodules ################
 echo "[~] fetching submodule dependencies";
+
+cd ~/dotfiles || exit
+
 git submodule init;
 git submodule sync;
 git submodule update;
