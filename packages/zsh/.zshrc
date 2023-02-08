@@ -19,6 +19,12 @@ export ENABLE_CORRECTION="false"
 source ~/dotfiles/custom/init.zsh
 
 #### load Zsh
-plugins=(git fzf-tab zsh-syntax-highlighting zsh-autosuggestions macos)
+plugins=(
+    fzf-tab
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+    macos
+    adb
+)
 
 source $ZSH/oh-my-zsh.sh
