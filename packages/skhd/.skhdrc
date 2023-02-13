@@ -91,6 +91,10 @@ alt - 0x18 : yabai -m space --create
 # force destroy space   - ALT + SHIFT + MINUS
 alt - 0x1B : yabai -m space --destroy
 
+# restart yabai
+alt - c : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
+
+
 ###                                         ###
 ### somewhat experimental/uncommon keybinds ###
 ###                                         ###
