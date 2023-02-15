@@ -7,5 +7,6 @@ alias blaze6='blaze --output_base=/tmp/blaze-out-6'
 alias blaze7='blaze --output_base=/tmp/blaze-out-7'
 
 #### Mobile device alias
-alias -g pixel7="TODO"
+alias -g pixel7="25101FDH30000P"
 alias -g pixel6="TODO"
+alias -g pixel4="TODO"
