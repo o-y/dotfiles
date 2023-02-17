@@ -54,6 +54,11 @@ echo "[~] fetching submodule dependencies";
 
 cd ~/dotfiles || exit
 
+rm ~/.zshrc
+rm ~/.blazerc
+rm ~/.tmux
+rm -rf ~/config/nvim
+
 git submodule init;
 git submodule sync;
 git submodule update;
@@ -97,7 +102,7 @@ process_stows() {
     echo "[!] symlinking '$package' from '$packages_directory' to '$target'"
 
     mkdir -p "$target"
-    stow "$package" --dir="$packages_directory" --target="$target"
+    stow "$package" --dir="$packages_directory" --target="$target" --adopt
   done
 }
 
