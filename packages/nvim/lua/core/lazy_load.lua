@@ -44,33 +44,44 @@ M.on_file_open = function(plugin_name)
   }
 end
 
-M.packer_cmds = {
-  "PackerSnapshot",
-  "PackerSnapshotRollback",
-  "PackerSnapshotDelete",
-  "PackerInstall",
-  "PackerUpdate",
-  "PackerSync",
-  "PackerClean",
-  "PackerCompile",
-  "PackerStatus",
-  "PackerProfile",
-  "PackerLoad",
+M.treesitter_cmds = {
+  "TSInstall",
+  "TSBufEnable",
+  "TSBufDisable",
+  "TSEnable",
+  "TSDisable",
+  "TSModuleInfo",
 }
 
-M.treesitter_cmds = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSEnable", "TSDisable", "TSModuleInfo" }
-M.mason_cmds = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUninstall", "MasonUninstallAll", "MasonLog" }
+M.mason_cmds = {
+  "Mason",
+  "MasonInstall",
+  "MasonInstallAll",
+  "MasonUninstall",
+  "MasonUninstallAll",
+  "MasonLog",
+}
 
 M.gitsigns = function()
+  -- taken from https://github.com/max397574
   autocmd({ "BufRead" }, {
-    group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
     callback = function()
-      vim.fn.system("git -C " .. vim.fn.expand "%:p:h" .. " rev-parse")
-      if vim.v.shell_error == 0 then
-        vim.api.nvim_del_augroup_by_name "GitSignsLazyLoad"
-        vim.schedule(function()
-          require("packer").loader "gitsigns.nvim"
-        end)
+      local function onexit(code, _)
+        if code == 0 then
+          vim.schedule(function()
+            require("packer").loader "gitsigns.nvim"
+          end)
+        end
+      end
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      if lines ~= { "" } then
+        vim.loop.spawn("git", {
+          args = {
+            "ls-files",
+            "--error-unmatch",
+            vim.fn.expand "%:p:h",
+          },
+        }, onexit)
       end
     end,
   })
