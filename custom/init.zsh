@@ -18,7 +18,7 @@ for dir in public private goog; do
       if [[ $filename == *.darwin.zsh ]]; then
         source_helper "$file" "Darwin"
       elif [[ $filename == *.linux.zsh ]]; then
-        source_helper("$file", "Linux")
+        source_helper "$file" "Linux"
       elif [[ $filename == *.zsh ]]; then
         source "$file"
       fi
