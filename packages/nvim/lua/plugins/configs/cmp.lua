@@ -6,7 +6,7 @@ end
 
 require("base46").load_highlight "cmp"
 
-vim.o.completeopt = "menu,menuone,noselect"
+vim.opt.completeopt = "menuone,noselect"
 
 local function border(hl_name)
   return {

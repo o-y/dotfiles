@@ -11,4 +11,4 @@ NEWLINE=$'\n'
 COLOR_DEF=$'\e[38;5;250m'
 setopt PROMPT_SUBST
 
-export PROMPT='%B${COLOR_USR}%n${COLOR_AT}@${COLOR_USR}%m ${COLOR_DIR}%~ ${COLOR_GIT}$(parse_git_branch)${COLOR_DEF}${NEWLINE}~%b '
+export PROMPT='%B${COgLOR_USR}%n${COLOR_AT}@${COLOR_USR}%m ${COLOR_DIR}%~ ${COLOR_GIT}$(parse_git_branch)${COLOR_DEF}${NEWLINE}~%b '
