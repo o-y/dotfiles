@@ -54,11 +54,6 @@ echo "[~] fetching submodule dependencies";
 
 cd ~/dotfiles || exit
 
-rm ~/.zshrc
-rm ~/.blazerc
-rm ~/.tmux
-rm -rf ~/config/nvim
-
 git submodule init;
 git submodule sync;
 git submodule update;
