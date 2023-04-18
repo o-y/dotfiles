@@ -10,3 +10,7 @@ alias blaze7='blaze --output_base=/tmp/blaze-out-7'
 alias -g pixel7="25101FDH30000P"
 alias -g pixel6="TODO"
 alias -g pixel4="TODO"
+
+# Ohhhhhh
+alias g4=hg
+alias actuallyg4=/usr/bin/g4
