@@ -25,6 +25,7 @@ plugins=(
     zsh-autosuggestions
     macos
     adb
+    web-search
 )
 
 source $ZSH/oh-my-zsh.sh
