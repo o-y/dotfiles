@@ -30,6 +30,7 @@ dependencies_linux=(
 stows_common=(
   zsh
   nvim:~/.config/nvim
+  hypr:~/.config/hypr
 )
 
 # symlinks for MacOS
