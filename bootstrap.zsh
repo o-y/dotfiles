@@ -79,7 +79,7 @@ elif [[ $(uname) == 'Linux' ]]; then
     fi
   done
 else
-  echo "[!] error - unrecognised OS ${uname}";
+  echo "[!] error - unrecognised OS (${uname})";
   exit 64;
 fi
 
