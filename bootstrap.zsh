@@ -47,8 +47,10 @@ echo "[?] press any key to install required dependencies and symlink dotfiles (o
 read -r;
 
 ################ Install Oh My Zsh ################
-echo "[!] installing oh-my-zsh";
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+if ! [ -e "$HOME/.oh-my-zsh" ]; then
+  echo "[!] installing oh-my-zsh";
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
 
 ################ Download submodules ################
 echo "[~] fetching submodule dependencies";
@@ -72,12 +74,12 @@ if [[ $(uname) == 'Darwin' ]]; then
 elif [[ $(uname) == 'Linux' ]]; then
   for ((i=1;i<${#dependencies_linux[@]};i+=2)); do
     if ! command -v ${dependencies_linux[$i]} &> /dev/null; then
-      echo "[!] gLinux - installing dependency: ${dependencies_linux[$i]}...";
+      echo "[!] Linux - installing dependency: ${dependencies_linux[$i]}...";
       eval "${dependencies_linux[$i+1]}"
     fi
   done
 else
-  echo "[!] error - unrecognised OS";
+  echo "[!] error - unrecognised OS ${uname}";
   exit 64;
 fi
 
@@ -113,7 +115,14 @@ fi
 # Common Stows
 process_stows "${stows_common[@]}"
 
-################ Post install :D ################
+################# Post install #################
+post_install_routine="$HOME/dotfiles/custom/postinstall/common.zsh"
+if [ -e $post_install_routine ]; then
+    source $post_install_routine
+else
+    echo "[!] warning - 'post_install_routine' does not exist at $post_install_routine...skipping"
+fi
+
 echo "[~] everything successfully (probably) installed and configured! :)"
 echo "[?] press any key to continue..."
 read -r
