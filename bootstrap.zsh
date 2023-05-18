@@ -12,6 +12,7 @@ dependencies_darwin=(
   "scrcpy" "brew install scrcpy"
   "adb" "brew install android-platform-tools"
   "rg" "brew install ripgrep"
+  "hyperfine" "brew install hyperfine"
 )
 
 # dependencies for Linux
@@ -24,6 +25,7 @@ dependencies_linux=(
   "scrcpy" "sudo apt-get install scrcpy"
   "adb" "sudo apt-get install android-tools-adb"
   "rg" "sudo apt-get install ripgrep"
+  "hyperfine" "sudo apt-get install hyperfine"
 )
 
 # common symlinks
@@ -37,7 +39,10 @@ stows_common=(
 stows_darwin=(skhd yabai)
 
 # symlinks for Linux
-stows_linux=(blaze)
+stows_linux=(
+  blaze,
+  alacritty:~/.config/alacritty
+)
 
 ################################################################################
 ################################################################################
