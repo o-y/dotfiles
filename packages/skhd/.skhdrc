@@ -85,6 +85,13 @@ cmd + shift - k :  yabai -m display --focus south
 # focus under mouse     - ALT + BACKTICK (`)
 alt - 0x32 : yabai -m window --focus mouse
 
+# float / unfloat window and center on screen
+alt - w : yabai -m window --toggle float;\
+          yabai -m window --grid 4:4:1:1:2:2
+
+# make floating window fill screen
+alt + shift - w : yabai -m window --grid 1:1:0:0:1:1
+
 # create space          - ALT + PLUS
 alt - 0x18 : yabai -m space --create
 
@@ -94,17 +101,9 @@ alt - 0x1B : yabai -m space --destroy
 # restart yabai
 alt - c : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
 
-
 ###                                         ###
 ### somewhat experimental/uncommon keybinds ###
 ###                                         ###
-
-# float / unfloat window and center on screen
-alt - w : yabai -m window --toggle float;\
-          yabai -m window --grid 4:4:1:1:2:2
-
-# make floating window fill screen
-alt + shift - w : yabai -m window --grid 1:1:0:0:1:1
 
 # toggle sticky(+float), topmost, picture-in-picture
 alt - p : yabai -m window --toggle sticky;\
