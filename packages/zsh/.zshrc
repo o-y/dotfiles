@@ -1,5 +1,3 @@
-export PATH=/usr/local/bin:$PATH
-
 #### set zsh directory and custom directory for plugins
 export ZSH_CUSTOM="$HOME/dotfiles/custom/static/zsh-custom"
 export ZSH="$HOME/.oh-my-zsh"
