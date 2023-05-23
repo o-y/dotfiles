@@ -32,7 +32,6 @@ dependencies_linux=(
 stows_common=(
   zsh
   nvim:~/.config/nvim
-  hypr:~/.config/hypr
 )
 
 # symlinks for MacOS
@@ -42,6 +41,8 @@ stows_darwin=(skhd yabai)
 stows_linux=(
   blaze,
   alacritty:~/.config/alacritty
+  hypr:~/.config/hypr
+  swaylock:~/.config/swaylock
 )
 
 ################################################################################
