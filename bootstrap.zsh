@@ -39,10 +39,11 @@ stows_darwin=(skhd yabai)
 
 # symlinks for Linux
 stows_linux=(
-  blaze,
+  blaze
   alacritty:~/.config/alacritty
   hypr:~/.config/hypr
   swaylock:~/.config/swaylock
+  rofi:~/.config/rofi
 )
 
 ################################################################################
