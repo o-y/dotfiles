@@ -30,13 +30,14 @@ __fzfcmd() {
 }
  
 fzf-file-widget() {
-  LBUFFER="${LBUFFER}$(__fsel)"
-  local ret=$?
-  zle reset-prompt
-  return $ret
+  echo "Disabled"
+  # LBUFFER="${LBUFFER}$(__fsel)"
+  # local ret=$?
+  # zle reset-prompt
+  # return $ret
 }
-zle     -N   fzf-file-widget
-bindkey '^Z' fzf-file-widget
+# zle     -N   fzf-file-widget
+# bindkey '^Z' fzf-file-widget
  
 # Ensure precmds are run after cd
 fzf-redraw-prompt() {

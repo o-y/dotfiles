@@ -1,0 +1,2 @@
+command = "zsh"
+args = ["/usr/local/google/home/slyo/dotfiles/custom/static/hyprland/rofi.zsh", "kill"]

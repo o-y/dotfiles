@@ -44,6 +44,7 @@ stows_linux=(
   hypr:~/.config/hypr
   swaylock:~/.config/swaylock
   rofi:~/.config/rofi
+  hypr-empty:~/.config/hypr-empty
 )
 
 ################################################################################
