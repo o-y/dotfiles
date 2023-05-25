@@ -9,8 +9,9 @@
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,run,filebrowser,ssh,window";
-    show-icons:                 false;
+	modi:                       "combi,drun,run,filebrowser,window";
+    show-icons:                 true;
+    display-combi:              " All";
     display-drun:               " Apps";
     display-run:                " Run";
     display-filebrowser:        " Files";
@@ -21,8 +22,16 @@ configuration {
 }
 
 /*****----- Global Properties -----*****/
-@import                          "shared/colors.rasi"
 @import                          "shared/fonts.rasi"
+
+* {
+    background:     rgba(30, 33, 39, 0.65);
+    background-alt: #282B31FF;
+    foreground:     #FFFFFFFF;
+    selected:       #9CB0F9;
+    active:         #FB99F0;
+    urgent:         #8C84FE;
+}
 
 * {
     border-colour:               var(selected);
@@ -37,17 +46,17 @@ configuration {
     active-background:           var(active);
     active-foreground:           var(background);
     selected-normal-background:  var(selected);
-    selected-normal-foreground:  var(background);
+    selected-normal-foreground:  var(foreground);
     selected-urgent-background:  var(active);
     selected-urgent-foreground:  var(background);
     selected-active-background:  var(urgent);
-    selected-active-foreground:  var(background);
+    selected-active-foreground:  var(foreground);
     alternate-normal-background: var(background);
     alternate-normal-foreground: var(foreground);
     alternate-urgent-background: var(urgent);
-    alternate-urgent-foreground: var(background);
+    alternate-urgent-foreground: var(foreground);
     alternate-active-background: var(active);
-    alternate-active-foreground: var(background);
+    alternate-active-foreground: var(foreground);
 }
 
 /*****----- Main Window -----*****/
@@ -57,7 +66,8 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       800px;
+    width:                       1000px;
+    height:                      580px;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -69,16 +79,7 @@ window {
     border-radius:               10px;
     border-color:                @border-colour;
     cursor:                      "default";
-    /* Backgroud Colors */
     background-color:            @background-colour;
-    /* Backgroud Image */
-    //background-image:          url("/path/to/image.png", none);
-    /* Simple Linear Gradient */
-    //background-image:          linear-gradient(red, orange, pink, purple);
-    /* Directional Linear Gradient */
-    //background-image:          linear-gradient(to bottom, pink, yellow, magenta);
-    /* Angle Linear Gradient */
-    //background-image:          linear-gradient(45, cyan, purple, indigo);
 }
 
 /*****----- Main Box -----*****/
@@ -97,7 +98,7 @@ mainbox {
 /*****----- A Custom Box -----*****/
 custombox {
     spacing:                     10px;
-    background-color:            @background-colour;
+    background-color:            transparent;
     text-color:                  @foreground-colour;
     orientation:                 horizontal;
     children:                    [ "mode-switcher", "listview" ];
@@ -188,7 +189,7 @@ listview {
     cursor:                      "default";
 }
 scrollbar {
-    handle-width:                5px ;
+    handle-width:                5px;
     handle-color:                @handle-colour;
     border-radius:               10px;
     background-color:            @alternate-background;
