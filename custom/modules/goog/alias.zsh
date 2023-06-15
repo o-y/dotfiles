@@ -6,11 +6,11 @@ alias blaze5='blaze --output_base=/tmp/blaze-out-5'
 alias blaze6='blaze --output_base=/tmp/blaze-out-6'
 alias blaze7='blaze --output_base=/tmp/blaze-out-7'
 
+#### Utilities
+alias bc=build_cleaner
+
 #### Mobile device alias
 alias -g pixel7="25101FDH30000P"
 alias -g pixel6="TODO"
 alias -g pixel4="TODO"
-
-# Ohhhhhh
-alias g4=hg
-alias actuallyg4=/usr/bin/g4
+alias -g pixelfold="TODO"
