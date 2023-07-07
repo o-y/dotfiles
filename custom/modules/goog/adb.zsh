@@ -1,10 +1,8 @@
-function flipboolean() {
+function flipbool() {
     if [ $# -lt 2 ]; then
         echo "Expected: $funcstack[1] <flag-id> [true/false]"
         return
     fi
-
-    echo "$2"
 
     if [ "$2"  != 'false' ] || [ "$2"  != 'true' ]; then
         echo "Expected: $funcstack[1] <flag-id> [true/false]"
