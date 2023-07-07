@@ -31,6 +31,7 @@ dependencies_linux=(
 # common symlinks
 stows_common=(
   zsh
+  helix:~/.config/helix
 )
 
 # symlinks for MacOS
