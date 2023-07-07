@@ -40,11 +40,12 @@ stows_darwin=(skhd yabai)
 stows_linux=(
   blaze
   hgrc
-  alacritty:~/.config/alacritty
+  kitty:~/.config/kitty
   hypr:~/.config/hypr
   swaylock:~/.config/swaylock
   rofi:~/.config/rofi
   hypr-empty:~/.config/hypr-empty
+  waybar:~/.config/waybar
 )
 
 ################################################################################
