@@ -5,7 +5,7 @@
 # dependencies for MacOS
 dependencies_darwin=(
   "stow" "brew install stow"
-  "vim" "brew install vim"
+  "helix" "brew install helix"
   "gawk" "brew install gawk"
   "realpath" "brew install coreutils"
   "fzf" "brew install fzf"
@@ -20,7 +20,6 @@ dependencies_linux=(
   "stow" "sudo apt-get install stow"
   "gawk" "sudo apt-get install gawk"
   "jot" "sudo apt-get install athena-jot"
-  "vim" "sudo apt-get install vim"
   "fzf" "sudo apt-get install fzf"
   "scrcpy" "sudo apt-get install scrcpy"
   "adb" "sudo apt-get install android-tools-adb"
