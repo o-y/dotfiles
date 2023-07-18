@@ -2,7 +2,11 @@ daemonize
 
 show-failed-attempts
 ignore-empty-password
-no-unlock-indicator
+
+grace=120
+indicator-idle-visible
+indicator-radius=165
+indicator-thickness=20
 
 clock
 
@@ -11,12 +15,8 @@ effect-blur=15x20
 
 datestr=%a %d-%m-%y 
 
-indicator
-indicator-radius=165
-indicator-thickness=20
-
-ring-color=C1A9F3ff
-inside-color=1f1d2e
+ring-color=adf0ea
+inside-color=050B3F
 line-color=ffffff
 
 key-hl-color=F5B0DDff
