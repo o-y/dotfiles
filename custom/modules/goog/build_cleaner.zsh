@@ -8,9 +8,6 @@ function bca() {
     __buildcleaner "$1" --tool_tag=javac --only-add
 }
 
-# compdef '_files' bcd
-# compdef '_files' bca
-
 function __buildcleaner() {
   args=("$@")
 

@@ -10,4 +10,6 @@ elif [[ "$scope" = "desktop-apps" ]]; then
     rofi -show drun -theme ~/.config/rofi/launchers/type-3/style-1.rasi -icon-theme "Papirus"
 elif [[ "$scope" = "kill" ]]; then
     killall rofi
+elif [[ "$scope" = "clipboard" ]]; then
+    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -theme ~/.config/rofi/launchers/type-1/style-7.rasi
 fi
