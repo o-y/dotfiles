@@ -1,9 +1,12 @@
-# Allow zsh to handle '*' like bash
+# allow zsh to handle '*' like bash
 setopt nonomatch
 
-# Cargo
+# cargo
 if [ -f "$HOME/.cargo/env" ]; then
-    fi
+    . "$HOME/.cargo/env"
+fi
 
-if [ -e /usr/local/google/home/slyo/.nix-profile/etc/profile.d/nix.sh ]; then . /usr/local/google/home/slyo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-. "$HOME/.cargo/env"
+# brew
+if [ -f "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
