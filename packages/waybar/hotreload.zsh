@@ -1,7 +1,9 @@
-DIRECTORY_TO_WATCH="$HOME/dotfiles/packages/waybar"
+DIRECTORY_TO_WATCH="$HOME/dotfiles/packages/waybar/"
+
+waybar &
 
 while true; do
-  EVENT=$(inotifywait -e modify -r $DIRECTORY_TO_WATCH)
+  inotifywait -e modify -r $DIRECTORY_TO_WATCH
   
   pkill waybar
   waybar &
