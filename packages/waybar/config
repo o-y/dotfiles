@@ -4,7 +4,6 @@
 	"modules-left": ["wlr/workspaces"],
 	"modules-center": ["network"],
 
-	// Left!
 	"wlr/workspaces": {
 		"format": "{icon}",
 		"on-click": "activate",
@@ -18,15 +17,24 @@
 			"7" : "7",
 			"8" : "8",
 			"9" : "9"
+		},
+		"persistent-workspaces": {
+			"1" : "1",
+			"2" : "2",
+			"3" : "3",
+			"4" : "4",
+			"5" : "5",
+			"6" : "6",
+			"7" : "7",
+			"8" : "8",
+			"9" : "9"
 		}
 	},
 
-	// Center
 	"network": {
 		"format-wifi": "  {essid}",
-		"format-ethernet": "󰤮 Disconnected",
 		"format-linked": "{ifname} (No IP) ",
 		"format-disconnected": "󰤮 Disconnected",
 		"tooltip-format-wifi": "Signal Strenght: {signalStrength}% | Down Speed: {bandwidthDownBits}, Up Speed: {bandwidthUpBits}",
-	},
+	}
 }

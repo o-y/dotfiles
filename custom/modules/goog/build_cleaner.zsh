@@ -5,7 +5,7 @@ function bcd() {
 
 function bca() {
     echo "[buildcleaner] running build_cleaner (add) on target $1"
-    __buildcleaner "$1" --tool_tag=javac --only-add
+    __buildcleaner "$1" --tool_tag=javac --only-adda
 }
 
 function __buildcleaner() {
@@ -26,10 +26,10 @@ function __buildcleaner() {
     echo "[buildcleaner] applying to current cl"
     build_cleaner "$flags"
   elif [[ -f "$parameter" ]]; then
-    echo "[buildcleaner] applying to file: $parameter"
+    echo "[buildcleaner] applying to file: $parameter with flags: $flags"
     build_cleaner "$parameter" "$flags"
   elif [[ "$parameter" == ///* || ! -f "$parameter" ]]; then
-     echo "[buildcleaner] applying to target: $parameter"
+     echo "[buildcleaner] applying to target: $parameter with flags: $flags"
      build_cleaner "$parameter" "$flags"
   fi
 }

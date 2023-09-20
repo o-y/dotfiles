@@ -31,6 +31,7 @@ dependencies_linux=(
 stows_common=(
   zsh
   helix:~/.config/helix
+  tmux:~/.config/tmux
 )
 
 # symlinks for MacOS
