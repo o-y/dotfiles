@@ -1,86 +1,62 @@
 * {
-    border: none;
-    border-radius: 0;
-    font-family: mononoki Nerd Font;
-    font-size: 14px;
-    min-height: 0;
+  font-family: Material Design Icons, JetBrainsMono Nerd Font;
+  font-size: 17px;
 }
-
-window#waybar {
-    background: transparent;
-    color: white;
-}
-
-tooltip {
-	background: #0f0f0f;
-	border-radius: 15px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #262626;
-	}
-
-#workspaces button {
-    padding: 5px 10px;
-    color: #f0f0f0;
-}
-
-#workspaces button.focused {
-    color: #0f0f0f;
-    background-color: #c49ec4;
-    border-radius: 15px;
-}
-
-#workspaces button.urgent {
-    color: #0f0f0f;
-    background-color: #9ec3c4;
-    border-radius: 15px;
-}
-
-#workspaces button:hover {
-	background-color: #c49ec4;
-	color: #0f0f0f;
-	border-radius: 15px;
-}
-
-#custom-date, #clock, #battery, #pulseaudio, #network, #workspaces {
-	background-color: #0f0f0f;
-	padding: 5px 10px;
-	margin: 5px 0px;
-}
-
-#workspaces {
-	background-color: #262626;
-	border-radius: 15px 0px 0px 15px;
-}
-
-#custom-date {
-	color: #9ec3c4;
-}
-
+.struct-right,
 #clock {
-    color: #a39ec4;
-    border-radius: 0px 15px 15px 0px;
-    margin-right: 10px;
+  margin-right: 35px;
 }
-
-#battery {
-    color: #9ec49f;
+#waybar {
+  background-color: #1e1e2e;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+  border-radius: 18px;
+  opacity: 0.95;
 }
-
-#battery.charging {
-    color: #9ec49f;
+#workspaces button {
+  all: initial;
+  border-radius: 13px;
+  padding: 6px 20px;
+  margin: 13px 6px;
+  background-color: #1e1e2e;
+  color: #8db2f2;
 }
-
-#battery.warning:not(.charging) {
-    background-color: #c49ea0;
-    color: #0f0f0f;
+#workspaces button:first-child {
+  margin-left: 13px;
 }
-
-#network {
-	color: #c4c19e;
-	border-radius: 0px 0px 0px 0px;
+#workspaces button.active {
+  color: #1e1e2e;
+  background-color: #8db2f2;
 }
-
-#pulseaudio {
-	color: #a5b4cb;
+#clock {
+  color: #fa98ef;
+}
+#custom-media {
+  padding-left: 52px;
+  padding-right: 52px;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  border-radius: 80px;
+  font-weight: bold;
+  color: #1e1e2e;
+}
+#custom-media.playing {
+  background: linear-gradient(45deg, #11998e, #38ef7d, #00b09b, #96c93d, #0f9b0f);
+  background-size: 600% 600%;
+  animation: CustomMediaAnimation 35s ease infinite;
+}
+#custom-media.stopped {
+  background: #2f2f48;
+  color: #f5f6fa;
+}
+@keyframes CustomMediaAnimation {
+  0% {
+    background-position: 0% 41%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+  100% {
+    background-position: 0% 41%;
+  }
 }
