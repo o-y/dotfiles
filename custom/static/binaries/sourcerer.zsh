@@ -3,13 +3,6 @@
 ##########################################
 
 echo "[~] starting sourcerer..."
-echo "[!] sourcerer: requesting sudo permission which is required to symlink binaries to /usr/local"
-sudo -v
-
-if ! sudo -n true &>/dev/null; then
-  echo "[!] sourcerer: sudo access denied, exiting..."
-  return 1
-fi
 
 #################### init ####################
 
@@ -35,6 +28,17 @@ source_helper() {
   echo "[!] sourcerer: symlinking $file_name (full path: $file) to $bin/$file_name"
 
   if ! [ -e "$bin/$file_name" ]; then
+
+    # vvv - request sudo permission - vvv
+    echo "[!] sourcerer: requesting sudo permission which is required to symlink binaries to /usr/local"
+    sudo -v
+
+    if ! sudo -n true &>/dev/null; then
+      echo "[!] sourcerer: sudo access denied, exiting..."
+      return 1
+    fi
+    # ^^^ - request sudo permission - ^^^
+
     sudo chmod +x "$file_path"
     sudo ln -s "$file_path" "$bin/$file_name"
   fi
