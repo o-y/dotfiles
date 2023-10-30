@@ -1,5 +1,3 @@
-if [[ $- == *i* ]]; then
- 
 #########################################
 #########################################
 ### CTRL-Z - Search for files/directories
@@ -30,14 +28,13 @@ __fzfcmd() {
 }
  
 fzf-file-widget() {
-  echo "Disabled"
-  # LBUFFER="${LBUFFER}$(__fsel)"
-  # local ret=$?
-  # zle reset-prompt
-  # return $ret
+  LBUFFER="${LBUFFER}$(__fsel)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
 }
-# zle     -N   fzf-file-widget
-# bindkey '^Z' fzf-file-widget
+zle     -N   fzf-file-widget
+bindkey '^Z' fzf-file-widget
  
 # Ensure precmds are run after cd
 fzf-redraw-prompt() {
@@ -71,5 +68,3 @@ fzf-history-widget() {
 }
 zle     -N   fzf-history-widget
 bindkey '^X' fzf-history-widget
-
-fi
