@@ -41,6 +41,7 @@ stows_darwin=(skhd yabai)
 stows_linux=(
   blaze
   hgrc
+  dunst:~/.config/dunst
   kitty:~/.config/kitty
   hypr:~/.config/hypr
   swaylock:~/.config/swaylock

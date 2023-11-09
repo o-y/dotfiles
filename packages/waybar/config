@@ -18,7 +18,7 @@
 		"format": "{icon}",
 		"on-click": "activate",
 		"format-icons": {
-			"1" : "1",
+			"1" : "I",
 			"2" : "2",
 			"3" : "3",
 			"4" : "4",
@@ -53,11 +53,5 @@
         "escape": true,
         "exec": "zsh ~/dotfiles/packages/waybar/custom/listening.zsh",
         "on-click": "playerctl play-pause"
-    },
-
-	"image#album-art": {
-        "path": "/usr/local/google/home/slyo/img.png",
-        "size": 32,
-        "interval": 1
-	}
+    }
 }
