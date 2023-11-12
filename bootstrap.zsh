@@ -13,6 +13,7 @@ dependencies_darwin=(
   "adb" "brew install android-platform-tools"
   "rg" "brew install ripgrep"
   "hyperfine" "brew install hyperfine"
+  "git-crypt" "brew install git-crypt"
 )
 
 # dependencies for Linux
@@ -25,6 +26,7 @@ dependencies_linux=(
   "adb" "sudo apt-get install android-tools-adb"
   "rg" "sudo apt-get install ripgrep"
   "hyperfine" "sudo apt-get install hyperfine"
+  "git-crypt" "sudo apt-get install git-crypt"
 )
 
 # common symlinks
