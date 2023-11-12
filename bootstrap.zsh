@@ -111,7 +111,7 @@ process_stows() {
     echo "[!] symlinking '$package' from '$packages_directory' to '$target'"
 
     mkdir -p "$target"
-    stow "$package" --dir="$packages_directory" --target="$target" --adopt
+    stow "$package" --dir="$packages_directory" --target="$target"
   done
 }
 
