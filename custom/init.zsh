@@ -22,7 +22,10 @@ source_helper() {
 
   if [[ $(uname) == $file_uname || $file_uname == "common" ]]; then
     if is_encrypted "$file"; then
-      echo "[init] WARNING - skipping encrypted file: $file - run '$ git-crypt unlock'"
+      if [ ! -e "$HOME/silence-git-crypt-warnings" ]; then
+        echo "[!] WARNING - skipping encrypted file: $file - run '$ git-crypt unlock'"
+        echo "[!]           to silence these warnings, execute $ touch ~/silence-git-crypt-warnings"
+      fi
     else
       source "$file"
     fi
