@@ -41,7 +41,7 @@
   color: #1e1e2e;
 }
 #custom-media.playing {
-  background: linear-gradient(45deg, #11998e, #38ef7d, #00b09b, #0f9b0f);
+  background: linear-gradient(45deg, #11998e, #38ef7d, #00b09b, #1db954);
   background-size: 600% 600%;
   animation: CustomMediaAnimation 15s ease infinite;
 }
