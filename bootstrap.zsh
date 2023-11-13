@@ -139,6 +139,6 @@ else
 fi
 
 echo "[~] everything successfully (probably) installed and configured! :)"
-echo "[?] press any key to continue..."
+echo "[?] press any key to reload zsh..."
 read -r
 zsh
