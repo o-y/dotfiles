@@ -19,7 +19,7 @@ echo "[!]           these can be unlocked using '$ git-crypt unlock, or   |"
 echo "[!]           their status can be queried with $ git-crypt status   |"
 echo "--------------------------------------------------------------------|"
 read -q "answer?run '$ git-crypt unlock' [Y/n] "
+echo ""
 if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
-    echo ""
     git-crypt unlock
 fi
