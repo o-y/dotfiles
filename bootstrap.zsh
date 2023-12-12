@@ -14,19 +14,21 @@ dependencies_darwin=(
   "rg" "brew install ripgrep"
   "hyperfine" "brew install hyperfine"
   "git-crypt" "brew install git-crypt"
+  "btop" "brew install btop"
 )
 
 # dependencies for Linux
 dependencies_linux=(
-  "stow" "sudo apt-get install stow"
-  "gawk" "sudo apt-get install gawk"
-  "jot" "sudo apt-get install athena-jot"
-  "fzf" "sudo apt-get install fzf"
-  "scrcpy" "sudo apt-get install scrcpy"
-  "adb" "sudo apt-get install android-tools-adb"
-  "rg" "sudo apt-get install ripgrep"
-  "hyperfine" "sudo apt-get install hyperfine"
-  "git-crypt" "sudo apt-get install git-crypt"
+  "stow" "sudo apt install stow"
+  "gawk" "sudo apt install gawk"
+  "jot" "sudo apt install athena-jot"
+  "fzf" "sudo apt install fzf"
+  "scrcpy" "sudo apt install scrcpy"
+  "adb" "sudo apt install android-tools-adb"
+  "rg" "sudo apt install ripgrep"
+  "hyperfine" "sudo apt install hyperfine"
+  "git-crypt" "sudo apt install git-crypt"
+  "btop" "sudo apt install btop"
 )
 
 # common symlinks
