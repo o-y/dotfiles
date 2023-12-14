@@ -1,17 +1,24 @@
 # allow zsh to handle '*' like bash
 setopt nonomatch
+autoload -U bashcompinit
+bashcompinit
 
 # cargo
-if [ -f "$HOME/.cargo/env" ]; then
+if [ -e "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
 
 # brew
-if [ -f "/opt/homebrew/bin/brew" ]; then
+if [ -e "/opt/homebrew/bin/brew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # conda
-if [ -f "$HOME/miniconda3" ]; then
+if [ -e "$HOME/miniconda3" ]; then
     . "$HOME/miniconda3/etc/profile.d/conda.sh"
+fi
+
+# local path
+if [ -e "$HOME/.local/bin" ]; then
+    export PATH="$PATH:$HOME/.local/bin"
 fi
