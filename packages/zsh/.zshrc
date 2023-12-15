@@ -4,8 +4,8 @@ export ZSH="$HOME/.oh-my-zsh"
 
 #### config
 export PROMPT_EOL_MARK=''
-export DISABLE_AUTO_TITLE="true"
-export ENABLE_CORRECTION="true"
+export DISABLE_AUTO_TITLE="false"
+export ENABLE_CORRECTION="false"
 export COMPLETION_WAITING_DOTS="true"
 
 #### load custom scripts
