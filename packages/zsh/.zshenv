@@ -8,6 +8,11 @@ if [ -e "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
 
+# go
+if [ -e "$HOME/go/bin" ]; then
+    export PATH="$PATH:$HOME/go/bin"
+fi
+
 # brew
 if [ -e "/opt/homebrew/bin/brew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
