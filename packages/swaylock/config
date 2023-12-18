@@ -10,7 +10,7 @@ indicator-thickness=20
 
 clock
 
-image=/usr/local/google/home/slyo/Pictures/wallpapers/075.jpg
+image=/usr/local/google/home/slyo/dotfiles/custom/static/backgrounds/075.jpg
 effect-blur=15x20
 
 datestr=%a %d-%m-%y 
