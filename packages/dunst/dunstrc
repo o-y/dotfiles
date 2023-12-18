@@ -13,7 +13,6 @@
     origin = bottom-right
     offset = 24x24
 
-
     progress_bar = true
     progress_bar_height = 14
     progress_bar_frame_width = 1
@@ -47,7 +46,6 @@
 
     # Disable idle time
     idle_threshold = 0
-
    
     # --- Text --- #
 
@@ -101,7 +99,6 @@
 
     # Display indicators for URLs (U) and actions (A).
     show_indicators = yes
-
     
     # ---- Icons ---- #
 
@@ -139,7 +136,6 @@
     mouse_left_click = close_current
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
-
 
 [experimental]
     per_monitor_dpi = false

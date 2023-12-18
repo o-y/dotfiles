@@ -19,14 +19,14 @@
   padding: 6px 20px;
   margin: 13px 6px;
   background-color: #1e1e2e;
-  color: #8db2f2;
+  color: #d3d0c9;
 }
 #workspaces button:first-child {
   margin-left: 13px;
 }
 #workspaces button.active {
   color: #1e1e2e;
-  background-color: #8db2f2;
+  background-color: #d3d0c9;
 }
 #clock {
   color: #fa98ef;
