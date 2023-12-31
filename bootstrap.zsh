@@ -15,6 +15,7 @@ dependencies_darwin=(
   "hyperfine" "brew install hyperfine"
   "git-crypt" "brew install git-crypt"
   "btop" "brew install btop"
+  "cliclick" "brew install cliclick"
 )
 
 # dependencies for Linux
