@@ -1,8 +1,11 @@
 # specifies wrappers around common functionality
 
+##
+## qrepeat - Command Repeater
+##
 qrepeat() {
     local usage() {
-        echo "qrepeat - Command repeater"
+        echo "qrepeat - Command Repeater"
         echo "Usage: qrepeat <interval> <command>"
         echo "  interval    time between each command [e.g 5s, 2m, 1h, 3d]"
         echo "  command     the command which should be executed" 
@@ -44,4 +47,11 @@ qrepeat() {
         eval $command
         sleep $interval
     done
+}
+
+##
+## qback - Send commands to the background
+##
+qback() {
+    
 }
