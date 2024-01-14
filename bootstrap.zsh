@@ -45,6 +45,7 @@ stows_darwin=(skhd yabai)
 # symlinks for Linux
 stows_linux=(
   blaze
+  bazel
   hgrc
   dunst:~/.config/dunst
   kitty:~/.config/kitty
