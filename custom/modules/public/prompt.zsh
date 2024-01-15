@@ -1,11 +1,5 @@
-function parse-git-branch() {
-  local branch
-  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-  if [ -n "$branch" ]; then
-    echo "$branch"
-  else
-    echo ""
-  fi
+function parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
 }
 
 COLOR_USR=$'\e[38;5;255m'
@@ -23,7 +17,7 @@ PROMPT+="${COLOR_USR}%n"                   # display username
 PROMPT+="${COLOR_AT}@"                     # display @ symbol
 PROMPT+="${COLOR_USR}%m"                   # display hostname
 PROMPT+=" ${COLOR_DIR}%~"                  # display current directory
-PROMPT+=" ${COLOR_GIT}$(parse-git-branch)" # display git branch
+PROMPT+=" ${COLOR_GIT}$(parse_git_branch)" # display git branch
 PROMPT+="${COLOR_DEF}${NEWLINE}"           # reset colour and add newline
 PROMPT+='~%b '                             # display tilde
 
