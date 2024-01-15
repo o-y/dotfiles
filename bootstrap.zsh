@@ -24,7 +24,6 @@ dependencies_linux=(
   "gawk" "sudo apt install gawk"
   "jot" "sudo apt install athena-jot"
   "fzf" "sudo apt install fzf"
-  "scrcpy" "sudo apt install scrcpy"
   "adb" "sudo apt install android-tools-adb"
   "rg" "sudo apt install ripgrep"
   "hyperfine" "sudo apt install hyperfine"
@@ -47,6 +46,7 @@ stows_linux=(
   blaze
   bazel
   hgrc
+  zellij:~/.config/zellij
   dunst:~/.config/dunst
   kitty:~/.config/kitty
   hypr:~/.config/hypr
