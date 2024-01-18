@@ -34,6 +34,8 @@ dependencies_linux=(
 # common symlinks
 stows_common=(
   zsh
+  bazel
+  zellij:~/.config/zellij
   helix:~/.config/helix
   tmux:~/.config/tmux
 )
@@ -44,9 +46,7 @@ stows_darwin=(skhd yabai)
 # symlinks for Linux
 stows_linux=(
   blaze
-  bazel
   hgrc
-  zellij:~/.config/zellij
   dunst:~/.config/dunst
   kitty:~/.config/kitty
   hypr:~/.config/hypr
