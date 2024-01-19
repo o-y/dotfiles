@@ -34,7 +34,6 @@ dependencies_linux=(
 # common symlinks
 stows_common=(
   zsh
-  bazel
   zellij:~/.config/zellij
   helix:~/.config/helix
   tmux:~/.config/tmux
