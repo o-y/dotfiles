@@ -27,3 +27,8 @@ fi
 if [ -e "$HOME/.local/bin" ]; then
     export PATH="$PATH:$HOME/.local/bin"
 fi
+
+# navi
+if type navi &> /dev/null; then
+    eval "$(navi widget zsh)"
+fi
