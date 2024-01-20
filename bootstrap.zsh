@@ -16,6 +16,7 @@ dependencies_darwin=(
   "git-crypt" "brew install git-crypt"
   "btop" "brew install btop"
   "cliclick" "brew install cliclick"
+  "navi" "brew install navi"
 )
 
 # dependencies for Linux
