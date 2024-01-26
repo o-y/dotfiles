@@ -98,6 +98,7 @@ bindkey '^E' edit-command-line
 ###########################################
 function yazi-filepicker {
   ya < "$TTY"
+  zle reset-prompt
 }
 zle -N yazi-filepicker
 bindkey '^Y' yazi-filepicker
