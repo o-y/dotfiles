@@ -68,3 +68,54 @@ fzf-history-widget() {
 }
 zle     -N   fzf-history-widget
 bindkey '^X' fzf-history-widget
+
+###########################################
+###########################################
+### CTRL-S - preprend sudo
+###########################################
+###########################################
+function prepend-sudo {
+  if [[ $BUFFER != "sudo "* ]]; then
+    BUFFER="sudo $BUFFER"; CURSOR+=5
+  fi
+}
+zle -N prepend-sudo
+bindkey '^S' prepend-sudo
+
+###########################################
+###########################################
+### CTRL-E - open CLI in $EDITOR
+###########################################
+###########################################
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^E' edit-command-line
+
+###########################################
+###########################################
+### CTRL-Y - file picker
+###########################################
+###########################################
+function yazi-filepicker {
+  ya < "$TTY"
+}
+zle -N yazi-filepicker
+bindkey '^Y' yazi-filepicker
+
+###########################################
+###########################################
+### CTRL-H - keybind help menu
+###########################################
+###########################################
+function keybind-help-menu {
+  echo "--~--~--~--"
+  echo "ctrl+y - yazi file picker"
+  echo "ctrl+e - edit current command in $EDITOR"
+  echo "ctrl+s - prepend sudo to the current command"
+  echo "ctrl+x - view command history"
+  echo "ctrl+z - open in-line file viewer"
+  echo "--~--~--~--"
+  zle reset-prompt
+}
+zle -N keybind-help-menu
+bindkey '^H' keybind-help-menu
