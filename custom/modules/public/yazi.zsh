@@ -5,5 +5,6 @@ function ya() {
 		cd -- "$cwd"
 	fi
 	rm -f -- "$tmp"
+
 }
 
