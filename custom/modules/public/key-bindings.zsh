@@ -108,6 +108,7 @@ bindkey '^Y' yazi-filepicker
 ###########################################
 ###########################################
 function keybind-help-menu {
+   echo ""
   echo "--~--~--~--"
   echo "ctrl+y - yazi file picker"
   echo "ctrl+e - edit current command in $EDITOR"
@@ -115,6 +116,7 @@ function keybind-help-menu {
   echo "ctrl+x - view command history"
   echo "ctrl+z - open in-line file viewer"
   echo "--~--~--~--"
+  echo ""
   zle reset-prompt
 }
 zle -N keybind-help-menu
