@@ -109,7 +109,7 @@ bindkey '^Y' yazi-filepicker
 ###########################################
 ###########################################
 function keybind-help-menu {
-   echo ""
+  echo ""
   echo "--~--~--~--"
   echo "ctrl+y - yazi file picker"
   echo "ctrl+e - edit current command in $EDITOR"
