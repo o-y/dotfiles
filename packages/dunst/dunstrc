@@ -8,10 +8,9 @@
     # Follow monitor with mouse
     follow = mouse
 
-    width = 300
-    # height = 260
+    width = 400
     origin = bottom-right
-    offset = 24x24
+    offset = 80x80
 
     progress_bar = true
     progress_bar_height = 14
@@ -133,9 +132,9 @@
     ignore_dbusclose = false
 
     # --- Mouse --- #
-    mouse_left_click = close_current
-    mouse_middle_click = do_action, close_current
-    mouse_right_click = close_all
+    mouse_left_click = open_url, close_current
+    mouse_middle_click = context, close_current
+    mouse_right_click = close_current
 
 [experimental]
     per_monitor_dpi = false
