@@ -1,8 +1,3 @@
-# allow zsh to handle '*' like bash
-setopt nonomatch
-autoload -U bashcompinit
-bashcompinit
-
 # cargo
 if [ -e "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
@@ -31,4 +26,9 @@ fi
 # navi
 if type navi &> /dev/null; then
     eval "$(navi widget zsh)"
+fi
+
+# fpath
+if type brew &> /dev/null; then
+    fpath+=("/opt/homebrew/share/zsh/site-functions")
 fi
