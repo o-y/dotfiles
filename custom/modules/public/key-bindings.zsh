@@ -122,3 +122,21 @@ function keybind-help-menu {
 }
 zle -N keybind-help-menu
 bindkey '^H' keybind-help-menu
+
+###########################################
+###########################################
+### CTRL-U - list directories
+###########################################
+###########################################
+function keybind-ls {
+  BUFFER=""
+  zle redisplay
+  echo -ne "\033[1K\r"  # Clears the current line
+  
+  eza 2>/dev/null || ls
+  
+  echo ""
+  zle reset-prompt
+}
+zle -N keybind-ls
+bindkey '^U' keybind-ls
