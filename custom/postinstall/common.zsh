@@ -9,7 +9,7 @@ else
 fi
 
 ######## Platform Install Scripts ########
-PATH_TO_SCRIPT=$(realpath -s "$0")
+PATH_TO_SCRIPT=$(realpath "$0")
 SCRIPT_DIR=$(dirname "$PATH_TO_SCRIPT")
 
 source_helper() {
