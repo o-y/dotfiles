@@ -1,4 +1,4 @@
-PATH_TO_SCRIPT=$(realpath -s "$0")
+PATH_TO_SCRIPT=$(realpath "$0")
 MODULES_DIR=$(dirname "$PATH_TO_SCRIPT")/modules
 
 is_encrypted() {
@@ -23,6 +23,7 @@ source_helper() {
   if [[ $(uname) == $file_uname || $file_uname == "common" ]]; then
     if is_encrypted "$file"; then
       if [ ! -e "$HOME/silence-git-crypt-warnings" ]; then
+        # TODO: Append skipped files to a set and log them once afterwards.
         echo "[!] WARNING - skipping encrypted file: $file - run '$ git-crypt unlock'"
         echo "[!]           to silence these warnings, execute '$ touch ~/silence-git-crypt-warnings'"
       fi
