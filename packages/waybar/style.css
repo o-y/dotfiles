@@ -3,7 +3,9 @@
   font-size: 17px;
 }
 .struct-right,
-#clock {
+#clock,
+#memory,
+#window {
   margin-right: 35px;
 }
 #waybar {
@@ -30,6 +32,12 @@
 }
 #clock {
   color: #fa98ef;
+}
+#memory {
+  color: #1abc9c;
+}
+#window {
+  color: #d3d0c9;
 }
 #custom-media {
   padding-left: 52px;

@@ -3,15 +3,15 @@ daemonize
 show-failed-attempts
 ignore-empty-password
 
-grace=120
+grace=15
 indicator-idle-visible
 indicator-radius=165
 indicator-thickness=20
 
 clock
 
-image=/usr/local/google/home/slyo/dotfiles/custom/static/backgrounds/lock.jpg
-effect-blur=15x20
+image=/usr/local/google/home/slyo/dotfiles/custom/static/backgrounds/current.png
+# effect-blur=15x20
 
 datestr=%a %d-%m-%y 
 
