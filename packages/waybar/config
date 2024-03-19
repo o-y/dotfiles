@@ -4,31 +4,22 @@
 	"margin-right": 220,
 	"margin-top": 45,
 
-	"modules-left": ["wlr/workspaces"],
+	"modules-left": ["hyprland/workspaces"],
 
 	"modules-center": [
         "custom/media"
     ],
 
 	"modules-right": [
+		"hyprland/window",
+		"memory",
 		"clock"
 	],
 	
-	"wlr/workspaces": {
+	"hyprland/workspaces": {
 		"format": "{icon}",
 		"on-click": "activate",
 		"format-icons": {
-			"1" : "1",
-			"2" : "2",
-			"3" : "3",
-			"4" : "4",
-			"5" : "5",
-			"6" : "6",
-			"7" : "7",
-			"8" : "8",
-			"9" : "9"
-		},
-		"persistent-workspaces": {
 			"1" : "1",
 			"2" : "2",
 			"3" : "3",
