@@ -8,9 +8,6 @@ export DISABLE_AUTO_TITLE="false"
 export ENABLE_CORRECTION="false"
 export COMPLETION_WAITING_DOTS="true"
 
-#### load custom scripts
-source ~/dotfiles/custom/init.zsh
-
 #### load Zsh
 plugins=(
     fzf-tab
@@ -18,7 +15,9 @@ plugins=(
     zsh-autosuggestions
     macos
     adb
-    web-search
 )
 
 source $ZSH/oh-my-zsh.sh
+
+#### load custom scripts
+source ~/dotfiles/custom/init.zsh
