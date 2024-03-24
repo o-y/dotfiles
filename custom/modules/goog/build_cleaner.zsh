@@ -5,7 +5,7 @@ function bcd() {
 
 function bca() {
     echo "[buildcleaner] running build_cleaner (add) on target $1"
-    __buildcleaner "$1" --tool_tag=javac --only-adda
+    __buildcleaner "$1" --tool_tag=javac --only-add
 }
 
 function __buildcleaner() {

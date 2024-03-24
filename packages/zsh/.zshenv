@@ -28,7 +28,7 @@ if type navi &> /dev/null; then
     eval "$(navi widget zsh)"
 fi
 
-# fpath
+# brew fpath
 if type brew &> /dev/null; then
     fpath+=("/opt/homebrew/share/zsh/site-functions")
 fi
