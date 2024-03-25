@@ -17,6 +17,7 @@ dependencies_darwin=(
   "btop" "brew install btop"
   "cliclick" "brew install cliclick"
   "navi" "brew install navi"
+  "zoxide" "brew install zoxide"
 )
 
 # dependencies for Linux
@@ -30,6 +31,7 @@ dependencies_linux=(
   "hyperfine" "sudo apt install hyperfine"
   "git-crypt" "sudo apt install git-crypt"
   "btop" "sudo apt install btop"
+  "zoxide" "sudo apt install zoxide"
 )
 
 # common symlinks
