@@ -32,3 +32,13 @@ fi
 if type brew &> /dev/null; then
     fpath+=("/opt/homebrew/share/zsh/site-functions")
 fi
+
+# fpath
+if [ -e "$HOME/dotfiles/custom/static/fpath" ]; then
+    fpath+="$HOME/dotfiles/custom/static/fpath"
+fi
+
+# zoxide
+if type zoxide &> /dev/null; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi
