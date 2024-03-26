@@ -17,7 +17,7 @@ plugins=(
     adb
 )
 
-source $ZSH/oh-my-zsh.sh
-
 #### load custom scripts
 source ~/dotfiles/custom/init.zsh
+
+source $ZSH/oh-my-zsh.sh
