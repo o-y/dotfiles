@@ -21,8 +21,11 @@ function zed() {
     zellij edit "$@"
 }
 
+# zellij attach
 function zs() {
-    sessions=$(zellij list-sessions --no-formatting | awk '{print $1, $3}')
-    selected_session=$(echo "$sessions" | fzf --height ${FZF_TMUX_HEIGHT:-20%})
-    za $selected_session | awk '{print $1}'
+    sessions=$(zellij list-sessions --no-formatting | awk '{printf "\033[1;36m%-20s\033[0m %s\n", $1, $3}')
+    selected_session=$(echo "$sessions" | fzf --height ${FZF_TMUX_HEIGHT:-20%} --ansi)
+    if [ -n "$selected_session" ]; then
+        za $selected_session | awk '{print $1}'
+    fi
 }
