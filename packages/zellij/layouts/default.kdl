@@ -15,11 +15,24 @@ layout {
 
                 hide_frame_for_single_pane "true"
 
-                mode_normal  "#[bg=blue] "
-                mode_tmux    "#[bg=#ffc387] "
+                mode_normal        "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_locked        "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_resize        "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_pane          "#[bg=#EACD61,fg=#000000] {name} "
+                mode_tab           "#[bg=#3CEC85,fg=#000000] {name} "
+                mode_scroll        "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_enter_search  "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_search        "#[bg=#B78AFF,fg=#000000] {name} "
+                mode_rename_tab    "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_rename_pane   "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_session       "#[bg=#FF738A,fg=#000000] {name} "
+                mode_move          "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_prompt        "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_tmux          "#[bg=#89B4FA,fg=#000000] {name} "
+                mode_default_to_mode "normal"
 
                 tab_normal   "#[fg=#6C7086] {name} "
-                tab_active   "#[fg=#9399B2,bold,italic] {name} "
+                tab_active   "#[fg=#9399B2,bold,italic] > {name} < "
 
                 datetime        "#[fg=#6C7086,bold] {format} "
                 datetime_format "%A, %d %b %Y %H:%M"

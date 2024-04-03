@@ -152,6 +152,12 @@ keybinds {
         bind "Alt -" { Resize "Decrease"; }
         bind "Alt [" { PreviousSwapLayout; }
         bind "Alt ]" { NextSwapLayout; }
+
+        bind "Ctrl i" {
+            LaunchOrFocusPlugin "file:~/dotfiles/packages/zellij/plugins/zellij_forgot.wasm" {
+                floating true
+            }
+        }
     }
     shared_except "normal" "locked" {
         bind "Enter" "Esc" { SwitchToMode "Normal"; }
