@@ -5,7 +5,7 @@
 # dependencies for MacOS
 dependencies_darwin=(
   "stow" "brew install stow"
-  "helix" "brew install helix"
+  "hx" "brew install helix"
   "gawk" "brew install gawk"
   "realpath" "brew install coreutils"
   "fzf" "brew install fzf"
@@ -64,12 +64,6 @@ stows_linux=(
 
 echo "[?] press any key to install required dependencies and symlink dotfiles (or ctrl+c to cancel)";
 read -r;
-
-################ Install Oh My Zsh ################
-if ! [ -e "$HOME/.oh-my-zsh" ]; then
-  echo "[!] installing oh-my-zsh";
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-fi
 
 ################ Download submodules ################
 echo "[~] fetching submodule dependencies";
