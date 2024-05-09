@@ -36,8 +36,7 @@
         "format": "{icon}  {}",
         "return-type": "json",
         "format-icons": {
-            "default": "󰎈",
-			"stopped": "󰏤"
+            "default": "󰎈"
         },
 		"tooltip": false,
 		"interval": 1,

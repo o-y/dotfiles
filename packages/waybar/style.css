@@ -47,6 +47,7 @@
   border-radius: 80px;
   font-weight: bold;
   color: #1e1e2e;
+  transition: background 0.45s ease-in-out, color 0.2s ease-in-out;
 }
 #custom-media.playing {
   background: linear-gradient(45deg, #11998e, #38ef7d, #00b09b, #1db954);
