@@ -1,9 +1,13 @@
+########################################
+################# SETUP ################
+########################################
+
 PATH_TO_SCRIPT=$(realpath "$0")
 MODULES_DIR=$(dirname "$PATH_TO_SCRIPT")/modules
 
 is_encrypted() {
   file="$1"
-  if command -v git-crypt4 &> /dev/null; then
+  if command -v git-crypt-disabled-do-not-use &> /dev/null; then
     if git-crypt status "$file" 2>&1 | grep -q 'not encrypted'; then
       return 1
     else
