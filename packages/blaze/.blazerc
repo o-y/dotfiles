@@ -1,6 +1,9 @@
 # WebX support
 import %workspace%/java/com/google/android/apps/gsa/tools/blazerc
 
+# Dogfood Blaze flags (speeds up builds)
+# build --config=dogfood_opt_in
+
 # More verbose Dagger buildgen error messages
 build --javacopt=-Adagger.experimentalDaggerErrorMessages=enabled
 

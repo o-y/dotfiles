@@ -21,7 +21,7 @@ function wrapped_blaze() {
   local target
 
   target="${!#}"
-  blaze "$@"
+  /usr/bin/blaze "$@"
   exit_code=$?
 
   # i should clean this up
