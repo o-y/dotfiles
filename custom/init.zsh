@@ -45,7 +45,7 @@ source "$(dirname "$PATH_TO_SCRIPT")/priority_init.zsh"
 # source modules
 for dir in public private goog; do
   if [ -d "$MODULES_DIR/$dir" ]; then
-    for file in "$MODULES_DIR/$dir"/*; do
+    for file in "$MODULES_DIR"/**/*.zsh; do
       filename=$(basename "$file")
       if [[ $filename == *.darwin.zsh ]]; then
         source_helper "$file" "Darwin"

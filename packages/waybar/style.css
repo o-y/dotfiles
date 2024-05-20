@@ -22,6 +22,7 @@
   margin: 13px 6px;
   background-color: #1e1e2e;
   color: #d3d0c9;
+  transition: background-color 0.35s ease-in-out, color 0.2s ease-in-out;
 }
 #workspaces button:first-child {
   margin-left: 13px;
