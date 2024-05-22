@@ -37,6 +37,7 @@ fi
 if [ -e "$HOME/dotfiles/custom/static/fpath" ]; then
     fpath+="$HOME/dotfiles/custom/static/fpath"
 fi
+
 # zsh-completions fpath
 if [ -e "$ZSH_CUSTOM/plugins/zsh-completions/src" ]; then
     fpath+="$ZSH_CUSTOM/plugins/zsh-completions/src"
