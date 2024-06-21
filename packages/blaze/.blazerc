@@ -1,4 +1,4 @@
-# WebX support
+# GSA support
 import %workspace%/java/com/google/android/apps/gsa/tools/blazerc
 
 # Dogfood Blaze flags (speeds up builds)
