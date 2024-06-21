@@ -1,0 +1,35 @@
+{
+  "menus": [
+    {
+      "root": {
+        "type": "submenu",
+        "name": "core",
+        "icon": "explosion",
+        "iconTheme": "material-symbols-rounded",
+        "children": [
+          {
+            "type": "uri",
+            "data": {
+              "uri": "http://sponge2/lucky"
+            },
+            "name": "Latest Blaze Run",
+            "icon": "directions_run",
+            "iconTheme": "material-symbols-rounded"
+          },
+          {
+            "type": "submenu",
+            "data": {},
+            "name": "Submenu",
+            "icon": "apps",
+            "iconTheme": "material-symbols-rounded",
+            "children": []
+          }
+        ]
+      },
+      "shortcut": "",
+      "shortcutID": "core",
+      "centered": false
+    }
+  ],
+  "stash": []
+}
