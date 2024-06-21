@@ -40,6 +40,7 @@ stows_common=(
   zellij:~/.config/zellij
   helix:~/.config/helix
   tmux:~/.config/tmux
+  kando:~/.config/kando
 )
 
 # symlinks for MacOS

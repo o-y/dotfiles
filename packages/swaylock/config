@@ -3,42 +3,52 @@ daemonize
 show-failed-attempts
 ignore-empty-password
 
-grace=15
+grace=30
 indicator-idle-visible
 indicator-radius=165
 indicator-thickness=20
 
 clock
 
-image=/usr/local/google/home/slyo/dotfiles/custom/static/backgrounds/current.png
-# effect-blur=15x20
+image=/usr/local/google/home/slyo/dotfiles/custom/static/images/current.png
 
-datestr=%a %d-%m-%y 
-
-ring-color=adf0ea
-inside-color=050B3F
-line-color=ffffff
-
-key-hl-color=F5B0DDff
-
-separator-color=00000000
-
-text-color=C1A9F3ff
+# misc text
+datestr=%a %d-%m-%y
+font=Consolas
 text-caps-lock-color=""
 
-ring-ver-color=F5B0DDff
-inside-ver-color=1f1d2e
+###
+### main ring
+###
+ring-color=CAA78C
+inside-color=A4836E
+line-color=ffffff
+text-color=2f3640ff
+
+# typing ring
+key-hl-color=A4836Eff
+separator-color=00000000
+
+###
+### verify ring
+###
+ring-ver-color=CAA78C
+inside-ver-color=A4836E
 line-ver-color=ffffff
-text-ver-color=F5B0DDff
+text-ver-color=2f3640ff
 
-ring-clear-color=C1A9F3ff
-inside-clear-color=1f1d2e
+###
+### clear text ring
+###
+ring-clear-color=CAA78C
+inside-clear-color=A4836E
 line-clear-color=ffffff
-text-clear-color=C1A9F3ff
+text-clear-color=2f3640ff
 
+###
+### incorrect ring
+###
 ring-wrong-color=d63031
 inside-wrong-color=eb4d4b
 line-wrong-color=ffffff
 text-wrong-color=ffffff
-
-font=Consolas
