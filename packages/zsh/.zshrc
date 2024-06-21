@@ -21,3 +21,4 @@ plugins=(
 source ~/dotfiles/custom/init.zsh
 
 source $ZSH/oh-my-zsh.sh
+[[ -e "/Users/slyo/mdproxy/data/mdproxy_zshrc" ]] && source "/Users/slyo/mdproxy/data/mdproxy_zshrc" # MDPROXY-ZSHRC
