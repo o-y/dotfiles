@@ -26,6 +26,9 @@ fi
 
 ################ Install Rust ################
 if ! command -v rustc >/dev/null 2>&1 || ! command -v cargo >/dev/null 2>&1; then
-    # echo "[!] rust/cargo is not installed, some dependencies may require that, would you like to install rust?"
-    # TODO...
+    echo "[!] rust/cargo is not installed, some dependencies may require this to build from source"
+    read -q "answer?install rust/cargo? [Y/n] "
+    if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    fi
 fi
