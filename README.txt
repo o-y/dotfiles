@@ -20,3 +20,15 @@ MacOS dependencies
   - Brew - https://brew.sh
   - Yabai - https://github.com/koekeishiya/yabai
   - Skhd - https://github.com/koekeishiya/skhd
+
+--
+Config
+--
+
+iTerm:
+  - Profile: custom/static/themes/iterm/dark.json
+  - Theme: Minimal
+
+Visual Studio Code:
+  - Theme: Bearded Theme - Arc
+  - Icons Theme: Bearded Icons
