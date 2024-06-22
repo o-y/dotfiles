@@ -9,3 +9,7 @@ export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
 
 #### Editor
 export EDITOR="hx"
+
+#### Zsh History
+export HISTSIZE=10000000
+export SAVEHIST=10000000
