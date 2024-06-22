@@ -26,10 +26,10 @@ source_helper() {
 
   if [[ $(uname) == $file_uname || $file_uname == "common" ]]; then
     if is_encrypted "$file"; then
-      if [ ! -e "$HOME/silence-git-crypt-warnings" ]; then
+      if [[ ! -e "$HOME/silence-git-crypt-warnings" && ! -e "$HOME/.silence-git-crypt-warnings" ]]; then
         # TODO: Append skipped files to a set and log them once afterwards.
         echo "[!] WARNING - skipping encrypted file: $file - run '$ git-crypt unlock'"
-        echo "[!]           to silence these warnings, execute '$ touch ~/silence-git-crypt-warnings'"
+        echo "[!]           to silence these warnings, execute '$ touch ~/.silence-git-crypt-warnings'"
       fi
     else
       source "$file"
