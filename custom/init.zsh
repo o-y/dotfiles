@@ -21,9 +21,7 @@ source_helper() {
 
   if [[ $(uname) == $file_uname || $file_uname == "common" ]]; then
     if is_encrypted "$file"; then
-      if [[ ! -e "$HOME/silence-git-crypt-warnings" && ! -e "$HOME/.silence-git-crypt-warnings" ]]; then
-        skipped_files+=("$file")
-      fi
+      skipped_files+=("$file")
     else
       source "$file"
     fi
@@ -50,7 +48,7 @@ for file in "${all_zsh_files[@]}"; do
 done
 
 # output the skipped files list if there are any
-if [[ ${#skipped_files[@]} -gt 0 ]]; then
+if [[ ${#skipped_files[@]} -gt 0 && ! -e "$HOME/silence-git-crypt-warnings" && ! -e "$HOME/.silence-git-crypt-warnings" ]]; then
   echo "[!] WARNING: The following encrypted files were skipped:"
   echo "[!] --- ↓"
   for file in "${skipped_files[@]}"; do
