@@ -50,8 +50,17 @@ qrepeat() {
 }
 
 ##
+## qzshtime - Records how long it takes zsh to load
+##
+qzshtime() {
+    shell=${1-$SHELL}
+    for i in $(seq 1 8); do /usr/bin/time $shell -i -c exit; done
+}
+
+##
 ## qback - Send commands to the background
 ##
 qback() {
     
 }
+
