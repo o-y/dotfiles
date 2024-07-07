@@ -1,6 +1,3 @@
-#### Utilities
-alias bc=build_cleaner
-
 #### Corp mobile device alias
 alias -g left="25101FDH30000P"
 alias -g mid="16041FDEE0002M"
