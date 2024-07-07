@@ -52,6 +52,8 @@ qrepeat() {
 ##
 ## qzshtime - Records how long it takes zsh to load
 ##
+## TODO: convert this function to qtime <command> <iterations> or something similar, e.g piping.
+##
 qzshtime() {
     local usage() {
         echo "qzshtime - Measures Zsh Startup Latency"
