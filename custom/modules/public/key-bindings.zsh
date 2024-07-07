@@ -104,6 +104,7 @@ function keybind-help-menu {
   echo "ctrl+s - prepend sudo to the current command"
   echo "ctrl+x - view command history"
   echo "ctrl+z - open in-line file viewer"
+  echo "ctrl+u - ls"
   echo "--~--~--~--"
   echo ""
   zle reset-prompt
@@ -121,7 +122,7 @@ function keybind-ls {
   zle redisplay
   echo -ne "\033[1K\r"  # Clears the current line
   
-  eza 2>/dev/null || ls
+  eza -l -h --git --icons --no-filesize 2>/dev/null || ls
   
   echo ""
   zle reset-prompt
