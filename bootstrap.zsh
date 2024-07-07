@@ -18,6 +18,7 @@ dependencies_darwin=(
   "cliclick" "brew install cliclick"
   "navi" "brew install navi"
   "zoxide" "brew install zoxide"
+  "pipx" "brew install pipx"
 )
 
 # dependencies for Linux
@@ -32,6 +33,7 @@ dependencies_linux=(
   "git-crypt" "sudo apt install git-crypt"
   "btop" "sudo apt install btop"
   "zoxide" "sudo apt install zoxide"
+  "pipx" "sudo apt install pipx"
 )
 
 # common symlinks
