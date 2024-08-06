@@ -1,3 +1,3 @@
-2024/06/14-16:52:59.639 c8fcd Reusing MANIFEST /usr/local/google/home/slyo/.config/kando/session/Local Storage/leveldb/MANIFEST-000001
-2024/06/14-16:52:59.640 c8fcd Recovering log #3
-2024/06/14-16:52:59.640 c8fcd Reusing old log /usr/local/google/home/slyo/.config/kando/session/Local Storage/leveldb/000003.log 
+2024/06/26-17:27:00.472 25710 Reusing MANIFEST /usr/local/google/home/slyo/.config/kando/session/Local Storage/leveldb/MANIFEST-000001
+2024/06/26-17:27:00.477 25710 Recovering log #3
+2024/06/26-17:27:00.478 25710 Reusing old log /usr/local/google/home/slyo/.config/kando/session/Local Storage/leveldb/000003.log 
