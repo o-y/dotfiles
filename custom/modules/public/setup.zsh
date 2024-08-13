@@ -8,11 +8,6 @@ if [ -e "$HOME/go/bin" ]; then
     export PATH="$PATH:$HOME/go/bin"
 fi
 
-# brew
-if [ -e "/opt/homebrew/bin/brew" ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 # conda
 if [ -e "$HOME/miniconda3" ]; then
     . "$HOME/miniconda3/etc/profile.d/conda.sh"
@@ -26,6 +21,11 @@ fi
 # navi
 if type navi &> /dev/null; then
     eval "$(navi widget zsh)"
+fi
+
+# brew
+if [ -e "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # brew fpath
