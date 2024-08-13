@@ -16,10 +16,12 @@ MacOS apps
   - Android Studio - https://developer.android.com/studio
 
 MacOS dependencies
-  - Zsh - https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
   - Brew - https://brew.sh
   - Yabai - https://github.com/koekeishiya/yabai
   - Skhd - https://github.com/koekeishiya/skhd
+
+Common dependencies
+  - Zsh - https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
 
 --
 Config
