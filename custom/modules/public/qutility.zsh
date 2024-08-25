@@ -50,19 +50,33 @@ qrepeat() {
 }
 
 ##
-## qzshtime - Records how long it takes zsh to load
+## qtime - Records how long it takes a command to run
 ##
-## TODO: convert this function to qtime <command> <iterations> or something similar, e.g piping.
-##
-qzshtime() {
+qtime() {
     local usage() {
-        echo "qzshtime - Measures Zsh Startup Latency"
-        echo "Usage: qzshtime <iterations>"
+        echo "qtime - Measures Command Execution Times"
+        echo "Usage: qtime <command> <iterations>"
+        echo "  command       the command to run"
         echo "  iterations    the number of commands to sample [e.g 20]"
     }
 
-    if [[ $# -lt 1 ]]; then
+    if [[ $# -lt 2 ]]; then
         usage
+        return 1
+    fi
+
+    command="$1"
+    iterations="$2"
+
+    # Input validation: Check if iterations is a positive integer
+    if [[ ! "$iterations" =~ ^[1-9][0-9]*$ ]]; then
+        echo "[qtime] error: iterations must be a positive integer."
+        return 1
+    fi
+
+    # Input validation: Check if command is at least one non-space character
+    if [[ -z "${command// /}" ]]; then
+        echo "[qtime] error: command must be at least one non-space character."
         return 1
     fi
 
@@ -70,12 +84,16 @@ qzshtime() {
     user_times=()
     sys_times=()
 
-    iterations=$1
-
-    echo "[qzshtime] sampling $iterations iterations..."
+    echo "[qtime] sampling $iterations iterations of '$command'..."
     echo "--- ↓"
     for i in $(seq 1 $iterations); do
-        time_output=$(/usr/bin/time zsh -i -c exit 2>&1)
+        # OLD - time_output=$(/usr/bin/time zsh -i -c exit 2>&1)
+        # RAW - time_output=$(eval "/usr/bin/time $command" 2>&1)
+
+        # TODO: At the moment this involves creating a zsh session, which doesn't matter too much
+        # as generally I'm more interested in the relative differences between commands rather
+        # than individual absolute speeds.
+        time_output=$(eval "/usr/bin/time zsh -i -c $command exit" 2>&1)
         
         [[ $time_output =~ '([0-9.]+) real' ]] && real_times+=("${match[1]}")
         [[ $time_output =~ '([0-9.]+) user' ]] && user_times+=("${match[1]}")
@@ -112,13 +130,13 @@ qzshtime() {
     median_sys=$(median "${sys_times[@]}")
 
     # --- output ---
-    echo "[qzshtime] raw data..."
+    echo "[qtime] raw data..."
     echo "--- ↓"
     echo "     real: $real_times"
     echo "     user: $user_times"
     echo "     sys: $sys_times"
     echo "--- ↑"
-    echo "[qzshtime] sampled $iterations iterations..."
+    echo "[qtime] sampled $iterations iterations of '$command'..."
     echo "--- ↓"
     echo "     mean real: $mean_real"
     echo "     mean user: $mean_user"
