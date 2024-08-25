@@ -57,7 +57,7 @@ qtime() {
         echo "qtime - Measures Command Execution Times"
         echo "Usage: qtime <command> <iterations>"
         echo "  command       the command to run"
-        echo "  iterations    the number of commands to sample [e.g 20]"
+        echo "  iterations    the number of commands to sample where n >= 3 [e.g 20]"
     }
 
     if [[ $# -lt 2 ]]; then
@@ -68,9 +68,9 @@ qtime() {
     command="$1"
     iterations="$2"
 
-    # Input validation: Check if iterations is a positive integer
-    if [[ ! "$iterations" =~ ^[1-9][0-9]*$ ]]; then
-        echo "[qtime] error: iterations must be a positive integer."
+    # Input validation: Check if iterations is a positive integer greater than 2
+    if [[ ! "$iterations" =~ ^[2-9][0-9]*$ ]]; then
+        echo "[qtime] error: iterations must be an integer >= 3."
         return 1
     fi
 
@@ -92,7 +92,7 @@ qtime() {
 
         # TODO: At the moment this involves creating a zsh session, which doesn't matter too much
         # as generally I'm more interested in the relative differences between commands rather
-        # than individual absolute speeds.
+        # than individual absolute metrics.
         time_output=$(eval "/usr/bin/time zsh -i -c $command exit" 2>&1)
         
         [[ $time_output =~ '([0-9.]+) real' ]] && real_times+=("${match[1]}")
