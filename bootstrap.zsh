@@ -36,6 +36,11 @@ dependencies_linux=(
   "pipx" "sudo apt install pipx"
 )
 
+dependencies_common=(
+  ## -- dependencies on pipx --
+  "fuck:pipx" "pipx install --fetch-missing-python --python "3.11" thefuck" # https://github.com/nvbn/thefuck/issues/1444
+)
+
 # common symlinks
 stows_common=(
   zsh
@@ -80,24 +85,52 @@ git submodule status;
 
 ################ Install dependencies ################
 echo "[~] installing required dependencies...";
+
+function install_dependencies() {
+  local dependencies=( "$@" )
+  for (( i=1; i<${#dependencies[@]}; i+=2 )); do
+    local dependency="${dependencies[$i]}"
+    local installer="${dependencies[$i+1]}"
+
+    # state validation: check for multiple colons or spaces
+    if [[ "$dependency" == *:*:* || "$dependency" == *" "* ]]; then
+      echo "[!] critical - invalid dependency format: '$dependency'. Cannot contain multiple colons or spaces."
+      exit 64
+    fi
+
+    # check for colon and dependency
+    local required_dependency="" # set if there exists a dependent on the right side of the colon
+    if [[ "$dependency" == *:* ]]; then
+      required_dependency="${dependency##*:}"
+      if ! command -v "$required_dependency" &> /dev/null; then
+        echo "[!] critical - skipping '$dependency' installation. required dependent '$required_dependency' not found"
+        continue
+      fi
+      
+      dependency="${dependency%:*}"
+    fi
+
+    if ! command -v "$dependency" &> /dev/null; then
+      if [[ -n "$required_dependency" ]]; then
+        echo "[!] installer - installing dependency: ${dependency} (using: $required_dependency)...";
+      else
+        echo "[!] installer - installing dependency: ${dependency}...";
+      fi
+      eval "$installer"
+    fi
+  done
+}
+
 if [[ $(uname) == 'Darwin' ]]; then
-  for ((i=1;i<${#dependencies_darwin[@]};i+=2)); do
-    if ! command -v ${dependencies_darwin[$i]} &> /dev/null; then
-      echo "[!] OSX - installing dependency: ${dependencies_darwin[$i]}...";
-      eval "${dependencies_darwin[$i+1]}"
-    fi
-  done
+  install_dependencies "${dependencies_darwin[@]}"
 elif [[ $(uname) == 'Linux' ]]; then
-  for ((i=1;i<${#dependencies_linux[@]};i+=2)); do
-    if ! command -v ${dependencies_linux[$i]} &> /dev/null; then
-      echo "[!] Linux - installing dependency: ${dependencies_linux[$i]}...";
-      eval "${dependencies_linux[$i+1]}"
-    fi
-  done
+  install_dependencies "${dependencies_linux[@]}"
 else
-  echo "[!] error - unrecognised OS (${uname})";
-  exit 64;
+  echo "[!] critical - unrecognised OS (${uname})"
+  exit 64
 fi
+
+install_dependencies "${dependencies_common[@]}"
 
 ################ Setup dotfile symlinks ################
 echo "[~] setting up dotfile symlinks...";

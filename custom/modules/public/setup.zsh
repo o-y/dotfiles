@@ -50,5 +50,10 @@ fi
 
 # mdproxy (google)
 if [ -e "$HOME/mdproxy/data/mdproxy_zshrc" ]; then
-  source "$HOME/mdproxy/data/mdproxy_zshrc"
+    source "$HOME/mdproxy/data/mdproxy_zshrc"
+fi
+
+# thefuck
+if type thefuck &> /dev/null; then
+    eval $(thefuck --alias)
 fi
