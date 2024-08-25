@@ -103,7 +103,7 @@ function install_dependencies() {
     if [[ "$dependency" == *:* ]]; then
       required_dependency="${dependency##*:}"
       if ! command -v "$required_dependency" &> /dev/null; then
-        echo "[!] critical - skipping '$dependency' installation. required dependent '$required_dependency' not found"
+        echo "[!] critical - skipping '$dependency' installation. required dependent '$required_dependency' not found!"
         continue
       fi
       
