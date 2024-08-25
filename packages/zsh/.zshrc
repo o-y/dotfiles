@@ -14,7 +14,6 @@ plugins=(
     zsh-syntax-highlighting
     zsh-autosuggestions
     macos
-    adb
 )
 
 #### load custom scripts

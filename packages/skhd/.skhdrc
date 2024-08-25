@@ -101,7 +101,7 @@ alt - 0x18 : yabai -m space --create
 alt - 0x1B : yabai -m space --destroy
 
 # restart yabai
-alt - c : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
+alt - c : yabai --restart-service
 
 ###                                         ###
 ### somewhat experimental/uncommon keybinds ###
