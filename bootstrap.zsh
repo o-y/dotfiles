@@ -32,8 +32,12 @@ dependencies_linux=(
   "hyperfine" "sudo apt install hyperfine"
   "git-crypt" "sudo apt install git-crypt"
   "btop" "sudo apt install btop"
-  "zoxide" "sudo apt install zoxide"
   "pipx" "sudo apt install pipx"
+  "bc" "sudo apt install bc"
+
+  ## -- dependencies on cargo --
+  "navi:cargo" "cargo install --locked navi"
+  "zoxide:cargo" "cargo install zoxide --locked" # the debian stable package is oudated and broken
 )
 
 dependencies_common=(
@@ -86,7 +90,7 @@ git submodule status;
 ################ Install dependencies ################
 echo "[~] installing required dependencies...";
 
-function install_dependencies() {
+function install_dependencies_internal() {
   local dependencies=( "$@" )
   for (( i=1; i<${#dependencies[@]}; i+=2 )); do
     local dependency="${dependencies[$i]}"
@@ -121,16 +125,20 @@ function install_dependencies() {
   done
 }
 
-if [[ $(uname) == 'Darwin' ]]; then
-  install_dependencies "${dependencies_darwin[@]}"
-elif [[ $(uname) == 'Linux' ]]; then
-  install_dependencies "${dependencies_linux[@]}"
-else
-  echo "[!] critical - unrecognised OS (${uname})"
-  exit 64
-fi
+function install_dependencies() {
+  if [[ $(uname) == 'Darwin' ]]; then
+    install_dependencies_internal "${dependencies_darwin[@]}"
+  elif [[ $(uname) == 'Linux' ]]; then
+    install_dependencies_internal "${dependencies_linux[@]}"
+  else
+    echo "[!] critical - unrecognised OS (${uname})"
+    exit 64
+  fi
 
-install_dependencies "${dependencies_common[@]}"
+  install_dependencies_internal "${dependencies_common[@]}"
+}
+
+install_dependencies
 
 ################ Setup dotfile symlinks ################
 echo "[~] setting up dotfile symlinks...";
@@ -153,6 +161,12 @@ process_stows() {
   done
 }
 
+if ! type stow &> /dev/null; then
+  echo "[!] critical - missing 'stow' which is a required dependency, terminating early..."
+  echo "[!] automatic installation seems to have failed..."
+  exit 64
+fi
+
 if [[ $(uname) == "Darwin" ]]; then
   # MacOS Stows
   process_stows "${stows_darwin[@]}"
@@ -168,6 +182,12 @@ process_stows "${stows_common[@]}"
 post_install_routine="$HOME/dotfiles/custom/postinstall/common.zsh"
 if [ -e $post_install_routine ]; then
     source $post_install_routine
+
+    # the post_install_routine might add additional package managers, therefore
+    # we call install_dependencies again, this is still quick if the dependencies
+    # still can't be installed, so it's okay to call this twice
+    echo "[?] checking to see if any additional dependencies can be installed..."
+    install_dependencies
 else
     echo "[!] warning - 'post_install_routine' does not exist at $post_install_routine...skipping"
 fi

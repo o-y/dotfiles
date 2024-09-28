@@ -104,6 +104,7 @@ function keybind-help-menu {
   echo "ctrl+s - prepend sudo to the current command"
   echo "ctrl+x - view command history"
   echo "ctrl+z - open in-line file viewer"
+  echo "ctrl+g - open navi cheat sheet"
   echo "ctrl+u - ls"
   echo "--~--~--~--"
   echo ""
