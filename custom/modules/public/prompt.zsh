@@ -22,3 +22,14 @@ precmd() {
 
     export PROMPT
 }
+
+# unlike precmd, chpwd is ran after a command is executed, therefore
+# it needs to be called once when we start a new session
+# however this doesn't play well with widgets which change the current
+# directory, thus the need to use chpwd as well
+# TODO: consolidate this into a single function, this is fucked.
+chpwd() {
+    precmd
+}
+
+chpwd
