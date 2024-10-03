@@ -9,6 +9,8 @@ fi
 ################ Install Oh My Zsh ################
 if ! [ -e "$HOME/.oh-my-zsh" ]; then
   echo "[!] installing oh-my-zsh";
+
+  # --keep-zshrc prevents ohmyzsh from overwriting the existing zshrc file with their default config
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 fi
 
@@ -21,7 +23,11 @@ echo "--------------------------------------------------------------------|"
 read -q "answer?run '$ git-crypt unlock' [Y/n] "
 echo ""
 if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
-    git-crypt unlock
+    if command -v git-crypt >/dev/null 2>&1  then
+        git-crypt unlock
+    else
+        echo "[!] error - $ git-crypt is not installed on your system!"
+    fi
 fi
 
 ################ Install Rust ################

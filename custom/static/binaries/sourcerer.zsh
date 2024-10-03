@@ -21,6 +21,7 @@ else
 fi
 
 source_helper() {
+  file=$1
   file_path=$(realpath "$file")
   file_name=$(basename "$file" "-${platform}")
   bin="/usr/local/bin"
@@ -48,8 +49,18 @@ SCRIPT_DIR=$(dirname "$0")
 
 for dir in "$SCRIPT_DIR"/*/; do
   dir=${dir%/}
-  file=$(find "$dir" -maxdepth 1 -name "*-${platform}")
-  if [[ -n "$file" ]]; then
-    source_helper $file
+  basename=${dir##*/}
+
+  echo "[~] sourcerer: scanning binaries in $dir"
+
+  file_with_platform=$(find "$dir" -maxdepth 1 -name "*-${platform}")
+  if [[ -n "$file_with_platform" ]]; then
+    # If there's a file which includes a $binary-$platform
+    source_helper $file_with_platform
+  else
+    # otherwise look for just the $binary
+    if [[ -f "$dir/$basename" ]]; then
+      source_helper "$dir/$basename"
+    fi
   fi
 done
