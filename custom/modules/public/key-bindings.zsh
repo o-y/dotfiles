@@ -85,7 +85,19 @@ bindkey '^E' edit-command-line
 ###########################################
 ###########################################
 function yazi-filepicker {
-  ya < "$TTY"
+  zle redisplay
+
+  cdfile=$(mktemp)
+  xplr --print-pwd-as-result < "$TTY" > $cdfile
+  if [[ -s "$cdfile" ]]; then
+    cd "$(cat $cdfile)"
+
+    # echo -ne "\033[1K\r"  # Clears the current line
+    echo ""
+    eza -l -h --git --icons --no-filesize 2>/dev/null || ls
+    echo ""
+  fi
+
   zle reset-prompt
 }
 zle -N yazi-filepicker
@@ -99,11 +111,11 @@ bindkey '^Y' yazi-filepicker
 function keybind-help-menu {
   echo ""
   echo "--~--~--~--"
-  echo "ctrl+y - yazi file picker"
-  echo "ctrl+e - edit current command in $EDITOR"
-  echo "ctrl+s - prepend sudo to the current command"
   echo "ctrl+x - view command history"
-  echo "ctrl+z - open in-line file viewer"
+  echo "ctrl+y - file picker"
+  echo "ctrl+z - inline file picker"
+  echo "ctrl+e - edit buffer in $EDITOR"
+  echo "ctrl+s - prepend sudo to the buffer"
   echo "ctrl+g - open navi cheat sheet"
   echo "ctrl+u - ls"
   echo "--~--~--~--"
