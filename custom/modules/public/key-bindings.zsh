@@ -68,7 +68,7 @@ function prepend-sudo {
   fi
 }
 zle -N prepend-sudo
-bindkey '^S' prepend-sudo
+bindkey '^J' prepend-sudo
 
 ###########################################
 ###########################################
@@ -84,7 +84,7 @@ bindkey '^E' edit-command-line
 ### CTRL-Y - file picker
 ###########################################
 ###########################################
-function yazi-filepicker {
+function filepicker {
   zle redisplay
 
   cdfile=$(mktemp)
@@ -92,7 +92,6 @@ function yazi-filepicker {
   if [[ -s "$cdfile" ]]; then
     cd "$(cat $cdfile)"
 
-    # echo -ne "\033[1K\r"  # Clears the current line
     echo ""
     eza -l -h --git --icons --no-filesize 2>/dev/null || ls
     echo ""
@@ -100,30 +99,8 @@ function yazi-filepicker {
 
   zle reset-prompt
 }
-zle -N yazi-filepicker
-bindkey '^Y' yazi-filepicker
-
-###########################################
-###########################################
-### CTRL-H - keybind help menu
-###########################################
-###########################################
-function keybind-help-menu {
-  echo ""
-  echo "--~--~--~--"
-  echo "ctrl+x - view command history"
-  echo "ctrl+y - file picker"
-  echo "ctrl+z - inline file picker"
-  echo "ctrl+e - edit buffer in $EDITOR"
-  echo "ctrl+s - prepend sudo to the buffer"
-  echo "ctrl+g - open navi cheat sheet"
-  echo "ctrl+u - ls"
-  echo "--~--~--~--"
-  echo ""
-  zle reset-prompt
-}
-zle -N keybind-help-menu
-bindkey '^H' keybind-help-menu
+zle -N filepicker
+bindkey '^S' filepicker
 
 ###########################################
 ###########################################
@@ -141,4 +118,37 @@ function keybind-ls {
   zle reset-prompt
 }
 zle -N keybind-ls
-bindkey '^U' keybind-ls
+bindkey '^A' keybind-ls
+
+
+###########################################
+###########################################
+### CTRL-H - keybind help menu
+###########################################
+###########################################
+function keybind-help-menu {
+  BUFFER=""
+  zle redisplay
+  echo -ne "\033[1K\r"  # Clears the current line
+
+  echo """
+  \033[90m[ ]\033[0m\033[90m[1][2][3][4][5]\033[0m
+  \033[90m[  ][Q][W]\033[1;35m[E]\033[0m\033[90m[R]\033[0m
+  \033[90m[   ]\033[1;31m[A]\033[0m\033[1;32m[S]\033[0m\033[90m[D][F]\033[0m
+  \033[90m[↑ ][ ]\033[1;34m[Z]\033[0m\033[1;33m[X]\033[0m\033[90m[C][V]\033[0m
+  \033[90m[][ ]\033[1;37m[^]\033[0m\033[90m[  ][]\033[0m
+
+  \033[1;37m^\033[1;35mE\033[0m -> \033[1;35medit buffer in $EDITOR\033[0m
+  \033[1;37m^\033[1;31mA\033[0m -> \033[1;31mls (list directories)\033[0m
+  \033[1;37m^\033[1;32mS\033[0m -> \033[1;32mwindow file picker\033[0m
+  \033[1;37m^\033[1;34mZ\033[0m -> \033[1;34minline file picker\033[0m
+  \033[1;37m^\033[1;33mX\033[0m -> \033[1;33mview command history\033[0m
+  \033[90m^H -> help menu (this ui)\033[0m
+  \033[90m^J -> prepend sudo to the buffer\033[0m
+  """
+
+  echo ""
+  zle reset-prompt
+}
+zle -N keybind-help-menu
+bindkey '^H' keybind-help-menu
