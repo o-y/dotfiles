@@ -58,3 +58,24 @@ alias blaze6='blaze --output_base=/tmp/blaze-out-6'
 alias blaze7='blaze --output_base=/tmp/blaze-out-7'
 alias blaze8='blaze --output_base=/tmp/blaze-out-8'
 alias blaze9='blaze --output_base=/tmp/blaze-out-9'
+alias blaze10='blaze --output_base=/tmp/blaze-out-10'
+alias blaze11='blaze --output_base=/tmp/blaze-out-11'
+alias blaze12='blaze --output_base=/tmp/blaze-out-12'
+alias blaze13='blaze --output_base=/tmp/blaze-out-13'
+alias blaze14='blaze --output_base=/tmp/blaze-out-14'
+alias blaze15='blaze --output_base=/tmp/blaze-out-15'
+alias blaze16='blaze --output_base=/tmp/blaze-out-16'
+
+#### Throw away blaze
+blazed() {
+  local random_number=$(( RANDOM % 1000 ))
+  local output_base="/tmp/blaze-out-blazed-${random_number}"
+  local blaze_command="blaze --output_base=${output_base} $@"
+
+  local YELLOW='\033[1;33m'
+  local NC='\033[0m' 
+  echo -e "${YELLOW}INFO:${NC} Running using blazed with output_base: ${output_base}"
+  eval "${blaze_command}"
+  echo -e "${YELLOW}INFO:${NC} To rerun this command with the same cache use:"
+  echo "  ${blaze_command}"
+}

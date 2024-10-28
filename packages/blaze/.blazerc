@@ -1,5 +1,11 @@
-# GSA support
+# AGSA support
 import %workspace%/java/com/google/android/apps/gsa/tools/blazerc
+
+# GWS support (Google Search Web Server)
+import %workspace%/gws/tools/blazerc
+
+# Boq support
+import %workspace%/frameworks/boq/devtools/blazerc
 
 # Dogfood Blaze flags (speeds up builds)
 # build --config=dogfood_opt_in
