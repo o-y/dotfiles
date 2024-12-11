@@ -104,14 +104,15 @@ bindkey '^S' filepicker
 
 ###########################################
 ###########################################
-### CTRL-U - list directories
+### CTRL-A - list directories
 ###########################################
 ###########################################
 function keybind-ls {
   BUFFER=""
   zle redisplay
   echo -ne "\033[1K\r"  # Clears the current line
-  
+
+  # I need to theme eza, it looks proper bad atm
   eza -l -h --git --icons --no-filesize 2>/dev/null || ls
   
   echo ""
@@ -128,8 +129,11 @@ bindkey '^A' keybind-ls
 ###########################################
 function keybind-help-menu {
   BUFFER=""
-  zle redisplay
-  echo -ne "\033[1K\r"  # Clears the current line
+  # zle redisplay
+  # echo -ne "\033[1K\r"  # Clears the current line
+
+  echo ""
+  echo "\033[1;37m^H · displaying keybinds... ↴\033[0m"
 
   echo """
   \033[90m[ ]\033[0m\033[90m[1][2][3][4][5]\033[0m
