@@ -23,10 +23,10 @@ echo "--------------------------------------------------------------------|"
 read -q "answer?run '$ git-crypt unlock' [Y/n] "
 echo ""
 if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
-    if command -v git-crypt >/dev/null 2>&1  then
-        git-crypt unlock
+    if type git-crypt &> /dev/null; then
+        git-crypt unlock;
     else
-        echo "[!] error - $ git-crypt is not installed on your system!"
+        echo "[!] error - \$ git-crypt is not installed on your system!"
     fi
 fi
 
