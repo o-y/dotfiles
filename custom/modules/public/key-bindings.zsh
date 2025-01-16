@@ -59,7 +59,7 @@ bindkey '^X' fzf-history-widget
 
 ###########################################
 ###########################################
-### CTRL-S - preprend sudo
+### CTRL-G - preprend sudo
 ###########################################
 ###########################################
 function prepend-sudo {
@@ -68,7 +68,7 @@ function prepend-sudo {
   fi
 }
 zle -N prepend-sudo
-bindkey '^J' prepend-sudo
+bindkey '^G' prepend-sudo
 
 ###########################################
 ###########################################
@@ -81,7 +81,7 @@ bindkey '^E' edit-command-line
 
 ###########################################
 ###########################################
-### CTRL-Y - file picker
+### CTRL-S - file picker
 ###########################################
 ###########################################
 function filepicker {
@@ -148,7 +148,7 @@ function keybind-help-menu {
   \033[1;37m^\033[1;34mZ\033[0m -> \033[1;34minline file picker\033[0m
   \033[1;37m^\033[1;33mX\033[0m -> \033[1;33mview command history\033[0m
   \033[90m^H -> help menu (this ui)\033[0m
-  \033[90m^J -> prepend sudo to the buffer\033[0m
+  \033[90m^G -> prepend sudo to the buffer\033[0m
   """
 
   echo ""
