@@ -17,11 +17,15 @@ macos-option-as-alt = true
 ### ZELLIJ KEYBINDS
 ###
 
-# Toggle floating
+# Toggle pane to floating or embed
 # PUS E000
 keybind = ctrl+shift+w=text:
 
+# Toggle view floating panes
+# PUS E002
+keybind = ctrl+shift+q=text:
 
-
-# Move between tabs (E001 -> E010)
+# Move between tabs
 keybind = ctrl+1=text:ctrl1!
+
+keybind = cmd+q=text:hi
