@@ -55,6 +55,7 @@ stows_common=(
   helix:~/.config/helix
   tmux:~/.config/tmux
   kando:~/.config/kando
+  ghostty:~/.config/ghostty
 )
 
 # symlinks for MacOS

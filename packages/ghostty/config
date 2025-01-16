@@ -1,0 +1,27 @@
+###
+### THEME
+###
+theme = "dark_master"
+
+###
+### MACOS
+###
+
+# https://github.com/ghostty-org/ghostty/discussions/3207
+# Allows alt to be picked up by zellij on macOS
+keybind = alt+left=unbind
+keybind = alt+right=unbind
+macos-option-as-alt = true
+
+###
+### ZELLIJ KEYBINDS
+###
+
+# Toggle floating
+# PUS E000
+keybind = ctrl+shift+w=text:
+
+
+
+# Move between tabs (E001 -> E010)
+keybind = ctrl+1=text:ctrl1!
