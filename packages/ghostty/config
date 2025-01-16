@@ -13,8 +13,23 @@ keybind = alt+left=unbind
 keybind = alt+right=unbind
 macos-option-as-alt = true
 
+
+###
+### DEFAULT UNBINDS
+###
+
+keybind = cmd+w=unbind
+keybind = cmd+t=unbind
+keybind = cmd+n=unbind
+keybind = ctrl+d=unbind
+
 ###
 ### ZELLIJ KEYBINDS
+### 
+### This makes use of the private unicode area
+### to send the terminal/Zellij certain characters
+### which it translates into actions.
+### https://jrgraphix.net/r/Unicode/E000-F8FF
 ###
 
 # Toggle pane to floating or embed
@@ -26,6 +41,22 @@ keybind = ctrl+shift+w=text:
 keybind = ctrl+shift+q=text:
 
 # Move between tabs
-keybind = ctrl+1=text:ctrl1!
+keybind = ctrl+1=text:  # PUS E003
+keybind = ctrl+2=text:  # PUS E004
+keybind = ctrl+3=text:  # PUS E005
+keybind = ctrl+4=text:  # PUS E006
+keybind = ctrl+5=text:  # PUS E007
+keybind = ctrl+6=text:  # PUS E008
+keybind = ctrl+7=text:  # PUS E009
+keybind = ctrl+8=text:  # PUS E00A
+keybind = ctrl+9=text:  # PUS E00B
+keybind = ctrl+0=text:  # PUS E00C
 
-keybind = cmd+q=text:hi
+# Move panes [l,r,u,d]
+keybind = ctrl+shift+j=text:  # PUS E00D
+keybind = ctrl+shift+l=text:  # PUS E00E
+keybind = ctrl+shift+i=text:  # PUS E00F
+keybind = ctrl+shift+k=text:  # PUS E010
+
+# Open scrollback in $EDITOR
+keybind = ctrl+shift+e=text:  # PUS E011
