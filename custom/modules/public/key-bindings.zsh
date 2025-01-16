@@ -118,8 +118,8 @@ function keybind-ls {
   echo ""
   zle reset-prompt
 }
-zle -N keybind-ls
-bindkey '^A' keybind-ls
+# zle -N keybind-ls
+# bindkey '^A' keybind-ls
 
 
 ###########################################
