@@ -1,4 +1,4 @@
-keybinds {
+keybinds clear-defaults=true {
     normal {
         // 
         // GLOBALS
@@ -7,10 +7,24 @@ keybinds {
         // Closes the current active view
         // which might be a pane or tab
         bind "Ctrl w" { CloseFocus; }
-        // Clear the current view
-        bind "Alt o" {
-            Clear
-        }
+
+        // Clear the current view (I don't like this...)
+        bind "Alt o" { Clear; }
+
+        // Change rotation (swap layout)
+        bind "Ctrl r" { NextSwapLayout; }
+
+        // Toggle floating panes
+        // FROM GHOSTTY: Ctrl Shift Q
+        // PUS E001
+        bind "" { ToggleFloatingPanes; }
+
+        // TODO:
+        //  - ctrl + shift + [ijkl]: moving panes
+        //  - ctrl + [left|right]: move tab
+        //  - detach
+        //  - view sessions
+        //  - edit scrollback
 
         // 
         // TAB MANAGEMENT
@@ -26,7 +40,7 @@ keybinds {
         bind "Alt 8" { GoToTab 8; }
         bind "Alt 9" { GoToTab 9; }
 
-        bind "Ctrl B" {  }
+        bind "Ctrl b" { ToggleTab; }
 
         //
         // PANE/TAB MANAGEMENT
