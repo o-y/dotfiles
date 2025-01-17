@@ -133,9 +133,17 @@ themes {
         white 255 255 255
     }
 }
+
 theme "custom"
 
-//  Send a request for a simplified ui (without arrow fonts) to plugins, default is false
+// plugins
+plugins {
+    welcome-screen location="zellij:session-manager" {
+        welcome_screen false
+    }
+}
+
+// Send a request for a simplified ui (without arrow fonts) to plugins, default is false
 simplified_ui false
 
 // Toggle between having pane frames around the panes, default is true
