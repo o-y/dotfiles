@@ -19,6 +19,9 @@ keybinds clear-defaults=true {
         // PUS E001
         bind "" { ToggleFloatingPanes; }
 
+        // Switch to locked mode (useful whilst SSH'ing)
+        bind "Ctrl ;" { SwitchToMode "locked"; }
+
         // 
         // SESSION MANAGEMENT
         //
@@ -100,6 +103,11 @@ keybinds clear-defaults=true {
         bind "" { MovePane "Right"; } // PUS E00E
         bind "" { MovePane "Up"; }    // PUS E00F
         bind "" { MovePane "Down"; }  // PUS E010
+    }
+
+    // Locked mode
+    locked {
+        bind "Ctrl ;" { SwitchToMode "normal"; }
     }
 }
 

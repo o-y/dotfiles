@@ -20,9 +20,18 @@ zellij_tab_name_update() {
         else
             current_dir=${current_dir##*/}
         fi
+
         command nohup zellij action rename-tab $current_dir >/dev/null 2>&1
     fi
 }
 
-zellij_tab_name_update
-chpwd_functions+=(zellij_tab_name_update)
+zellij_session_name_update() {
+    if [[ -n $ZELLIJ ]]; then
+        command nohup  zellij action rename-session "$(cat /dev/urandom | base64 | tr -dc '0-9a-zA-Z' | head -c5)" >/dev/null 2>&1
+    fi
+}
+
+zellij_session_name_update
+
+# zellij_tab_name_update
+# chpwd_functions+=(zellij_tab_name_update)
