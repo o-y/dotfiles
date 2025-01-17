@@ -34,6 +34,7 @@ dependencies_linux=(
   "btop" "sudo apt install btop"
   "pipx" "sudo apt install pipx"
   "bc" "sudo apt install bc"
+  "c++" "sudo apt install build-essential"
 
   ## -- dependencies on cargo --
   "navi:cargo" "cargo install --locked navi"
@@ -46,6 +47,7 @@ dependencies_common=(
 
   ## -- dependencies on cargo --
   "pik:cargo" "cargo install pik --locked"
+  "zellij:cargo" "cargo install zellij --locked"
 )
 
 # common symlinks

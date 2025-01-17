@@ -21,6 +21,3 @@ plugins=(
 source ~/dotfiles/custom/init.zsh
 
 source $ZSH/oh-my-zsh.sh
-
-#### Temporary whilst I evaluate zellij
-eval "$(zellij setup --generate-auto-start zsh)"

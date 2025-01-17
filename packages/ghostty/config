@@ -2,6 +2,8 @@
 ### THEME
 ###
 theme = "dark_master"
+window-padding-y = 15,0
+window-padding-x = 15
 
 ###
 ### MACOS
@@ -11,17 +13,25 @@ theme = "dark_master"
 # Allows alt to be picked up by zellij on macOS
 keybind = alt+left=unbind
 keybind = alt+right=unbind
-macos-option-as-alt = true
-
+macos-option-as-alt=true
+macos-titlebar-style=hidden
 
 ###
 ### DEFAULT UNBINDS
 ###
 
-keybind = cmd+w=unbind
+keybind = cmd+w=close_window
 keybind = cmd+t=unbind
 keybind = cmd+n=unbind
 keybind = ctrl+d=unbind
+
+
+###
+### KEYBINDS
+###
+
+keybind = ctrl+shift+n=new_window
+
 
 ###
 ### ZELLIJ KEYBINDS
@@ -38,7 +48,7 @@ keybind = ctrl+shift+w=text:
 
 # Toggle view floating panes
 # PUS E002
-keybind = ctrl+shift+q=text:
+keybind = ctrl+shift+a=text:
 
 # Move between tabs
 keybind = ctrl+1=text:  # PUS E003

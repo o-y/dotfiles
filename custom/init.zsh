@@ -5,6 +5,9 @@
 PATH_TO_SCRIPT=${0:A}
 MODULES_DIR=${PATH_TO_SCRIPT:h}/modules
 
+# add hooks to the context
+source "${PATH_TO_SCRIPT:h}/hooks.zsh"
+
 # files which are skipped due to being encrypted
 skipped_files=()
 
@@ -30,8 +33,7 @@ local source_helper() {
 
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###
 
-# source priority config
-source "${PATH_TO_SCRIPT:h}/priority_init.zsh"
+zsh_pre_init;
 
 # source modules
 for file in $MODULES_DIR/{public,private,goog}/**/*.zsh(N); do
@@ -53,3 +55,5 @@ if (( ${#skipped_files} > 0 )) && [[ ! -e "$HOME/silence-git-crypt-warnings" && 
   echo "[!] Run '$ git-crypt unlock' to decrypt them."
   echo "[!] To silence these warnings, execute '$ touch ~/.silence-git-crypt-warnings'"
 fi
+
+zsh_post_init;
