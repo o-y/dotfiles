@@ -50,8 +50,8 @@ alt - d : yabai -m space --mirror x-axis
 alt - f : yabai -m space --mirror y-axis
 
 # swap current window with largest/smallest window
-# alt - 0x21 : yabai -m window --swap smallest  # [
-# alt - 0x1E : yabai -m window --swap largest   # ]
+alt - 0x21 : yabai -m window --swap smallest  # [
+alt - 0x1E : yabai -m window --swap largest   # ]
 
 # minimise current window (cmd + m alternative)
 alt - m : yabai -m window --minimize
