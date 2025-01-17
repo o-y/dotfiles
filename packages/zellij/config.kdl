@@ -136,18 +136,11 @@ themes {
 
 theme "custom"
 
-// plugins
-plugins {
-    welcome-screen location="zellij:session-manager" {
-        welcome_screen false
-    }
-}
-
 // Send a request for a simplified ui (without arrow fonts) to plugins, default is false
 simplified_ui false
 
 // Toggle between having pane frames around the panes, default is true
-pane_frames false
+pane_frames true
 
 // Whether pane viewports are serialized along with the session, default is false
 serialize_pane_viewport true
