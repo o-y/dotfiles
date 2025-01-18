@@ -49,8 +49,6 @@ start_zellij() {
             "$1"
         fi
 
-        if [[ "$ZELLIJ_AUTO_EXIT" == "true" ]]; then
-            exit
-        fi
+        exit
     fi
 }
