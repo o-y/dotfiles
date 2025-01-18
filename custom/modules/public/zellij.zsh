@@ -27,7 +27,7 @@ zellij_tab_name_update() {
 
 zellij_session_name_update() {
     if [[ -n $ZELLIJ ]]; then
-        command nohup  zellij action rename-session "$(cat /dev/urandom | base64 | tr -dc '0-9a-zA-Z' | head -c5)" >/dev/null 2>&1
+        command nohup  zellij action rename-session "$(openssl rand -base64 10 | tr -dc 'A-Za-z0-9' | head -c 5)" >/dev/null 2>&1
     fi
 }
 
