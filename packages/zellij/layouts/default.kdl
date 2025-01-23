@@ -8,15 +8,14 @@ layout {
                 format_right  "{command_host}"
                 format_space  ""
 
-                border_enabled  "false"
-                border_char     "─"
-                border_format   "#[fg=#6C7086]{char}"
-                border_position "top"
+                // border_enabled  "false"
+                // border_char     "─"
+                // border_format   "#[fg=#6C7086]{char}"
+                // border_position "top"
+                hide_frame_for_single_pane "false"
 
-                hide_frame_for_single_pane "true"
-
-                mode_normal  "#[bg=#89B4FA,fg=#2C3A47] NORMAL "
-                mode_locked  "#[bg=#e84118,fg=#ecf0f1,bold] LOCKED "
+                mode_normal  "#[bg=#89B4FA,fg=#2C3A47] N "
+                mode_locked  "#[bg=#e84118,fg=#ecf0f1,bold] L "
 
                 tab_normal   "#[fg=#6C7086] {name} "
                 tab_active   "#[fg=#9399B2,bold,italic] {name} "
