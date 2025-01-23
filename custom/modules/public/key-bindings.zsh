@@ -59,7 +59,7 @@ bindkey '^X' fzf-history-widget
 
 ###########################################
 ###########################################
-### CTRL-G - preprend sudo
+### CTRL-F - preprend sudo
 ###########################################
 ###########################################
 function prepend-sudo {
@@ -68,7 +68,19 @@ function prepend-sudo {
   fi
 }
 zle -N prepend-sudo
-bindkey '^G' prepend-sudo
+bindkey '^F' prepend-sudo
+
+###########################################
+###########################################
+### CTRL-O - clear scrollback
+###########################################
+###########################################
+function clear-scrollback {
+  clear
+  zle redisplay
+}
+zle -N clear-scrollback
+bindkey '^O' clear-scrollback
 
 ###########################################
 ###########################################
@@ -84,40 +96,40 @@ bindkey '^E' edit-command-line
 ### CTRL-S - file picker
 ###########################################
 ###########################################
-function filepicker {
-  zle redisplay
+# function filepicker {
+#   zle redisplay
 
-  cdfile=$(mktemp)
-  xplr --print-pwd-as-result < "$TTY" > $cdfile
-  if [[ -s "$cdfile" ]]; then
-    cd "$(cat $cdfile)"
+#   cdfile=$(mktemp)
+#   xplr --print-pwd-as-result < "$TTY" > $cdfile
+#   if [[ -s "$cdfile" ]]; then
+#     cd "$(cat $cdfile)"
 
-    echo ""
-    eza -l -h --git --icons --no-filesize 2>/dev/null || ls
-    echo ""
-  fi
+#     echo ""
+#     eza -l -h --git --icons --no-filesize 2>/dev/null || ls
+#     echo ""
+#   fi
 
-  zle reset-prompt
-}
-zle -N filepicker
-bindkey '^S' filepicker
+#   zle reset-prompt
+# }
+# zle -N filepicker
+# bindkey '^S' filepicker
 
 ###########################################
 ###########################################
 ### CTRL-A - list directories
 ###########################################
 ###########################################
-function keybind-ls {
-  BUFFER=""
-  zle redisplay
-  echo -ne "\033[1K\r"  # Clears the current line
+# function keybind-ls {
+#   BUFFER=""
+#   zle redisplay
+#   echo -ne "\033[1K\r"  # Clears the current line
 
-  # I need to theme eza, it looks proper bad atm
-  eza -l -h --git --icons --no-filesize 2>/dev/null || ls
+#   # I need to theme eza, it looks proper bad atm
+#   eza -l -h --git --icons --no-filesize 2>/dev/null || ls
   
-  echo ""
-  zle reset-prompt
-}
+#   echo ""
+#   zle reset-prompt
+# }
 # zle -N keybind-ls
 # bindkey '^A' keybind-ls
 

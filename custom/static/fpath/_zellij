@@ -20,8 +20,10 @@ _zellij() {
 '*--server=[Run server listening at the specified socket path]:SERVER:_files' \
 '*-s+[Specify name of a new session]:SESSION: ' \
 '*--session=[Specify name of a new session]:SESSION: ' \
-'*-l+[Name of a predefined layout inside the layout directory or the path to a layout file]:LAYOUT:_files' \
-'*--layout=[Name of a predefined layout inside the layout directory or the path to a layout file]:LAYOUT:_files' \
+'*-l+[Name of a predefined layout inside the layout directory or the path to a layout file if inside a session (or using the --session flag) will be added to the session as a new tab or tabs, otherwise will start a new session]:LAYOUT:_files' \
+'*--layout=[Name of a predefined layout inside the layout directory or the path to a layout file if inside a session (or using the --session flag) will be added to the session as a new tab or tabs, otherwise will start a new session]:LAYOUT:_files' \
+'*-n+[Name of a predefined layout inside the layout directory or the path to a layout file Will always start a new session, even if inside an existing session]:NEW_SESSION_WITH_LAYOUT:_files' \
+'*--new-session-with-layout=[Name of a predefined layout inside the layout directory or the path to a layout file Will always start a new session, even if inside an existing session]:NEW_SESSION_WITH_LAYOUT:_files' \
 '*-c+[Change where zellij looks for the configuration file]:CONFIG:_files' \
 '*--config=[Change where zellij looks for the configuration file]:CONFIG:_files' \
 '*--config-dir=[Change where zellij looks for the configuration directory]:CONFIG_DIR:_files' \
@@ -80,6 +82,8 @@ tmux\:"`Tmux` mode allows for basic tmux keybindings functionality"))' \
 '*--scrollback-lines-to-serialize=[Scrollback lines to serialize along with the pane viewport when serializing sessions, 0 defaults to the scrollback size. If this number is higher than the scrollback size, it will also default to the scrollback size]:SCROLLBACK_LINES_TO_SERIALIZE: ' \
 '*--styled-underlines=[Whether to use ANSI styled underlines]:STYLED_UNDERLINES:(true false)' \
 '*--serialization-interval=[The interval at which to serialize sessions for resurrection (in seconds)]:SERIALIZATION_INTERVAL: ' \
+'*--disable-session-metadata=[If true, will disable writing session metadata to disk]:DISABLE_SESSION_METADATA:(true false)' \
+'*--support-kitty-keyboard-protocol=[Whether to enable support for the Kitty keyboard protocol (must also be supported by the host terminal), defaults to true if the terminal supports it]:SUPPORT_KITTY_KEYBOARD_PROTOCOL:(true false)' \
 '(--mouse-mode)*--disable-mouse-mode[Disable handling of mouse events]' \
 '(--pane-frames)*--no-pane-frames[Disable display of pane frames]' \
 '-h[Print help information]' \
@@ -106,6 +110,14 @@ _arguments "${_arguments_options[@]}" \
 '*--no-formatting[Do not add colors and formatting to the list (useful for parsing)]' \
 '*-s[Print just the session name]' \
 '*--short[Print just the session name]' \
+'*-r[List the sessions in reverse order (default is ascending order)]' \
+'*--reverse[List the sessions in reverse order (default is ascending order)]' \
+'-h[Print help information]' \
+'--help[Print help information]' \
+&& ret=0
+;;
+(list-aliases)
+_arguments "${_arguments_options[@]}" \
 '-h[Print help information]' \
 '--help[Print help information]' \
 && ret=0
@@ -115,6 +127,8 @@ _arguments "${_arguments_options[@]}" \
 '*--index=[Number of the session index in the active sessions ordered creation date]:INDEX: ' \
 '*-c[Create a session if one does not exist]' \
 '*--create[Create a session if one does not exist]' \
+'*-b[Create a detached session in the background if one does not exist]' \
+'*--create-background[Create a detached session in the background if one does not exist]' \
 '*-f[If resurrecting a dead session, immediately run all its commands on startup]' \
 '*--force-run-commands[If resurrecting a dead session, immediately run all its commands on startup]' \
 '-h[Print help information]' \
@@ -170,6 +184,8 @@ tmux\:"`Tmux` mode allows for basic tmux keybindings functionality"))' \
 '*--scrollback-lines-to-serialize=[Scrollback lines to serialize along with the pane viewport when serializing sessions, 0 defaults to the scrollback size. If this number is higher than the scrollback size, it will also default to the scrollback size]:SCROLLBACK_LINES_TO_SERIALIZE: ' \
 '*--styled-underlines=[Whether to use ANSI styled underlines]:STYLED_UNDERLINES:(true false)' \
 '*--serialization-interval=[The interval at which to serialize sessions for resurrection (in seconds)]:SERIALIZATION_INTERVAL: ' \
+'*--disable-session-metadata=[If true, will disable writing session metadata to disk]:DISABLE_SESSION_METADATA:(true false)' \
+'*--support-kitty-keyboard-protocol=[Whether to enable support for the Kitty keyboard protocol (must also be supported by the host terminal), defaults to true if the terminal supports it]:SUPPORT_KITTY_KEYBOARD_PROTOCOL:(true false)' \
 '(--mouse-mode)*--disable-mouse-mode[Disable handling of mouse events]' \
 '(--pane-frames)*--no-pane-frames[Disable display of pane frames]' \
 '-h[Print help information]' \
@@ -397,6 +413,12 @@ _arguments "${_arguments_options[@]}" \
 '*-n+[Name of the new pane]:NAME: ' \
 '*--name=[Name of the new pane]:NAME: ' \
 '*--configuration=[]:CONFIGURATION: ' \
+'-x+[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'--x=[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'-y+[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--y=[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--width=[The width if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:WIDTH: ' \
+'--height=[The height if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:HEIGHT: ' \
 '*-f[Open the new pane in floating mode]' \
 '*--floating[Open the new pane in floating mode]' \
 '(-f --floating -d --direction)*-i[Open the new pane in place of the current pane, temporarily suspending it]' \
@@ -405,6 +427,7 @@ _arguments "${_arguments_options[@]}" \
 '*--close-on-exit[Close the pane immediately when its command exits]' \
 '*-s[Start the command suspended, only running it after the you first press ENTER]' \
 '*--start-suspended[Start the command suspended, only running it after the you first press ENTER]' \
+'*--skip-plugin-cache[]' \
 '-h[Print help information]' \
 '--help[Print help information]' \
 '*::command:' \
@@ -417,6 +440,12 @@ _arguments "${_arguments_options[@]}" \
 '*-l+[Open the file in the specified line number]:LINE_NUMBER: ' \
 '*--line-number=[Open the file in the specified line number]:LINE_NUMBER: ' \
 '*--cwd=[Change the working directory of the editor]:CWD:_files' \
+'-x+[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'--x=[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'-y+[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--y=[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--width=[The width if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:WIDTH: ' \
+'--height=[The height if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:HEIGHT: ' \
 '*-f[Open the new pane in floating mode]' \
 '*--floating[Open the new pane in floating mode]' \
 '(-f --floating -d --direction)*-i[Open the new pane in place of the current pane, temporarily suspending it]' \
@@ -524,6 +553,13 @@ _arguments "${_arguments_options[@]}" \
 '--help[Print help information]' \
 && ret=0
 ;;
+(move-tab)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help information]' \
+'--help[Print help information]' \
+':direction:' \
+&& ret=0
+;;
 (previous-swap-layout)
 _arguments "${_arguments_options[@]}" \
 '-h[Print help information]' \
@@ -561,6 +597,8 @@ _arguments "${_arguments_options[@]}" \
 '*--in-place[]' \
 '*-m[]' \
 '*--move-to-focused-tab[]' \
+'*-s[]' \
+'*--skip-plugin-cache[]' \
 '-h[Print help information]' \
 '--help[Print help information]' \
 ':url:' \
@@ -574,6 +612,8 @@ _arguments "${_arguments_options[@]}" \
 '*--floating[]' \
 '*-i[]' \
 '*--in-place[]' \
+'*-s[]' \
+'*--skip-plugin-cache[]' \
 '-h[Print help information]' \
 '--help[Print help information]' \
 ':url:' \
@@ -584,6 +624,39 @@ _arguments "${_arguments_options[@]}" \
 '-h[Print help information]' \
 '--help[Print help information]' \
 ':name:' \
+&& ret=0
+;;
+(pipe)
+_arguments "${_arguments_options[@]}" \
+'*-n+[The name of the pipe]:NAME: ' \
+'*--name=[The name of the pipe]:NAME: ' \
+'*-a+[The args of the pipe]:ARGS: ' \
+'*--args=[The args of the pipe]:ARGS: ' \
+'*-p+[The plugin url (eg. file:/tmp/my-plugin.wasm) to direct this pipe to, if not specified, will be sent to all plugins, if specified and is not running, the plugin will be launched]:PLUGIN: ' \
+'*--plugin=[The plugin url (eg. file:/tmp/my-plugin.wasm) to direct this pipe to, if not specified, will be sent to all plugins, if specified and is not running, the plugin will be launched]:PLUGIN: ' \
+'*-c+[The plugin configuration (note: the same plugin with different configuration is considered a different plugin for the purposes of determining the pipe destination)]:PLUGIN_CONFIGURATION: ' \
+'*--plugin-configuration=[The plugin configuration (note: the same plugin with different configuration is considered a different plugin for the purposes of determining the pipe destination)]:PLUGIN_CONFIGURATION: ' \
+'*-f+[If launching a plugin, should it be floating or not, defaults to floating]:FLOATING_PLUGIN:(true false)' \
+'*--floating-plugin=[If launching a plugin, should it be floating or not, defaults to floating]:FLOATING_PLUGIN:(true false)' \
+'(-f --floating-plugin)*-i+[If launching a plugin, launch it in-place (on top of the current pane)]:IN_PLACE_PLUGIN:(true false)' \
+'(-f --floating-plugin)*--in-place-plugin=[If launching a plugin, launch it in-place (on top of the current pane)]:IN_PLACE_PLUGIN:(true false)' \
+'*-w+[If launching a plugin, specify its working directory]:PLUGIN_CWD:_files' \
+'*--plugin-cwd=[If launching a plugin, specify its working directory]:PLUGIN_CWD:_files' \
+'*-t+[If launching a plugin, specify its pane title]:PLUGIN_TITLE: ' \
+'*--plugin-title=[If launching a plugin, specify its pane title]:PLUGIN_TITLE: ' \
+'*-l[Launch a new plugin even if one is already running]' \
+'*--force-launch-plugin[Launch a new plugin even if one is already running]' \
+'*-s[If launching a new plugin, skip cache and force-compile the plugin]' \
+'*--skip-plugin-cache[If launching a new plugin, skip cache and force-compile the plugin]' \
+'-h[Print help information]' \
+'--help[Print help information]' \
+'::payload -- The data to send down this pipe (if blank, will listen to STDIN):' \
+&& ret=0
+;;
+(list-clients)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help information]' \
+'--help[Print help information]' \
 && ret=0
 ;;
 (help)
@@ -602,6 +675,12 @@ _arguments "${_arguments_options[@]}" \
 '*--cwd=[Change the working directory of the new pane]:CWD:_files' \
 '*-n+[Name of the new pane]:NAME: ' \
 '*--name=[Name of the new pane]:NAME: ' \
+'-x+[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'--x=[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'-y+[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--y=[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--width=[The width if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:WIDTH: ' \
+'--height=[The height if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:HEIGHT: ' \
 '*-f[Open the new pane in floating mode]' \
 '*--floating[Open the new pane in floating mode]' \
 '(-f --floating -d --direction)*-i[Open the new pane in place of the current pane, temporarily suspending it]' \
@@ -619,10 +698,18 @@ _arguments "${_arguments_options[@]}" \
 _arguments "${_arguments_options[@]}" \
 '*-c+[Plugin configuration]:CONFIGURATION: ' \
 '*--configuration=[Plugin configuration]:CONFIGURATION: ' \
+'-x+[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'--x=[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'-y+[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--y=[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--width=[The width if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:WIDTH: ' \
+'--height=[The height if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:HEIGHT: ' \
 '*-f[Open the new pane in floating mode]' \
 '*--floating[Open the new pane in floating mode]' \
 '(-f --floating)*-i[Open the new pane in place of the current pane, temporarily suspending it]' \
 '(-f --floating)*--in-place[Open the new pane in place of the current pane, temporarily suspending it]' \
+'*-s[Skip the memory and HD cache and force recompile of the plugin (good for development)]' \
+'*--skip-plugin-cache[Skip the memory and HD cache and force recompile of the plugin (good for development)]' \
 '-h[Print help information]' \
 '--help[Print help information]' \
 ':url -- Plugin URL, can either start with http(s), file\: or zellij\::' \
@@ -635,6 +722,12 @@ _arguments "${_arguments_options[@]}" \
 '(-f --floating)*-d+[Direction to open the new pane in]:DIRECTION: ' \
 '(-f --floating)*--direction=[Direction to open the new pane in]:DIRECTION: ' \
 '*--cwd=[Change the working directory of the editor]:CWD:_files' \
+'-x+[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'--x=[The x coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:X: ' \
+'-y+[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--y=[The y coordinates if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:Y: ' \
+'--width=[The width if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:WIDTH: ' \
+'--height=[The height if the pane is floating as a bare integer (eg. 1) or percent (eg. 10%)]:HEIGHT: ' \
 '(-f --floating -d --direction)*-i[Open the new pane in place of the current pane, temporarily suspending it]' \
 '(-f --floating -d --direction)*--in-place[Open the new pane in place of the current pane, temporarily suspending it]' \
 '*-f[Open the new pane in floating mode]' \
@@ -665,6 +758,21 @@ _arguments "${_arguments_options[@]}" \
 ':old-theme-file:' \
 && ret=0
 ;;
+(pipe)
+_arguments "${_arguments_options[@]}" \
+'*-n+[The name of the pipe]:NAME: ' \
+'*--name=[The name of the pipe]:NAME: ' \
+'*-a+[The args of the pipe]:ARGS: ' \
+'*--args=[The args of the pipe]:ARGS: ' \
+'*-p+[The plugin url (eg. file:/tmp/my-plugin.wasm) to direct this pipe to, if not specified, will be sent to all plugins, if specified and is not running, the plugin will be launched]:PLUGIN: ' \
+'*--plugin=[The plugin url (eg. file:/tmp/my-plugin.wasm) to direct this pipe to, if not specified, will be sent to all plugins, if specified and is not running, the plugin will be launched]:PLUGIN: ' \
+'*-c+[The plugin configuration (note: the same plugin with different configuration is considered a different plugin for the purposes of determining the pipe destination)]:PLUGIN_CONFIGURATION: ' \
+'*--plugin-configuration=[The plugin configuration (note: the same plugin with different configuration is considered a different plugin for the purposes of determining the pipe destination)]:PLUGIN_CONFIGURATION: ' \
+'-h[Print help information]' \
+'--help[Print help information]' \
+'::payload -- The data to send down this pipe (if blank, will listen to STDIN):' \
+&& ret=0
+;;
 (help)
 _arguments "${_arguments_options[@]}" \
 '*::subcommand -- The subcommand whose help message to display:' \
@@ -682,6 +790,8 @@ _zellij_commands() {
 'setup:Setup zellij and check its configuration' \
 'list-sessions:List active sessions' \
 'ls:List active sessions' \
+'list-aliases:List existing plugin aliases' \
+'la:List existing plugin aliases' \
 'attach:Attach to a session' \
 'a:Attach to a session' \
 'kill-session:Kill a specific session' \
@@ -697,12 +807,13 @@ _zellij_commands() {
 'run:Run a command in a new pane' \
 'r:Run a command in a new pane' \
 'plugin:Load a plugin' \
-'r:Load a plugin' \
+'p:Load a plugin' \
 'edit:Edit file with default $EDITOR / $VISUAL' \
 'e:Edit file with default $EDITOR / $VISUAL' \
 'convert-config:' \
 'convert-layout:' \
 'convert-theme:' \
+'pipe:Send data to one or more plugins, launch them if they are not running' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'zellij commands' commands "$@"
@@ -750,6 +861,7 @@ _zellij__action_commands() {
 'rename-tab:Renames the focused pane' \
 'undo-rename-tab:Remove a previously set tab name' \
 'new-tab:Create a new tab, optionally with a specified tab layout and name' \
+'move-tab:Move the focused tab in the specified direction. \[right|left\]' \
 'previous-swap-layout:' \
 'next-swap-layout:' \
 'query-tab-names:Query all tab names' \
@@ -757,6 +869,8 @@ _zellij__action_commands() {
 'launch-or-focus-plugin:' \
 'launch-plugin:' \
 'rename-session:' \
+'pipe:Send data to one or more plugins, launch them if they are not running' \
+'list-clients:' \
 'help:Print this message or the help of the given subcommand(s)' \
     )
     _describe -t commands 'zellij action commands' commands "$@"
@@ -909,6 +1023,16 @@ _zellij__action__launch-plugin_commands() {
     local commands; commands=()
     _describe -t commands 'zellij action launch-plugin commands' commands "$@"
 }
+(( $+functions[_zellij__list-aliases_commands] )) ||
+_zellij__list-aliases_commands() {
+    local commands; commands=()
+    _describe -t commands 'zellij list-aliases commands' commands "$@"
+}
+(( $+functions[_zellij__action__list-clients_commands] )) ||
+_zellij__action__list-clients_commands() {
+    local commands; commands=()
+    _describe -t commands 'zellij action list-clients commands' commands "$@"
+}
 (( $+functions[_zellij__list-sessions_commands] )) ||
 _zellij__list-sessions_commands() {
     local commands; commands=()
@@ -933,6 +1057,11 @@ _zellij__action__move-pane_commands() {
 _zellij__action__move-pane-backwards_commands() {
     local commands; commands=()
     _describe -t commands 'zellij action move-pane-backwards commands' commands "$@"
+}
+(( $+functions[_zellij__action__move-tab_commands] )) ||
+_zellij__action__move-tab_commands() {
+    local commands; commands=()
+    _describe -t commands 'zellij action move-tab commands' commands "$@"
 }
 (( $+functions[_zellij__action__new-pane_commands] )) ||
 _zellij__action__new-pane_commands() {
@@ -968,6 +1097,16 @@ _zellij__action__page-scroll-down_commands() {
 _zellij__action__page-scroll-up_commands() {
     local commands; commands=()
     _describe -t commands 'zellij action page-scroll-up commands' commands "$@"
+}
+(( $+functions[_zellij__action__pipe_commands] )) ||
+_zellij__action__pipe_commands() {
+    local commands; commands=()
+    _describe -t commands 'zellij action pipe commands' commands "$@"
+}
+(( $+functions[_zellij__pipe_commands] )) ||
+_zellij__pipe_commands() {
+    local commands; commands=()
+    _describe -t commands 'zellij pipe commands' commands "$@"
 }
 (( $+functions[_zellij__plugin_commands] )) ||
 _zellij__plugin_commands() {
@@ -1091,3 +1230,16 @@ _zellij__action__write-chars_commands() {
 }
 
 _zellij "$@"
+function zr () { zellij run --name "$*" -- zsh -ic "$*";}
+function zrf () { zellij run --name "$*" --floating -- zsh -ic "$*";}
+function zri () { zellij run --name "$*" --in-place -- zsh -ic "$*";}
+function ze () { zellij edit "$*";}
+function zef () { zellij edit --floating "$*";}
+function zei () { zellij edit --in-place "$*";}
+function zpipe () { 
+  if [ -z "$1" ]; then
+    zellij pipe;
+  else 
+    zellij pipe -p $1;
+  fi
+}
