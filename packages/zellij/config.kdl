@@ -9,7 +9,7 @@ keybinds clear-defaults=true {
         bind "Ctrl w" { CloseFocus; }
 
         // Clear the current view
-        bind "Ctrl o" { Clear; }
+        // BOUND AS: Ctrl O
 
         // Change rotation (swap layout)
         bind "Ctrl r" { NextSwapLayout; }
@@ -39,6 +39,9 @@ keybinds clear-defaults=true {
                 move_to_focused_tab true
             };
         }
+
+        // Open current prompt in $EDITOR
+        // BOUND AS: Ctrl E
 
         // Open scrollback in $EDITOR
         // FROM GHOSTTY
@@ -112,10 +115,7 @@ keybinds clear-defaults=true {
 }
 
 plugins {
-    tab-bar location="zellij:tab-bar"
-    status-bar location="zellij:status-bar"
     strider location="zellij:strider"
-    compact-bar location="zellij:compact-bar"
     session-manager location="zellij:session-manager"
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
@@ -128,29 +128,34 @@ plugins {
 // theme
 themes {
     custom {
-        fg 248 248 242
-        bg 28 24 34
-        red 255 109 103
-        green 89 246 141
-        yellow 243 248 157
-        blue 201 168 250
-        magenta 255 146 208
-        orange 255 184 108
-        cyan 153 236 253
-        black 0 0 0
-        white 255 255 255
+        fg "#f8f8f2"
+        bg "#1c1822"
+        red "#ff6d67"
+        green "#89B4FA"  // Until https://github.com/zellij-org/zellij/pull/3242 is merged
+        yellow "#f3f89d" // the default pane colour uses green, that's ugly, thus this.
+        blue "#c9a8fa"   // at some later point, switch to #59f68d once we can
+        magenta "#ff92d0"
+        orange "#ffb86c"
+        cyan "#99ecfd"
+        black "#000000"
+        white "#ffffff"
     }
 }
 
 theme "custom"
 
-// Send a request for a simplified ui (without arrow fonts) to plugins, default is false
+// Send a request for a simplified ui (without arrow fonts) to plugins
 simplified_ui false
 
-// Toggle between having pane frames around the panes, default is true
-pane_frames false
+// Toggle between having pane frames around the panes
+// When true and hide_frame_for_single_pane is false,
+// all views have panes, even when only a single pane
+// is displayed, this is necessary because otherwise
+// the UI bugs out when you interleave between tabs
+// with 1 to n > 1 tabs.
+pane_frames true
 
-// Whether pane viewports are serialized along with the session, default is false
+// Whether pane viewports are serialized along with the session
 serialize_pane_viewport true
 
 // scrollback

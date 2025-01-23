@@ -25,13 +25,12 @@ zellij_tab_name_update() {
     fi
 }
 
-zellij_session_name_update() {
-    if [[ -n $ZELLIJ ]]; then
-        command nohup  zellij action rename-session "$(openssl rand -base64 10 | tr -dc 'A-Za-z0-9' | head -c 5)" >/dev/null 2>&1
-    fi
-}
+# zellij_session_name_update() {
+#     if [[ -n $ZELLIJ ]]; then
+#         command nohup  zellij action rename-session "$(openssl rand -base64 10 | tr -dc 'A-Za-z0-9' | head -c 5)" >/dev/null 2>&1
+#     fi
+# }
+# zellij_session_name_update
 
-zellij_session_name_update
-
-# zellij_tab_name_update
-# chpwd_functions+=(zellij_tab_name_update)
+zellij_tab_name_update
+chpwd_functions+=(zellij_tab_name_update)

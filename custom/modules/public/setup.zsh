@@ -58,3 +58,8 @@ if [ -e "$HOME/.bun/_bun" ]; then
     source "/Users/zv/.bun/_bun"
     export PATH="$PATH:$HOME/.bun/bin"
 fi
+
+# jj
+if type jj &> /dev/null; then
+    source <(COMPLETE=zsh jj)
+fi
