@@ -23,7 +23,7 @@ zsh_pre_init() {
     ### In the interest of entering zellij in the fast path, we attempt
     ### to determine if zellij is installed via heuristics and fallbacks
     ###
-    if [[ -z "$ZELLIJ" ]]; then
+    if [[ -z "$ZELLIJ" && -e "$HOME/.execute-zellij-on-init" ]]; then
         if [ -e "$HOME/.cargo/bin/zellij" ]; then
             start_zellij "$HOME/.cargo/bin/zellij"
         elif type zellij &> /dev/null; then
@@ -49,6 +49,8 @@ start_zellij() {
             "$1"
         fi
 
-        exit
+        if [ -e "$HOME/.exit-zellij-on-session-terminate" ]; then
+            exit
+        fi
     fi
 }
