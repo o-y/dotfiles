@@ -1,6 +1,3 @@
-#### Useful as a shorthand
-export DOTFILES="$HOME/dotfiles";
-
 #### Required by some TUI apps
 export TERM=xterm-256color
 
@@ -13,3 +10,4 @@ export EDITOR="hx"
 #### Zsh History
 export HISTSIZE=10000000
 export SAVEHIST=10000000
+setopt EXTENDED_HISTORY
