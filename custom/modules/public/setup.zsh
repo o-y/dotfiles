@@ -63,3 +63,8 @@ fi
 if type jj &> /dev/null; then
     source <(COMPLETE=zsh jj)
 fi
+
+# vscode (code binary)
+if [ -e "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]; then
+    export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
