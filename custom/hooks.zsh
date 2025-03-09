@@ -21,7 +21,8 @@ zsh_pre_init() {
     ### Execute Zellij
     ### 
     ### In the interest of entering zellij in the fast path, we attempt
-    ### to determine if zellij is installed via heuristics and fallbacks
+    ### to extract the binary location, as we haven't yet sourced the
+    ### modules which add cargo, brew, etc to the $PATH.
     ###
     if [[ -z "$ZELLIJ" && -e "$HOME/.execute-zellij-on-init" ]]; then
         if [ -e "$HOME/.cargo/bin/zellij" ]; then
@@ -42,15 +43,13 @@ zsh_post_init() {
 }
 
 start_zellij() {
-    if [[ -z "$ZELLIJ" ]]; then
-        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-            "$1" attach -c
-        else
-            "$1"
-        fi
+    if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
+        "$1" attach -c
+    else
+       trap "$1" EXIT
+    fi
 
-        if [ -e "$HOME/.exit-zellij-on-session-terminate" ]; then
-            exit
-        fi
+    if [ -e "$HOME/.exit-zellij-on-session-terminate" ]; then
+        exit
     fi
 }

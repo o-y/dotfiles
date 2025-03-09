@@ -35,6 +35,7 @@ dependencies_linux=(
   "pipx" "sudo apt install pipx"
   "bc" "sudo apt install bc"
   "c++" "sudo apt install build-essential"
+  "curl" "sudo apt install curl"
 
   ## -- dependencies on cargo --
   "navi:cargo" "cargo install --locked navi"
