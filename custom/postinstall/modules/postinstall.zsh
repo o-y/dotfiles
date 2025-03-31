@@ -38,3 +38,12 @@ if ! command -v rustc >/dev/null 2>&1 || ! command -v cargo >/dev/null 2>&1; the
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     fi
 fi
+
+################ Install Python Dependencies ################
+
+if ! command -v pyenv >/dev/null 2>&1; then
+    read -q "answer?[!] pyenv is not installed, would you like to install it? [Y/n] "
+    if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
+        curl -fsSL https://pyenv.run | bash
+    fi
+fi

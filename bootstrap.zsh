@@ -45,6 +45,7 @@ dependencies_linux=(
 dependencies_common=(
   ## -- dependencies on pipx --
   "fuck:pipx" "pipx install --fetch-missing-python --python "3.11" thefuck" # https://github.com/nvbn/thefuck/issues/1444
+  "poetry:pipx" "pipx install poetry"
 
   ## -- dependencies on cargo --
   "pik:cargo" "cargo install pik --locked"
