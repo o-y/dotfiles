@@ -68,3 +68,12 @@ fi
 if [ -e "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]; then
     export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
+
+# pyenv
+if ! type pyenv &> /dev/null; then
+    if [ -e "$HOME/.pyenv/bin" ]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init - zsh)"
+    fi
+fi
