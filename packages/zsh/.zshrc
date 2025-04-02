@@ -14,7 +14,7 @@ plugins=(
     zsh-syntax-highlighting
     zsh-autosuggestions
     macos
-    virtualenv
+    direnv
 )
 
 #### load custom scripts

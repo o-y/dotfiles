@@ -8,11 +8,6 @@ if [ -e "$HOME/go/bin" ]; then
     export PATH="$PATH:$HOME/go/bin"
 fi
 
-# conda
-if [ -e "$HOME/miniconda3" ]; then
-    . "$HOME/miniconda3/etc/profile.d/conda.sh"
-fi
-
 # local path
 if [ -e "$HOME/.local/bin" ]; then
     export PATH="$PATH:$HOME/.local/bin"

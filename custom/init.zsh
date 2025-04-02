@@ -12,13 +12,13 @@ source "${PATH_TO_SCRIPT:h}/hooks.zsh"
 skipped_files=()
 
 # determines whether a file is encrypted using git-crypt
-local is_encrypted() {
-  [[ $(head -n 1 "$1") == *GITCRYPT* ]]
+function is_encrypted {
+  [[ -r "$1" && $(head -n 1 "$1") == *GITCRYPT* ]]
 }
 
 # sources the specified file if it matches the hostname and isn't encrypted
 uname=$(uname)
-local source_helper() {
+function source_helper() {
   local file=$1
   local file_uname=$2
 
