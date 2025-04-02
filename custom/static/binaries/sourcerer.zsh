@@ -26,9 +26,8 @@ source_helper() {
   file_name=$(basename "$file" "-${platform}")
   bin="/usr/local/bin"
 
-  echo "[!] sourcerer: symlinking $file_name (full path: $file) to $bin/$file_name"
-
   if ! [ -e "$bin/$file_name" ]; then
+    echo "[!] sourcerer: symlinking $file_name (full path: $file) to $bin/$file_name"
 
     # vvv - request sudo permission - vvv
     echo "[!] sourcerer: requesting sudo permission which is required to symlink binaries to /usr/local"
