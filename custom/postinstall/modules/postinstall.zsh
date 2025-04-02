@@ -33,15 +33,11 @@ fi
 ################ Install Dependencies ################
 
 # ==============================================================================
-# Function: ensure_installed
-# Description: Checks if specified commands exist. If not, prompts the user
-#              to run a provided installation command.
 # Arguments:
 #   $1: Canonical name of the software (e.g., "rust/cargo", "pyenv"). Used in prompts.
 #   $2: The command string to execute for installation (e.g., "curl ... | sh").
 #   $3..: One or more command names to check for existence (e.g., rustc cargo).
 # Usage:
-#   ensure_installed "My Tool" "curl <url> | bash" mytool
 #   ensure_installed "Rust Toolchain" "curl <rustup_url> | sh" rustc cargo
 # ==============================================================================
 function ensure_installed() {
@@ -69,18 +65,18 @@ function ensure_installed() {
         echo "[!] $canonical_name does not seem to be installed or fully available."
 
         local answer
-        read -q "answer?Install $canonical_name? [Y/n] "
+        read -q "answer?install $canonical_name? [Y/n] "
         echo
 
         if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
-            echo "[~] attempting to install $canonical_name..."
+            echo "[~] attempting to install: $canonical_name..."
             if eval "$install_cmd"; then
                  echo "[~] $canonical_name installation command executed successfully."
             else
                  echo "[!] $canonical_name installation command failed (exit code: $?)." >&2
             fi
         else
-            echo "[i] Skipping installation of $canonical_name."
+            echo "[i] skipping installation of: $canonical_name."
         fi
     fi
 
@@ -97,9 +93,12 @@ ensure_installed "pyenv" \
                  "curl -fsSL https://pyenv.run | bash" \
                  pyenv
 
-ensure_installed "miniconda" \
-                 "mkdir -p ~/miniconda3 && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh && bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 && rm ~/miniconda3/miniconda.sh" \
-                 conda
+### not sure if we have a license for miniconda, maybe delegate to conda-forge on corp.
+if [[ $(hostname) != *corp.google.com && $(hostname) != *c.googlers.com ]]; then
+    ensure_installed "miniconda" \
+                    "mkdir -p ~/miniconda3 && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh && bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 && rm ~/miniconda3/miniconda.sh" \
+                    conda
+fi
 
 ensure_installed "pixi" \
                  "export PIXI_NO_PATH_UPDATE=true && curl -fsSL https://pixi.sh/install.sh | sh" \
