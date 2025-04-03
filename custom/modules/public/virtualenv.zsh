@@ -12,8 +12,8 @@ if ! type pyenv &> /dev/null; then
 fi
 
 # miniconda
-if [ -e "$HOME/miniconda3/bin/conda" ]; then
-    eval "$($HOME/miniconda3/bin/conda shell.zsh hook)"
+if [ -e "$HOME/miniforge3/bin/conda" ]; then
+    eval "$($HOME/miniforge3/bin/conda shell.zsh hook)"
 fi
 
 # pixi
