@@ -84,7 +84,7 @@ function ensure_installed() {
 }
 
 ################ Install Rust ################
-ensure_installed "rust/cargo" \
+ensure_installed "Rust Toolchain" \
                  "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" \
                  rustc cargo
 
@@ -93,13 +93,13 @@ ensure_installed "pyenv" \
                  "curl -fsSL https://pyenv.run | bash" \
                  pyenv
 
-### not sure if we have a license for miniconda, maybe delegate to conda-forge on corp.
-if [[ $(hostname) != *corp.google.com && $(hostname) != *c.googlers.com ]]; then
-    ensure_installed "miniconda" \
-                    "mkdir -p ~/miniconda3 && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh && bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 && rm ~/miniconda3/miniconda.sh" \
-                    conda
-fi
-
-ensure_installed "pixi" \
+ensure_installed "Pixi" \
                  "export PIXI_NO_PATH_UPDATE=true && curl -fsSL https://pixi.sh/install.sh | sh" \
                  pixi
+
+function miniforge-installer() {
+    local file="/tmp/miniforge-installer-$RANDOM.sh"
+    local url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3$( [[ "$(uname -s)" == "Darwin" ]] && echo "-MacOSX-" || echo "-$(uname -s)-" )$(uname -m).sh"
+    wget -O "$file" "$url" && bash "$file" -b -p "${HOME}/miniforge3" && rm "$file"
+}
+ensure_installed "Conda Miniforge" "miniforge-installer" conda
