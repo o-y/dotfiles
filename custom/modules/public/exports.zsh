@@ -7,6 +7,9 @@ export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
 #### Editor
 export EDITOR="hx"
 
+#### Required for Conda which overrides clear - https://askubuntu.com/a/1402408
+export TERMINFO=/usr/share/terminfo
+
 #### Zsh History
 HISTFILE=~/.zsh_history
 
@@ -14,10 +17,10 @@ setopt NO_INC_APPEND_HISTORY_TIME
 setopt NO_INC_APPEND_HISTORY
 
 # In-memory per-session state
-HISTSIZE=100000
+HISTSIZE=1000000
 
-# No. entries to save in ~/.zsh_history
-SAVEHIST=100000
+# Number of entries to save in ~/.zsh_history
+SAVEHIST=1000000
 
 setopt EXTENDED_HISTORY
 setopt SHAREHISTORY
