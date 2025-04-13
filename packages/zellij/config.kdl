@@ -145,7 +145,15 @@ themes {
 theme "custom"
 
 // Send a request for a simplified ui (without arrow fonts) to plugins
-simplified_ui false
+simplified_ui true
+
+
+ui {
+    pane_frames {
+        hide_session_name true
+        rounded_corners true
+    }
+}
 
 // Toggle between having pane frames around the panes
 // When true and hide_frame_for_single_pane is false,

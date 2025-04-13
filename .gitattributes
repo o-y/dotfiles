@@ -1,1 +1,2 @@
 custom/modules/private/** filter=git-crypt diff=git-crypt
+custom/static/private/** filter=git-crypt diff=git-crypt
