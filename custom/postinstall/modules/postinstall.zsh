@@ -88,7 +88,12 @@ ensure_installed "Rust Toolchain" \
                  "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" \
                  rustc cargo
 
-################ Install Python Dependencies ################
+################ Install Bun ################
+ensure_installed "Bun" \
+                 "curl -fsSL https://bun.sh/install | bash" \
+                 bun
+
+################ Install Python Dependencies
 ensure_installed "pyenv" \
                  "curl -fsSL https://pyenv.run | bash" \
                  pyenv
@@ -100,6 +105,6 @@ ensure_installed "Pixi" \
 function miniforge-installer() {
     local file="/tmp/miniforge-installer-$RANDOM.sh"
     local url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3$( [[ "$(uname -s)" == "Darwin" ]] && echo "-MacOSX-" || echo "-$(uname -s)-" )$(uname -m).sh"
-    wget -O "$file" "$url" && bash "$file" -b -p "${HOME}/miniforge3" && rm "$file"
+    wget -O "$file" "$url" && sh "$file" -b -p "${HOME}/miniforge3" && rm "$file" # we can't pipe into sh because the script strangly verifies itself ends in ".sh"...
 }
 ensure_installed "Conda Miniforge" "miniforge-installer" conda
