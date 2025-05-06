@@ -61,6 +61,7 @@ stows_common=(
   tmux:~/.config/tmux
   kando:~/.config/kando
   ghostty:~/.config/ghostty
+  nvim:~/.config/nvim
 )
 
 # symlinks for MacOS
