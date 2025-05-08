@@ -55,6 +55,7 @@ dependencies_common=(
 stows_common=(
   zsh
   jj
+  git
   zellij:~/.config/zellij
   helix:~/.config/helix
   tmux:~/.config/tmux
