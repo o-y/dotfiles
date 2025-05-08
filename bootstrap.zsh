@@ -38,7 +38,6 @@ dependencies_linux=(
   "curl" "sudo apt install curl"
 
   ## -- dependencies on cargo --
-  "navi:cargo" "cargo install --locked navi"
   "zoxide:cargo" "cargo install zoxide --locked" # the debian stable package is oudated and broken
 )
 
@@ -55,6 +54,7 @@ dependencies_common=(
 # common symlinks
 stows_common=(
   zsh
+  jj
   zellij:~/.config/zellij
   helix:~/.config/helix
   tmux:~/.config/tmux
