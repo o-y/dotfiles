@@ -1,4 +1,4 @@
-echo "[~] starting common-post-install subroutine" 
+echo "[~] postinstall :: starting common-post-install subroutine" 
 
 ######## Platform Install Scripts ########
 PATH_TO_SCRIPT=$(realpath "$0")

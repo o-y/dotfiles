@@ -1,1 +1,1 @@
-echo "[~] starting darwin-post-install routine" 
+echo "[~] postinstall :: starting darwin-post-install routine" 

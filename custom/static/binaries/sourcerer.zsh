@@ -2,7 +2,7 @@
 ################ Sourcerer ###############
 ##########################################
 
-echo "[~] starting sourcerer..."
+echo "[~] postinstall :: starting sourcerer..."
 
 #################### init ####################
 
@@ -16,7 +16,7 @@ elif [[ "$os" == "Linux" && "$arch" == "x86_64" ]]; then
 elif [[ "$os" == "Linux" && "$arch" == "aarch64" ]]; then
   platform="linux-aarch64"
 else
-  echo "[!] sourcerer: unknown OS ($os) or architecture ($arch)"
+  echo "[!] sourcerer :: unknown OS ($os) or architecture ($arch)"
   return 1
 fi
 
@@ -27,14 +27,14 @@ source_helper() {
   bin="/usr/local/bin"
 
   if ! [ -e "$bin/$file_name" ]; then
-    echo "[!] sourcerer: symlinking $file_name (full path: $file) to $bin/$file_name"
+    echo "[!] sourcerer :: symlinking $file_name (full path: $file) to $bin/$file_name"
 
     # vvv - request sudo permission - vvv
-    echo "[!] sourcerer: requesting sudo permission which is required to symlink binaries to /usr/local"
+    echo "[!] sourcerer :: requesting sudo permission which is required to symlink binaries to /usr/local"
     sudo -v
 
     if ! sudo -n true &>/dev/null; then
-      echo "[!] sourcerer: sudo access denied, exiting..."
+      echo "[!] sourcerer :: sudo access denied, exiting..."
       return 1
     fi
     # ^^^ - request sudo permission - ^^^
@@ -50,7 +50,7 @@ for dir in "$SCRIPT_DIR"/*/; do
   dir=${dir%/}
   basename=${dir##*/}
 
-  echo "[~] sourcerer: scanning binaries in $dir"
+  echo "[~] sourcerer :: scanning binaries in $dir"
 
   file_with_platform=$(find "$dir" -maxdepth 1 -name "*-${platform}")
   if [[ -n "$file_with_platform" ]]; then

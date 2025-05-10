@@ -1,0 +1,14 @@
+[ui]
+paginate = "never"
+default-command = "log"
+
+[merge-tools.meld]
+program = "meld"
+
+[user]
+name = "zv"
+email = "zv@zv.wtf"
+
+[aliases]
+e = ["edit"]
+rm = ["abandon"]
