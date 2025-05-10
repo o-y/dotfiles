@@ -1,1 +1,1 @@
-echo "[~] starting linux-post-install routine" 
+echo "[~] postinstall :: starting linux-post-install routine" 

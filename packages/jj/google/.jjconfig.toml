@@ -1,0 +1,9 @@
+[ui]
+paginate = "never"
+default-command = "log"
+
+[aliases]
+# short-hand to open the main workspace
+agsa = ["util", "exec", "jjd", "agsa"]
+
+e = ["edit"]

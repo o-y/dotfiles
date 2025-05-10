@@ -3,12 +3,12 @@ sourcerer_directory="$HOME/dotfiles/custom/static/binaries/sourcerer.zsh"
 if [ -e $sourcerer_directory ]; then
     source $sourcerer_directory
 else
-    echo "[!] warning - sourcerer does not exist at $sourcerer_directory"
+    echo "[!] postinstall :: warning - sourcerer does not exist at $sourcerer_directory"
 fi
 
 ################ Install Oh My Zsh ################
 if ! [ -e "$HOME/.oh-my-zsh" ]; then
-  echo "[!] installing oh-my-zsh";
+  echo "[!] postinstall :: installing oh-my-zsh";
 
   # --keep-zshrc prevents ohmyzsh from overwriting the existing zshrc file with their default config
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
@@ -26,7 +26,7 @@ if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
     if type git-crypt &> /dev/null; then
         git-crypt unlock;
     else
-        echo "[!] error - \$ git-crypt is not installed on your system!"
+        echo "[!] postinstall :: error - \$ git-crypt is not installed on your system!"
     fi
 fi
 
@@ -62,21 +62,21 @@ function ensure_installed() {
     done
 
     if [[ $all_found -eq 0 ]]; then
-        echo "[!] $canonical_name does not seem to be installed or fully available."
+        echo "[!] postinstall :: ensureinstalled - $canonical_name does not seem to be installed or fully available."
 
         local answer
         read -q "answer?install $canonical_name? [Y/n] "
         echo
 
         if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
-            echo "[~] attempting to install: $canonical_name..."
+            echo "[~] postinstall :: ensureinstalled - attempting to install: $canonical_name..."
             if eval "$install_cmd"; then
-                 echo "[~] $canonical_name installation command executed successfully."
+                 echo "[~] postinstall :: ensureinstalled - $canonical_name installation command executed successfully."
             else
-                 echo "[!] $canonical_name installation command failed (exit code: $?)." >&2
+                 echo "[!] postinstall :: ensureinstalled - $canonical_name installation command failed (exit code: $?)." >&2
             fi
         else
-            echo "[i] skipping installation of: $canonical_name."
+            echo "[i] postinstall :: ensureinstalled - skipping installation of: $canonical_name."
         fi
     fi
 
