@@ -43,11 +43,7 @@ zsh_post_init() {
 }
 
 start_zellij() {
-    if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-        "$1" attach -c
-    else
-       trap "$1" EXIT
-    fi
+    exec "$1"
 
     if [ -e "$HOME/.exit-zellij-on-session-terminate" ]; then
         exit
