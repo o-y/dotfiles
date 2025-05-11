@@ -43,7 +43,6 @@ dependencies_linux=(
 
 dependencies_common=(
   ## -- dependencies on pipx --
-  "fuck:pipx" "pipx install --fetch-missing-python --python "3.11" thefuck" # https://github.com/nvbn/thefuck/issues/1444
   "poetry:pipx" "pipx install poetry"
 
   ## -- dependencies on cargo --
@@ -172,19 +171,19 @@ function process_stows() {
   ## Example: "pkg:~/.config" (no condition)
   ## Example: "pkg" (no condition, default target is $HOME)
 
-  local -a stows_to_process=("$@")
   local packages_directory="$HOME/dotfiles/packages"
+  function trim() { sed 's/^[ \t]*//;s/[ \t]*$//' <<< "${1:-}" }
 
-  for stow_entry in "${stows_to_process[@]}"; do
+  for stow_entry in "$@"; do
     local stow_segment="$stow_entry"
 
     ##
     ## detect and parse the optional "... [when:condition]" clause
     ##
     if [[ "$stow_entry" == *' when:'* ]]; then
-      stow_segment="${stow_entry%%' when:'*}"                                    # part before " when:"
-      stow_predicate="${stow_entry#*' when:'}"                                   # part after "when:"
-      stow_predicate="${(*)${(*)stow_predicate/#[[:space:]]#}/%[[:space:]]#}"    # trim leading/trailing spaces
+      stow_segment="${stow_entry%%' when:'*}"     # part before " when:"
+      stow_predicate="${stow_entry#*' when:'}"    # part after "when:"
+      stow_predicate="$(trim $stow_predicate)"    # trim leading/trailing spaces
 
       # validate: ensure stow_segment (package[:target]) is not empty after the split
       if [[ -z "$stow_segment" ]]; then
@@ -207,14 +206,14 @@ function process_stows() {
     ##
     ## detect and parse the optional "...:target" clause (such as "pkg:~/.config")
     ##
-    local package="${(*)${(*)stow_segment/#[[:space:]]#}/%[[:space:]]#}"
+    local package="$(trim $stow_segment)"
     local target_dir="$HOME"
 
     if [[ "$stow_segment" == *:* ]]; then
-      package="${stow_segment%%:*}"                                      # part before the first ':'
-      target_dir="${stow_segment#*:}"                                    # part after the first ':'
-      target_dir="${(*)${(*)target_dir/#[[:space:]]#}/%[[:space:]]#}"    # trim leading/trailing spaces
-      target_dir="${target_dir/#\~/$HOME}"                               # resolve ~ to $HOME
+      package="${stow_segment%%:*}"           # part before the first ':'
+      target_dir="${stow_segment#*:}"         # part after the first ':'
+      target_dir="$(trim $target_dir)"        # trim leading/trailing spaces
+      target_dir="${target_dir/#\~/$HOME}"    # resolve ~ to $HOME
     fi
 
     ##
