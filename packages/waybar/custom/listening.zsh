@@ -1,4 +1,6 @@
-TRACK=$(playerctl metadata title)
+TRACK_RAW=$(playerctl metadata title)
+TRACK="${TRACK_RAW:-"N/A"}"
+
 STATUS=$(playerctl status)
 
 CLASS=$( [[ "$STATUS" == "Playing" ]] && echo "playing" || echo "stopped" )
