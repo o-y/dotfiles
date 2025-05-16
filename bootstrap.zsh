@@ -55,6 +55,8 @@ dependencies_common=(
 #########################################
 
 function is_google() [[ "$(hostname)" =~ '\.corp\.goo(gle|glers)\.com$' ]]
+function is_macos() [[ "$(uname -s)" == 'Darwin' ]]
+function is_linux() [[ "$(uname -s)" == 'Linux' ]]
 
 # common symlinks
 stows_common=(
@@ -64,10 +66,10 @@ stows_common=(
   "zellij:~/.config/zellij"
   "helix:~/.config/helix"
   "kando:~/.config/kando"
-  "ghostty:~/.config/ghostty"
   "nvim:~/.config/nvim"
   "sesh:~/.config/sesh"
 
+<<<<<<< HEAD
   # # jj config
   "jj/google    when: is_google"
   "jj/personal  when: ! is_google"
@@ -76,6 +78,20 @@ stows_common=(
   "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
   "tmux/base/plugins:~/.tmux/plugins"
   "tmux/base/config:~/.tmux"
+=======
+  # ---- jj ----
+  "jj/google    when: is_google"
+  "jj/personal  when: ! is_google"
+
+  # ---- ghostty ----
+  "ghostty/linux:~/.config/ghostty when: is_linux"
+  "ghostty/macos:~/.config/ghostty when: is_macos"
+  # as "linux" and "macos" represent scoped-configuration
+  # these are conditionally stowed. the themes is not
+  # conditional, therefore we can stow them straight into
+  # the ~/.config/ghostty directory.
+  "ghostty/themes:~/.config/ghostty/themes"
+>>>>>>> e217a10 (fix bug in bootstrap, add jj config)
 )
 
 # symlinks for MacOS
@@ -181,6 +197,7 @@ function process_stows() {
   function trim() { echo "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'; }
 
   for stow_entry in "$@"; do
+    local packages_directory="$HOME/dotfiles/packages"
     local stow_segment="$stow_entry"
     local packages_directory="$HOME/dotfiles/packages"
 

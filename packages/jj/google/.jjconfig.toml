@@ -4,6 +4,163 @@ default-command = "log"
 
 [aliases]
 # short-hand to open the main workspace
-agsa = ["util", "exec", "jjd", "agsa"]
-
+watch = ["util", "exec", "hwatch", "--", "--no-title", "--color", "jj", "--ignore-working-copy", "--color=always", "log"]
 e = ["edit"]
+rm = ["abandon"]
+
+[colors]
+# Daemon status colors.
+"daemon_unflushed" = "bright black"
+"daemon_unflushed_slow" = "red"
+
+# CL status colors.
+"drafts" = "red"
+"lgtm" = "bright green"
+"mailed" = "green"
+"unresolved" = "bright red"
+
+# Author label color.
+"author" = "yellow"
+
+# Change ID color for submitted commits.
+"submitted change_id" = "green"
+
+# CL number colors: distinct for normal vs. immutable (sync point) CLs.
+"submitted normal-cl cl" = "bright blue"
+"submitted immutable-cl cl" = "bright black"
+
+# Other submitted commit elements.
+"submitted commit_id" = "green"
+"submitted email" = "green"
+"submitted username" = "green" # Note: "username" label is used for author in templates.
+
+# Node styling for immutable commits in the log graph.
+"node immutable" = { fg = "bright black", bold = true }
+
+# Timestamp colors: default and for submitted commits.
+"timestamp" = {fg = "cyan", bold = true }
+"submitted timestamp" = { fg = "bright black", bold = false }
+
+[templates]
+commit_summary = '''
+label(if(submitted, "submitted"),
+  separate(" ",
+    format_short_change_id_with_hidden_and_divergent_info(self),
+    if(submitted, label("cl", cl("cl", submitted_change_number))),
+    format_short_commit_id(commit_id),
+    separate(commit_summary_separator,
+      if(p4head, label("bookmark", "main")),
+      if(p4base, label("bookmark", "p4base")),
+      bookmarks,
+      piper_commit_summary_desc,
+    )
+  )
+)
+'''
+
+log = 'if(is_piper_repo, piper_log_compact, builtin_log_compact)'
+log_node = 'builtin_log_node'
+op_log_node = 'builtin_op_log_node'
+
+[template-aliases]
+changelist_data_cl_state = '''
+coalesce(
+  if(is_submitted, label("submitted", label("cl", "(submitted)"))),
+  if(is_lgtm, label("lgtm", "LGTM")),
+  if(is_mailed, label("mailed", "Mailed")))
+'''
+
+changelist_data_comments_state = '''
+separate(" ",
+  if(has_unresolved_comments, label("unresolved", "(" ++ unresolved_comments ++ " unresolved)")),
+  if(has_draft_comments, label("drafts", "(unpublished drafts)")))
+'''
+
+changelist_data = '''
+separate(" ", changelist_data_cl_state, changelist_data_comments_state)
+'''
+
+daemon_unflushed = 'daemon_unflushed_for >= 0'
+
+daemon_unflushed_slow = 'daemon_unflushed_for >= 10'
+
+'format_submitted_timestamp(timestamp)' = 'timestamp.ago()'
+
+'link(target, label)' = 'raw_escape_sequence("\x1b]8;;" ++ target ++ "\x1b\\") ++ label ++ raw_escape_sequence("\x1b]8;;\x1b\\")'
+'cl(lbl, number)' = 'link("http://cl/"++number, label(lbl, "http://cl/" ++ number))'
+
+piper_commit_summary_desc = '''
+separate(" ",
+  if(conflict, label("conflict", "(conflict)")),
+  if(google_empty, label("empty", "(empty)")),
+  if(description, piper_commit_summary_desc_text,
+    label(if(google_empty, "empty"), description_placeholder)
+  ),
+)
+'''
+
+piper_commit_summary_desc_text = 'google_desc.first_line()'
+piper_log_compact = '''
+label(if(current_working_copy, "working_copy"),
+  label(if(submitted, "submitted"),
+    concat(
+      piper_log_compact_header, "\n",
+      piper_log_compact_desc, "\n",
+    )
+  )
+)
+'''
+
+'format_short_id(id)' = 'id.shortest(4)'
+
+piper_log_compact_header = '''
+separate(" ",
+  if(immutable, 
+    label("immutable-commit",
+      format_short_change_id_with_hidden_and_divergent_info(self)),
+    label("normal-commit", 
+      format_short_change_id_with_hidden_and_divergent_info(self)),
+  ),
+
+  if(submitted,
+    if(immutable, 
+      label("immutable-cl", label("cl", cl("cl", submitted_change_number))),
+      label("normal-cl", label("cl", cl("cl", submitted_change_number))),
+    )
+  ),
+
+  if(immutable, "", label("username", author.name())),
+
+  if(submitted,
+    format_submitted_timestamp(committer.timestamp()),
+    format_timestamp(committer.timestamp())),
+  
+  if(p4head, label("bookmark", "main")),
+  if(p4base, label("bookmark", "p4base")),
+  bookmarks.map(|b| if(b.name().starts_with("cl/"), link("http://" ++ b.name(), "http://" ++ b), b)),
+  tags,
+  changelist_data,
+  working_copies,
+  if(conflict, label("conflict", "conflict")),
+)
+'''
+
+piper_log_compact_desc = '''
+separate(" ",
+  if(google_empty, label("empty", "(empty)")),
+  if(immutable,
+    "", 
+    if(description, piper_log_compact_desc_text,
+      label(if(empty, "empty"), description_placeholder)
+    )
+  ),
+  if(daemon_unflushed,
+    if(daemon_unflushed_slow,
+      label("daemon_unflushed_slow", "(still not backed up to cloud)"),
+      label("daemon_unflushed", "(backing up to cloud...)"),
+    )
+  )
+)
+'''
+
+piper_log_compact_desc_text = 'google_desc.first_line()'
