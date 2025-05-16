@@ -1,0 +1,6 @@
+###
+### THEME
+###
+theme = "dark_master"
+window-padding-y = 15,0
+window-padding-x = 15
