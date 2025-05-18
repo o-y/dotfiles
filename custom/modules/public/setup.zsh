@@ -50,7 +50,7 @@ fi
 
 # bun
 if [ -e "$HOME/.bun/_bun" ]; then
-    source "/Users/zv/.bun/_bun"
+    source "$HOME/.bun/_bun"
     export PATH="$PATH:$HOME/.bun/bin"
 fi
 
