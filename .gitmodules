@@ -17,3 +17,7 @@
 [submodule "fzf-tab"]
 	path = custom/static/zsh-custom/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
+
+[submodule "tpm"]
+	path = packages/tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm

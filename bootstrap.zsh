@@ -63,20 +63,24 @@ stows_common=(
 
   "zellij:~/.config/zellij"
   "helix:~/.config/helix"
-  "tmux:~/.config/tmux"
   "kando:~/.config/kando"
   "ghostty:~/.config/ghostty"
   "nvim:~/.config/nvim"
 
-  # JJ config
+  # # jj config
   "jj/google    when: is_google"
   "jj/personal  when: ! is_google"
+
+  # tmux config
+  "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
+  "tmux/plugins:~/.tmux/plugins"
 )
 
 # symlinks for MacOS
 stows_darwin=(
   skhd
   yabai
+  aerospace:~/.config/aerospace
 )
 
 # symlinks for Linux
@@ -171,11 +175,12 @@ function process_stows() {
   ## Example: "pkg:~/.config" (no condition)
   ## Example: "pkg" (no condition, default target is $HOME)
 
-  local packages_directory="$HOME/dotfiles/packages"
-  function trim() { sed 's/^[ \t]*//;s/[ \t]*$//' <<< "${1:-}" }
+  # trims leading and trailing spaces from a string
+  function trim() { echo "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'; }
 
   for stow_entry in "$@"; do
     local stow_segment="$stow_entry"
+    local packages_directory="$HOME/dotfiles/packages"
 
     ##
     ## detect and parse the optional "... [when:condition]" clause
