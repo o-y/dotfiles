@@ -1,18 +1,19 @@
 ###
-### THEME
+### APPEARANCE
 ###
 theme = "dark_master"
-window-padding-y = 15,0
+window-padding-y = 15,15
 window-padding-x = 15
+
+# Shaders
+# custom-shader = ~/.config/ghostty/shaders/mnoise.glsl
 
 ###
 ### MACOS
 ###
 
 # https://github.com/ghostty-org/ghostty/discussions/3207
-# Allows alt to be picked up by zellij on macOS
-keybind = alt+left=unbind
-keybind = alt+right=unbind
+# Allows alt to be picked up by tmux on macOS
 macos-option-as-alt=true
 macos-titlebar-style=hidden
 
@@ -23,15 +24,17 @@ macos-titlebar-style=hidden
 keybind = cmd+w=close_window
 keybind = cmd+t=unbind
 keybind = cmd+n=unbind
-keybind = ctrl+d=unbind
 
+keybind = ctrl+d=unbind
+keybind = ctrl+j=unbind
+keybind = ctrl+k=unbind
+keybind = ctrl+l=unbind
 
 ###
 ### KEYBINDS
 ###
 
 keybind = ctrl+shift+n=new_window
-
 
 ###
 ### ZELLIJ KEYBINDS
@@ -41,14 +44,6 @@ keybind = ctrl+shift+n=new_window
 ### which it translates into actions.
 ### https://jrgraphix.net/r/Unicode/E000-F8FF
 ###
-
-# Toggle pane to floating or embed
-# PUS E000
-keybind = ctrl+shift+w=text:
-
-# Toggle view floating panes
-# PUS E002
-keybind = ctrl+shift+a=text:
 
 # Move between tabs
 keybind = ctrl+1=text:  # PUS E003
@@ -62,11 +57,19 @@ keybind = ctrl+8=text:  # PUS E00A
 keybind = ctrl+9=text:  # PUS E00B
 keybind = ctrl+0=text:  # PUS E00C
 
-# Move panes [l,r,u,d]
-keybind = ctrl+shift+j=text:  # PUS E00D
-keybind = ctrl+shift+l=text:  # PUS E00E
-keybind = ctrl+shift+i=text:  # PUS E00F
-keybind = ctrl+shift+k=text:  # PUS E010
+###
+### Move panes [l,r,u,d]
+###
+# PUS E00D
+keybind = ctrl+shift+j=text:
+# PUS E00E
+keybind = ctrl+shift+l=text:
+# PUS E00F
+keybind = ctrl+shift+i=text:
+# PUS E010
+keybind = ctrl+shift+k=text:
 
 # Open scrollback in $EDITOR
-keybind = ctrl+shift+e=text:  # PUS E011
+# keybind = ctrl+r=text:
+# PUS E011
+

@@ -88,6 +88,10 @@ ensure_installed "Rust Toolchain" \
                  "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" \
                  rustc cargo
 
+ensure_installed "Rust Cargo B(inary)Install" \
+                 "curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash" \
+                 cargo-binstall
+
 ################ Install Bun ################
 ensure_installed "Bun" \
                  "curl -fsSL https://bun.sh/install | bash" \
