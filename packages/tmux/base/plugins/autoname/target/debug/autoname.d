@@ -1,0 +1,1 @@
+/Users/zv/dotfiles/packages/tmux/base/plugins/autoname/target/debug/autoname: /Users/zv/dotfiles/packages/tmux/base/plugins/autoname/src/main.rs /Users/zv/dotfiles/packages/tmux/base/plugins/autoname/src/parser.rs /Users/zv/dotfiles/packages/tmux/base/plugins/autoname/src/retriever.rs /Users/zv/dotfiles/packages/tmux/base/plugins/autoname/src/validator.rs

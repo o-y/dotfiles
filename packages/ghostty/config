@@ -37,39 +37,52 @@ keybind = ctrl+l=unbind
 keybind = ctrl+shift+n=new_window
 
 ###
-### ZELLIJ KEYBINDS
+### TMUX KEYBINDS
 ### 
 ### This makes use of the private unicode area
-### to send the terminal/Zellij certain characters
+### to send the terminal/Tmux certain characters
 ### which it translates into actions.
 ### https://jrgraphix.net/r/Unicode/E000-F8FF
 ###
 
-# Move between tabs
-keybind = ctrl+1=text:  # PUS E003
-keybind = ctrl+2=text:  # PUS E004
-keybind = ctrl+3=text:  # PUS E005
-keybind = ctrl+4=text:  # PUS E006
-keybind = ctrl+5=text:  # PUS E007
-keybind = ctrl+6=text:  # PUS E008
-keybind = ctrl+7=text:  # PUS E009
-keybind = ctrl+8=text:  # PUS E00A
-keybind = ctrl+9=text:  # PUS E00B
-keybind = ctrl+0=text:  # PUS E00C
+##
+## Move between tabs
+##
+# Reciever: tmux - ctrl+1 -> sends  (E003)
+keybind = ctrl+1=text:
+# Reciever: tmux - ctrl+2 -> sends  (E004)
+keybind = ctrl+2=text:
+# Reciever: tmux - ctrl+3 -> sends  (E005)
+keybind = ctrl+3=text:
+# Reciever: tmux - ctrl+4 -> sends  (E006)
+keybind = ctrl+4=text:
+# Reciever: tmux - ctrl+5 -> sends  (E007)
+keybind = ctrl+5=text:
+# Reciever: tmux - ctrl+6 -> sends  (E008)
+keybind = ctrl+6=text:
+# Reciever: tmux - ctrl+7 -> sends  (E009)
+keybind = ctrl+7=text:
+# Reciever: tmux - ctrl+8 -> sends  (E00A)
+keybind = ctrl+8=text:
+# Reciever: tmux - ctrl+9 -> sends  (E00B)
+keybind = ctrl+9=text:
+# Reciever: tmux - ctrl+0 -> sends  (E00C)
+keybind = ctrl+0=text:
 
 ###
 ### Move panes [l,r,u,d]
 ###
-# PUS E00D
+# Reciever: tmux - ctrl+shift+j -> sends  (E00D)
 keybind = ctrl+shift+j=text:
-# PUS E00E
+# Reciever: tmux - ctrl+shift+l -> sends  (E00E)
 keybind = ctrl+shift+l=text:
-# PUS E00F
+# Reciever: tmux - ctrl+shift+i -> sends  (E00F)
 keybind = ctrl+shift+i=text:
-# PUS E010
+# Reciever: tmux - ctrl+shift+k -> sends  (E010)
 keybind = ctrl+shift+k=text:
 
-# Open scrollback in $EDITOR
-# keybind = ctrl+r=text:
-# PUS E011
-
+##
+## Open scrollback in $EDITOR
+##
+# Reciever: tmux - ctrl+shift+e -> sends  (E011)
+keybind = ctrl+shift+e=text:

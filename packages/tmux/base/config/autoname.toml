@@ -1,0 +1,39 @@
+[config]
+default-process-icon = ""
+default-process-colour = "#8caaee"
+
+default-icon = ""
+default-icon-colour = "#e5c890"
+
+override-base-shell-name = "zsh"
+
+[processes]
+apt = ""
+cargo = ""
+rustc = ""
+brew = ""
+docker = ""
+go = ""
+node = ""
+tmux = ""
+zsh = ""
+top = ""
+btop = ""
+gcc = ""
+clang = ""
+make = ""
+cmake = ""
+pip = ""
+pip3 = ""
+python = ""
+python3 = ""
+jj = ""
+
+[processes.nvim]
+icon = ""
+colour = "#81c8be"
+
+[directories.google]
+path = "/Users/zv/google/src/cloud/slyo/agsa/google"
+icon = ""
+colour = "#ea999c"

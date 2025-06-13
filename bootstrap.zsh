@@ -73,7 +73,8 @@ stows_common=(
 
   # tmux config
   "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
-  "tmux/plugins:~/.tmux/plugins"
+  "tmux/base/plugins:~/.tmux/plugins"
+  "tmux/base/config:~/.tmux"
 )
 
 # symlinks for MacOS
