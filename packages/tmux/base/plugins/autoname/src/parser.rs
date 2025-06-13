@@ -55,8 +55,7 @@ pub struct AppConfig {
 /// Models
 /// =====================================================================
 
-/// Deserialization model for a directory entry when defined as a TOML table.
-/// Corresponds to entries such as `[directories.dotfiles]`.
+/// Deserialization model for a single directory entry defined within the TOML config.
 #[derive(Deserialize, Debug)]
 struct DirectoryDetails {
     path: String,
@@ -65,26 +64,16 @@ struct DirectoryDetails {
     colour: Option<String>,
 }
 
-/// Deserialization model for a process entry when defined as a TOML table.
-/// Corresponds to entries such as `nvim = { default_process_icon = "?", default_process_colour = "#fff" }`.
+/// Deserialization model for a single process entry defined within the TOML config.
 #[derive(Deserialize, Debug)]
 struct ProcessDetails {
+    names: Vec<String>,
     icon: String,
     #[serde(default)]
     colour: Option<String>,
 }
 
-/// Deserialization model for a single process configuration entry.
-/// This allows a process to be defined either as a simple string (for the default_process_icon)
-/// or as a detailed table (`ProcessDetails`).
-#[derive(Deserialize, Debug)]
-#[serde(untagged)]
-enum ProcessConfigEntryValue {
-    Icon(String),
-    Details(ProcessDetails),
-}
-
-/// Deserialization model for the `[config]` section of the TOML file.
+/// Deserialization model for the `[config]` section defined within the TOML config.
 /// Captures global settings like default icons and colours.
 #[derive(Deserialize, Debug)]
 struct ConfigSection {
@@ -101,14 +90,12 @@ struct ConfigSection {
     override_base_shell_name: Option<String>,
 }
 
-/// Represents the top-level structure of the `autoname.toml` file.
-/// This struct is the primary target for `toml::from_str`, directly mapping
-/// to the sections and tables defined in the configuration file.
+/// Represents the top-level structure of the TOML file.
 #[derive(Deserialize, Debug)]
 struct AutonameTomlConfig {
     config: ConfigSection,
     #[serde(default)]
-    processes: HashMap<String, ProcessConfigEntryValue>,
+    process: Vec<ProcessDetails>,
     #[serde(default)]
     directories: HashMap<String, DirectoryDetails>,
 }
@@ -137,23 +124,21 @@ pub fn parse_autoname_config() -> Result<AppConfig, String> {
 
     let default_colour = toml_config.config.default_process_colour.clone();
     
-    let process_map = toml_config
-        .processes
-        .into_iter()
-        .map(|(name, entry_value)| {
-            let (icon, colour) = match entry_value {
-                ProcessConfigEntryValue::Icon(icon_str) => (
-                    icon_str, 
-                    default_colour.clone()
-                ),
-                ProcessConfigEntryValue::Details(details) => (
-                    details.icon,
-                    details.colour.unwrap_or_else(|| default_colour.clone()),
-                ),
-            };
-            (name, ProcessInfo { icon, colour })
-        })
-        .collect();
+    let mut process_map = HashMap::new();
+    for process_group in toml_config.process {
+        let colour = process_group
+            .colour
+            .unwrap_or_else(|| default_colour.clone());
+        for name in process_group.names {
+            process_map.insert(
+                name,
+                ProcessInfo {
+                    icon: process_group.icon.clone(),
+                    colour: colour.clone(),
+                },
+            );
+        }
+    }
 
     let directory_map = toml_config
         .directories
