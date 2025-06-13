@@ -3,7 +3,7 @@ use dirs;
 use std::path::Path;
 use std::path::PathBuf;
 
-/// This struct is the final, canonical representation of a process's metadata,
+/// Defines the final, canonical representation of a process's metadata,
 /// used throughout the application after parsing.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TabAppearance {
@@ -84,7 +84,7 @@ pub fn compute_tab_appearance(
 /// Checks if the working directory matches any of the configured directories.
 ///
 /// This function iterates through the `directories` in the `AppConfig` and checks
-/// if the `working_directory` is a sub-path of any of them. If a match is found,
+/// if the `working_directory` is a sub-path of them. If a match is found,
 /// it returns a `TabAppearance` with the directory's configured icon, colour,
 /// and formatted name.
 fn get_appearance_for_directory(

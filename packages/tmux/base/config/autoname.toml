@@ -7,31 +7,62 @@ default-icon-colour = "#e5c890"
 
 override-base-shell-name = "zsh"
 
-[processes]
-apt = ""
-cargo = ""
-rustc = ""
-brew = ""
-docker = ""
-go = ""
-node = ""
-tmux = ""
-zsh = ""
-top = ""
-btop = ""
-gcc = ""
-clang = ""
-make = ""
-cmake = ""
-pip = ""
-pip3 = ""
-python = ""
-python3 = ""
-jj = ""
+[[process]]
+names = ["zsh"]
+icon = ""
 
-[processes.nvim]
+[[process]]
+names = ["nvim"]
 icon = ""
 colour = "#81c8be"
+
+[[process]]
+names = ["cargo", "rustc"]
+icon = ""
+
+[[process]]
+names = ["apt"]
+icon = ""
+
+[[process]]
+names = ["brew"]
+icon = ""
+
+[[process]]
+names = ["docker"]
+icon = ""
+
+[[process]]
+names = ["go"]
+icon = ""
+
+[[process]]
+names = ["node"]
+icon = ""
+
+[[process]]
+names = ["tmux"]
+icon = ""
+
+[[process]]
+names = ["top", "btop"]
+icon = ""
+
+[[process]]
+names = ["gcc", "clang"]
+icon = ""
+
+[[process]]
+names = ["make", "cmake"]
+icon = ""
+
+[[process]]
+names = ["pip", "pip3", "python", "python3"]
+icon = ""
+
+[[process]]
+names = ["jj"]
+icon = ""
 
 [directories.google]
 path = "/Users/zv/google/src/cloud/slyo/agsa/google"
