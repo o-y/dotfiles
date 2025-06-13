@@ -1,11 +1,18 @@
-[config]
-default-process-icon = ""
-default-process-colour = "#8caaee"
+[defaults]
+process_icon = ""
+process_colour = "#8caaee"
 
-default-icon = ""
-default-icon-colour = "#e5c890"
+[shell_override]
+enabled = true
+shell_name = "zsh"
+icon = ""
+colour = "#e5c890"
 
-override-base-shell-name = "zsh"
+[directories.google]
+path = "/google/src/cloud/"
+icon = ""
+colour = "#ea999c"
+extract_tab_name = "^/google/src/cloud/[^/]+/([^/]+)/google$"
 
 [[process]]
 names = ["zsh"]
@@ -63,8 +70,3 @@ icon = ""
 [[process]]
 names = ["jj"]
 icon = ""
-
-[directories.google]
-path = "/Users/zv/google/src/cloud/slyo/agsa/google"
-icon = ""
-colour = "#ea999c"

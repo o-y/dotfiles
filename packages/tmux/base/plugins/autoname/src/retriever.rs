@@ -1,5 +1,6 @@
 use crate::parser::AppConfig;
 use dirs;
+use regex::Regex;
 use std::path::Path;
 use std::path::PathBuf;
 
@@ -19,29 +20,31 @@ pub struct TabAppearance {
 /// 1.  **Configured Directory**: If the `working_directory` is within a path
 ///     defined in the `[directories]` section of the configuration:
 ///     - The icon and colour are taken from the directory's configuration.
-///     - If the running process is the configured `override_base_shell` (e.g., "zsh"),
+///     - If the `shell_override` is active for the current `process_name`,
 ///       the tab name is the formatted directory name.
 ///     - Otherwise, the tab name is the process name.
 ///
 /// 2.  If the `working_directory` is not in a configured directory:
-///     - If the running process is the `override_base_shell`:
-///         - The icon and colour are the `default_icon` and `default_icon_colour`.
+///     - If the `shell_override` is active:
+///         - The icon and colour are from the `[shell_override]` config.
 ///         - The tab name is the formatted directory name.
 ///     - Otherwise (for any other process):
 ///         - The appearance is looked up from the `[processes]` configuration.
-///         - If not found, it falls back to `default_process_icon` and `default_process_colour`.
+///         - If not found, it falls back to the `[defaults]` configuration.
 ///         - The tab name is always the process name.
 pub fn compute_tab_appearance(
     process_name: &str,
     working_directory: &str,
     app_config: &AppConfig,
 ) -> TabAppearance {
-    let is_base_shell = app_config.overrides.should_override_base_shell
-        && app_config.overrides.override_base_shell.as_deref() == Some(process_name);
+    let is_shell_override = app_config
+        .shell_override
+        .as_ref()
+        .map_or(false, |so| so.shell_name == process_name);
 
     // Check if we are in a configured directory
     if let Some(dir_appearance) = get_appearance_for_directory(working_directory, app_config) {
-        if is_base_shell {
+        if is_shell_override {
             // Use directory appearance but with directory name
             dir_appearance
         } else {
@@ -53,10 +56,12 @@ pub fn compute_tab_appearance(
         }
     } else {
         // We are in a non-registered directory
-        if is_base_shell {
+        if is_shell_override {
+            // This should be safe to unwrap due to the is_shell_override check
+            let override_info = app_config.shell_override.as_ref().unwrap();
             TabAppearance {
-                icon: app_config.defaults.default_icon.clone(),
-                colour: app_config.defaults.default_icon_colour.clone(),
+                icon: override_info.icon.clone(),
+                colour: override_info.colour.clone(),
                 name: format_directory_path(Path::new(working_directory)),
             }
         } else {
@@ -72,8 +77,8 @@ pub fn compute_tab_appearance(
                 .unwrap_or_else(|| {
                     // Fallback to default process appearance
                     TabAppearance {
-                        icon: app_config.defaults.default_process_icon.clone(),
-                        colour: app_config.defaults.default_process_colour.clone(),
+                        icon: app_config.defaults.process_icon.clone(),
+                        colour: app_config.defaults.process_colour.clone(),
                         name: process_name.to_string(),
                     }
                 })
@@ -96,10 +101,26 @@ fn get_appearance_for_directory(
     for (_name, dir_info) in &app_config.directories {
         if let Some(configured_dir) = expand_directory(&dir_info.directory) {
             if working_dir_path.starts_with(&configured_dir) {
+                let name = if let Some(re_str) = &dir_info.extract_tab_name {
+                    Regex::new(re_str)
+                        .ok()
+                        .and_then(|re| {
+                            re.captures(working_dir_path.to_str().unwrap_or(""))
+                                .and_then(|caps| {
+                                    caps.get(1)
+                                        .or(caps.get(0))
+                                        .map(|m| m.as_str().to_string())
+                                })
+                        })
+                        .unwrap_or_else(|| format_directory_path(&working_dir_path))
+                } else {
+                    format_directory_path(&working_dir_path)
+                };
+
                 return Some(TabAppearance {
                     icon: dir_info.icon_override.clone(),
                     colour: dir_info.icon_colour.clone(),
-                    name: format_directory_path(&configured_dir),
+                    name,
                 });
             }
         }

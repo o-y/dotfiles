@@ -23,22 +23,22 @@ pub struct DirectoryInfo {
     pub directory: String,
     pub icon_override: String,
     pub icon_colour: String,
+    pub extract_tab_name: Option<String>,
 }
 
 /// Represents the default values from the TOML file.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Defaults {
-    pub default_process_icon: String,
-    pub default_process_colour: String,
-    pub default_icon: String,
-    pub default_icon_colour: String,
+    pub process_icon: String,
+    pub process_colour: String,
 }
 
 /// Represents override settings from the TOML file.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Overrides {
-    pub override_base_shell: Option<String>,
-    pub should_override_base_shell: bool,
+pub struct ShellOverride {
+    pub shell_name: String,
+    pub icon: String,
+    pub colour: String,
 }
 
 /// Represents the application's fully parsed and processed configuration.
@@ -48,7 +48,7 @@ pub struct AppConfig {
     pub processes: HashMap<String, ProcessInfo>,
     pub directories: HashMap<String, DirectoryInfo>,
     pub defaults: Defaults,
-    pub overrides: Overrides,
+    pub shell_override: Option<ShellOverride>,
 }
 
 /// =====================================================================
@@ -62,6 +62,8 @@ struct DirectoryDetails {
     icon: String,
     #[serde(default)]
     colour: Option<String>,
+    #[serde(default)]
+    extract_tab_name: Option<String>,
 }
 
 /// Deserialization model for a single process entry defined within the TOML config.
@@ -73,27 +75,28 @@ struct ProcessDetails {
     colour: Option<String>,
 }
 
-/// Deserialization model for the `[config]` section defined within the TOML config.
-/// Captures global settings like default icons and colours.
+/// Deserialization model for the `[defaults]` section in the TOML file.
 #[derive(Deserialize, Debug)]
-struct ConfigSection {
-    #[serde(rename = "default-process-icon")]
-    default_process_icon: String,
-    #[serde(rename = "default-process-colour")]
-    default_process_colour: String,
-    #[serde(rename = "default-icon")]
-    default_icon: String,
-    #[serde(rename = "default-icon-colour")]
-    default_icon_colour: String,
-    #[serde(rename = "override-base-shell-name")]
-    #[serde(default)]
-    override_base_shell_name: Option<String>,
+struct DefaultsSection {
+    process_icon: String,
+    process_colour: String,
+}
+
+/// Deserialization model for the `[shell_override]` section in the TOML file.
+#[derive(Deserialize, Debug)]
+struct ShellOverrideSection {
+    enabled: bool,
+    shell_name: String,
+    icon: String,
+    colour: String,
 }
 
 /// Represents the top-level structure of the TOML file.
 #[derive(Deserialize, Debug)]
 struct AutonameTomlConfig {
-    config: ConfigSection,
+    defaults: DefaultsSection,
+    #[serde(default)]
+    shell_override: Option<ShellOverrideSection>,
     #[serde(default)]
     process: Vec<ProcessDetails>,
     #[serde(default)]
@@ -122,7 +125,7 @@ pub fn parse_autoname_config() -> Result<AppConfig, String> {
     let toml_config: AutonameTomlConfig = toml::from_str(&config_content)
         .map_err(|e| format!("Failed to parse TOML from {:?}: {}", config_path, e))?;
 
-    let default_colour = toml_config.config.default_process_colour.clone();
+    let default_colour = toml_config.defaults.process_colour.clone();
     
     let mut process_map = HashMap::new();
     for process_group in toml_config.process {
@@ -150,23 +153,33 @@ pub fn parse_autoname_config() -> Result<AppConfig, String> {
                     directory: details.path,
                     icon_override: details.icon,
                     icon_colour: details.colour.unwrap_or_else(|| default_colour.clone()),
+                    extract_tab_name: details.extract_tab_name,
                 },
             )
         })
         .collect();
 
+    let shell_override = toml_config
+        .shell_override
+        .and_then(|override_config| {
+            if override_config.enabled {
+                Some(ShellOverride {
+                    shell_name: override_config.shell_name,
+                    icon: override_config.icon,
+                    colour: override_config.colour,
+                })
+            } else {
+                None
+            }
+        });
+
     Ok(AppConfig {
         processes: process_map,
         directories: directory_map,
         defaults: Defaults {
-            default_process_icon: toml_config.config.default_process_icon,
-            default_process_colour: default_colour,
-            default_icon: toml_config.config.default_icon,
-            default_icon_colour: toml_config.config.default_icon_colour,
+            process_icon: toml_config.defaults.process_icon,
+            process_colour: default_colour,
         },
-        overrides: Overrides {
-            override_base_shell: toml_config.config.override_base_shell_name.clone(),
-            should_override_base_shell: toml_config.config.override_base_shell_name.is_some(),
-        },
+        shell_override,
     })
 } 
