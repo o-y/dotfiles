@@ -24,8 +24,17 @@ icon = ""
 colour = "#81c8be"
 
 [[process]]
+names = ["hwatch", "watch"]
+icon = ""
+colour = "#ca9ee6"
+
+[[process]]
 names = ["cargo", "rustc"]
 icon = ""
+
+[[process]]
+names = ["go"]
+icon = ""
 
 [[process]]
 names = ["apt"]
@@ -38,10 +47,6 @@ icon = ""
 [[process]]
 names = ["docker"]
 icon = ""
-
-[[process]]
-names = ["go"]
-icon = ""
 
 [[process]]
 names = ["node"]
@@ -70,3 +75,7 @@ icon = ""
 [[process]]
 names = ["jj"]
 icon = ""
+
+[[process]]
+names = ["blaze", "bazel"]
+icon = ""
