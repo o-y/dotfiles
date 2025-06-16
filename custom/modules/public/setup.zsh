@@ -13,7 +13,7 @@ if [ -e "$HOME/.local/bin" ]; then
     export PATH="$PATH:$HOME/.local/bin"
 fi
 
-# brew
+# mac brew
 if [ -e "/opt/homebrew/bin/brew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
@@ -21,6 +21,11 @@ fi
 # brew fpath
 if type brew &> /dev/null; then
     fpath+=("/opt/homebrew/share/zsh/site-functions")
+fi
+
+# linux brew
+if [ -e "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # fpath
