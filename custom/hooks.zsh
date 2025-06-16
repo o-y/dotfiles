@@ -41,8 +41,7 @@ zsh_post_init() {
 }
 
 start_tmux() {
-    # Don't auto-start inside VS Code's integrated terminal
-    if [[ $TERM_PROGRAM == "vscode" ]]; then
+    if [[ $TERM_PROGRAM == "vscode" || $TERMINAL_EMULATOR == "JetBrains-JediTerm" ]]; then
         return 0
     fi
 
@@ -57,9 +56,6 @@ gen_cvcv() {
   local vowels=(A E I O U)
   local consonants=(B C D F G H J K L M N P Q R S T V W X Y Z)
 
-  # This now works because zmodload makes $RANDOM dynamic
-  # NOTE: This assumes 0-indexed arrays, which Zsh uses inside functions
-  # for compatibility (KSH_ARRAYS option is on by default).
   local c1=${consonants[$(( $RANDOM % ${#consonants[@]} ))]}
   local v1=${vowels[$(( $RANDOM % ${#vowels[@]} ))]}
   local c2=${consonants[$(( $RANDOM % ${#consonants[@]} ))]}
