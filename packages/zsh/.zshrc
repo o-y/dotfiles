@@ -21,3 +21,9 @@ plugins=(
 source ~/dotfiles/custom/init.zsh
 
 source $ZSH/oh-my-zsh.sh
+# bun completions
+[ -s "/home/zv/.bun/_bun" ] && source "/home/zv/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
