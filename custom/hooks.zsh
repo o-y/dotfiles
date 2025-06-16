@@ -18,19 +18,17 @@ zsh_pre_init() {
     compinit
 
     ###
-    ### Execute Zellij
-    ### 
-    ### In the interest of entering zellij in the fast path, we attempt
+    ### Execute Tmux
+    ###
+    ### In the interest of entering tmux in the fast path, we attempt
     ### to extract the binary location, as we haven't yet sourced the
     ### modules which add cargo, brew, etc to the $PATH.
     ###
-    if [[ -z "$ZELLIJ" && -e "$HOME/.execute-zellij-on-init" ]]; then
-        if [ -e "$HOME/.cargo/bin/zellij" ]; then
-            start_zellij "$HOME/.cargo/bin/zellij"
-        elif type zellij &> /dev/null; then
-            start_zellij "zellij"
-        elif [ -e "/opt/homebrew/bin/zellij" ]; then
-            start_zellij "/opt/homebrew/bin/zellij"
+    if [[ -z "$TMUX" && -e "$HOME/.execute-tmux-on-init" ]]; then
+        if [ -e "/opt/homebrew/bin/tmux" ]; then
+            start_tmux "/opt/homebrew/bin/tmux"
+        elif type tmux &> /dev/null; then
+            start_tmux "tmux"
         fi
     fi
 }
@@ -39,13 +37,33 @@ zsh_pre_init() {
 ### HOOK: Called after modules are sourced
 ###
 zsh_post_init() {
-
+    
 }
 
-start_zellij() {
-    exec "$1"
-
-    if [ -e "$HOME/.exit-zellij-on-session-terminate" ]; then
-        exit
+start_tmux() {
+    # Don't auto-start inside VS Code's integrated terminal
+    if [[ $TERM_PROGRAM == "vscode" ]]; then
+        return 0
     fi
+
+    "$1" new-session -s $(gen_cvcv)
+
+    if [[ -e "$HOME/.kill-session-on-tmux-exit" ]]; then
+        
+    fi
+}
+
+gen_cvcv() {
+  local vowels=(A E I O U)
+  local consonants=(B C D F G H J K L M N P Q R S T V W X Y Z)
+
+  # This now works because zmodload makes $RANDOM dynamic
+  # NOTE: This assumes 0-indexed arrays, which Zsh uses inside functions
+  # for compatibility (KSH_ARRAYS option is on by default).
+  local c1=${consonants[$(( $RANDOM % ${#consonants[@]} ))]}
+  local v1=${vowels[$(( $RANDOM % ${#vowels[@]} ))]}
+  local c2=${consonants[$(( $RANDOM % ${#consonants[@]} ))]}
+  local v2=${vowels[$(( $RANDOM % ${#vowels[@]} ))]}
+
+  echo "${c1}${v1}${c2}${v2}"
 }

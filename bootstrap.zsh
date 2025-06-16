@@ -66,6 +66,7 @@ stows_common=(
   "kando:~/.config/kando"
   "ghostty:~/.config/ghostty"
   "nvim:~/.config/nvim"
+  "sesh:~/.config/sesh"
 
   # # jj config
   "jj/google    when: is_google"

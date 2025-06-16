@@ -81,6 +81,15 @@ keybind = ctrl+shift+i=text:
 # Reciever: tmux - ctrl+shift+k -> sends  (E010)
 keybind = ctrl+shift+k=text:
 
+###
+### Focus panes 
+###
+# Reciever: tmux - ctrl+i -> sends  (E012)
+# This is required because ctrl+i sends the byte sequence character asii code
+# (0x09) as ctrl+i, therefore binding this within tmux stops tab from functioning
+# within the shell environment. By binding this natively within ghostty, we can
+# use ctrl+i to focus the above pane.
+keybind = ctrl+i=text:
 ##
 ## Open scrollback in $EDITOR
 ##
