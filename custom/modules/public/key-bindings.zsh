@@ -2,15 +2,6 @@
 ### SETUP
 ##########
 
-__fzf_use_tmux__() {
-  [ -n "$TMUX_PANE" ] && [ "${FZF_TMUX:-0}" != 0 ] && [ ${LINES:-40} -gt 15 ]
-}
- 
-__fzfcmd() {
-  __fzf_use_tmux__ &&
-    echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
-}
-
 # Ensure precmds are run after cd
 fzf-redraw-prompt() {
   local precmd
@@ -34,25 +25,58 @@ function zoxide-filepicker {
 zle -N zoxide-filepicker
 bindkey '^Z' zoxide-filepicker
 
+###########################################
+###########################################
+### CTRL-S - Tmux session manager
+###########################################
+###########################################
+function tmux-session-manager {
+  # Renamed 'session' to 'selected_session' to avoid conflicts
+  local selected_session=$(sesh list --tmux --hide-attached --icons | fzf-tmux -p 100%,60% \
+      --no-sort --ansi \
+      --prompt=' ' --border="rounded" --border-label="<  >" --color="label:#caaafe" \
+      --bind 'tab:down,btab:up' \
+      --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
+      --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
+      --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
+      --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
+      --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
+      --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)' \
+      --preview-window 'right:55%' \
+      --preview '~/go/bin/sesh preview {}')
+
+  # Use the new variable name in the check
+  echo "could connect to: $selected_session"
+  if [[ -n "$selected_session" ]]; then
+    echo "connecting to: $selected_session"
+    # Use the new variable name for the connection
+    sesh connect "$selected_session"
+  fi
+}
+zle -N tmux-session-manager
+bindkey '^S' tmux-session-manager
+
 #########################################
 #########################################
 ### CTRL-X - command line history search
 #########################################
 #########################################
 fzf-history-widget() {
-  local selected num
-  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-  selected=( $(fc -rl 1 |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
-  local ret=$?
-  if [ -n "$selected" ]; then
-    num=$selected[1]
-    if [ -n "$num" ]; then
-      zle vi-fetch-history -n $num
-    fi
+  # this also matches the height specified by the zoxide widget
+  local selected_command=$(fc -l -n -r 1 |
+    fzf --height=45% \
+        --tiebreak=index \
+        --query="$LBUFFER" \
+        --bind='ctrl-z:ignore' \
+        --border="rounded" --border-label="<  >" --color="label:#caaafe" \
+        --prompt='  ')
+
+  # if a command was selected, write that to the buffer
+  if [[ -n "$selected_command" ]]; then
+    LBUFFER=$selected_command
   fi
-  zle reset-prompt
-  return $ret
+
+  zle redisplay
 }
 zle     -N   fzf-history-widget
 bindkey '^X' fzf-history-widget

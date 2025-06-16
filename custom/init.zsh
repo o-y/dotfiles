@@ -5,6 +5,9 @@
 PATH_TO_SCRIPT=${0:A}
 MODULES_DIR=${PATH_TO_SCRIPT:h}/modules
 
+# load modules
+zmodload zsh/mathfunc
+
 # add hooks to the context
 source "${PATH_TO_SCRIPT:h}/hooks.zsh"
 

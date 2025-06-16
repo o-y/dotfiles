@@ -6,7 +6,7 @@ process_colour = "#8caaee"
 enabled = true
 shell_name = "zsh"
 icon = ""
-colour = "#e5c890"
+colour = "#f3f59d"
 
 [directories.google]
 path = "/google/src/cloud/"

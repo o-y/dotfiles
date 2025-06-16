@@ -1,0 +1,9 @@
+[default_session]
+startup_command = "nvim +GoToFile"
+preview_command = "eza --all --git --icons --color=always {}"
+
+[[session]]
+name = "fastfetch"
+path = "~/.config/"
+startup_command = "fastfetch"
+preview_command = "fastfetch"
