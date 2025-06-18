@@ -64,12 +64,9 @@ stows_common=(
   "zellij:~/.config/zellij"
   "helix:~/.config/helix"
   "kando:~/.config/kando"
-  "ghostty:~/.config/ghostty"
   "nvim:~/.config/nvim"
   "sesh:~/.config/sesh"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   # # jj config
   "jj/google    when: is_google"
   "jj/personal  when: ! is_google"
@@ -78,10 +75,6 @@ stows_common=(
   "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
   "tmux/base/plugins:~/.tmux/plugins"
   "tmux/base/config:~/.tmux"
-=======
-  # ---- jj ----
-  "jj/google    when: is_google"
-  "jj/personal  when: ! is_google"
 
   # ---- ghostty ----
   "ghostty/linux:~/.config/ghostty when: is_linux"
@@ -91,17 +84,6 @@ stows_common=(
   # conditional, therefore we can stow them straight into
   # the ~/.config/ghostty directory.
   "ghostty/themes:~/.config/ghostty/themes"
->>>>>>> e217a10 (fix bug in bootstrap, add jj config)
-=======
-  # # jj config
-  "jj/google    when: is_google"
-  "jj/personal  when: ! is_google"
-
-  # tmux config
-  "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
-  "tmux/base/plugins:~/.tmux/plugins"
-  "tmux/base/config:~/.tmux"
->>>>>>> 656c1e0 (updates)
 )
 
 # symlinks for MacOS
