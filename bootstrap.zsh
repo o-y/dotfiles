@@ -55,6 +55,8 @@ dependencies_common=(
 #########################################
 
 function is_google() [[ "$(hostname)" =~ '\.corp\.goo(gle|glers)\.com$' ]]
+function is_macos() [[ "$(uname)" == "Darwin" ]]
+function is_linux() [[ "$(uname)" == "Linux" ]]
 
 # common symlinks
 stows_common=(
