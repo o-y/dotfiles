@@ -32,7 +32,7 @@ pub struct Args {
     #[arg(
         short = 'r',
         long,
-        help = "Defines what metadata should be retrieved given the process name and directory, valid values are: 'tab_colour', 'tab_icon' and 'tab_name'.",
+        help = "Defines what metadata should be retrieved given the process name and directory, valid values are: 'tab_colour', 'tab_icon', 'tab_name' and 'tab_name_expanded'.",
     )]
     pub retrieve: String,
 }
@@ -57,6 +57,7 @@ fn main() {
                 "tab_icon" => tab_appearance.icon + " ",
                 "tab_name" => tab_appearance.name,
                 "tab_colour" => tab_appearance.colour,
+                "tab_name_expanded" => tab_appearance.name_expanded,
                 _ => unreachable!(),
             };
             println!("{}", output_value);
