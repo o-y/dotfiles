@@ -11,6 +11,7 @@ pub struct TabAppearance {
     pub icon: String,
     pub colour: String,
     pub name: String,
+    pub name_expanded: String,
 }
 
 /// Computes the tab appearance based on the process name and working directory.
@@ -42,27 +43,30 @@ pub fn compute_tab_appearance(
         .as_ref()
         .map_or(false, |so| so.shell_name == process_name);
 
+    let expanded_working_directory = format_expanded_directory_path(Path::new(working_directory));
+
     // Check if we are in a configured directory
-    if let Some(dir_appearance) = get_appearance_for_directory(working_directory, app_config) {
+    if let Some(mut dir_appearance) = get_appearance_for_directory(working_directory, app_config) {
         if is_shell_override {
             // Use directory appearance but with directory name
             dir_appearance
         } else {
             // Use directory appearance but with process name
-            TabAppearance {
-                name: process_name.to_string(),
-                ..dir_appearance
-            }
+            dir_appearance.name = process_name.to_string();
+            dir_appearance.name_expanded = process_name.to_string();
+            dir_appearance
         }
     } else {
         // We are in a non-registered directory
         if is_shell_override {
             // This should be safe to unwrap due to the is_shell_override check
             let override_info = app_config.shell_override.as_ref().unwrap();
+            let path = Path::new(working_directory);
             TabAppearance {
                 icon: override_info.icon.clone(),
                 colour: override_info.colour.clone(),
-                name: format_directory_path(Path::new(working_directory)),
+                name: format_directory_path(path),
+                name_expanded: expanded_working_directory,
             }
         } else {
             // Look for a specific process configuration
@@ -73,6 +77,7 @@ pub fn compute_tab_appearance(
                     icon: info.icon.clone(),
                     colour: info.colour.clone(),
                     name: process_name.to_string(),
+                    name_expanded: expanded_working_directory.clone(),
                 })
                 .unwrap_or_else(|| {
                     // Fallback to default process appearance
@@ -80,6 +85,7 @@ pub fn compute_tab_appearance(
                         icon: app_config.defaults.process_icon.clone(),
                         colour: app_config.defaults.process_colour.clone(),
                         name: process_name.to_string(),
+                        name_expanded: expanded_working_directory,
                     }
                 })
         }
@@ -121,6 +127,7 @@ fn get_appearance_for_directory(
                     icon: dir_info.icon_override.clone(),
                     colour: dir_info.icon_colour.clone(),
                     name,
+                    name_expanded: format_expanded_directory_path(&working_dir_path),
                 });
             }
         }
@@ -160,4 +167,69 @@ fn format_directory_path(path: &Path) -> String {
         .and_then(|name| name.to_str())
         .map(String::from)
         .unwrap_or_else(|| path.to_string_lossy().to_string())
+}
+
+/// Format an expanded directory path for display.
+/// - `/usr/local/bin/rust` -> `/usr/lb/rust`
+/// - `/google/src/base/cloud/depot/slyo/agsa` -> `/google/sbcds/agsa`
+fn format_expanded_directory_path(path: &Path) -> String {
+    if path == Path::new("/") {
+        return "/".to_string();
+    }
+
+    let home_dir = dirs::home_dir();
+
+    let (prefix, path_to_format) = if let Some(ref home_dir) = home_dir {
+        if path == home_dir {
+            return "~".to_string();
+        }
+        if let Ok(stripped) = path.strip_prefix(home_dir) {
+            ("~/", stripped)
+        } else {
+            ("/", path)
+        }
+    } else {
+        ("/", path)
+    };
+
+    let mut components: Vec<_> = path_to_format
+        .components()
+        .filter_map(|c| c.as_os_str().to_str())
+        .collect();
+
+    if components.get(0) == Some(&"/") {
+        components.remove(0);
+    }
+
+    if components.is_empty() {
+        return prefix.trim_end_matches('/').to_string();
+    }
+
+    if components.len() == 1 {
+        return format!("{}{}", prefix, components[0]);
+    }
+
+    let last = components.pop().unwrap();
+
+    if prefix == "/" {
+        // Absolute path logic: /first/middle.../last -> /first/m.../last
+        let first = components.remove(0);
+        let shortened_middle = components
+            .iter()
+            .filter_map(|s| s.chars().next())
+            .collect::<String>();
+
+        if shortened_middle.is_empty() {
+            format!("/{}/{}", first, last)
+        } else {
+            format!("/{}/{}/{}", first, shortened_middle, last)
+        }
+    } else {
+        // Tilde path logic: ~/a/b/c -> ~/ab/c
+        let shortened = components
+            .iter()
+            .filter_map(|s| s.chars().next())
+            .collect::<String>();
+        format!("~/{}/{}", shortened, last)
+    }
 }

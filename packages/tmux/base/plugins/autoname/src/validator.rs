@@ -6,7 +6,7 @@ pub fn validate_args(args: &Args) -> Result<(), String> {
 }
 
 fn validate_retrieve_value(value: &str) -> Result<(), String> {
-    const VALID_VALUES: &[&str] = &["tab_colour", "tab_name", "tab_icon"];
+    const VALID_VALUES: &[&str] = &["tab_colour", "tab_name", "tab_icon", "tab_name_expanded"];
     if VALID_VALUES.contains(&&value.to_lowercase().as_str()) {
         Ok(())
     } else {
