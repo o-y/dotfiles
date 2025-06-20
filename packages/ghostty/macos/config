@@ -83,9 +83,9 @@ keybind = ctrl+shift+k=text:
 ###
 # Reciever: tmux - ctrl+i -> sends  (E012)
 # This is required because ctrl+i sends the byte sequence character asii code
-# (0x09) as ctrl+i, therefore binding this within tmux stops tab from functioning
+# (0x09) as tab, therefore binding this within tmux stops tab from functioning
 # within the shell environment. By binding this natively within ghostty, we can
-# use ctrl+i to focus the above pane.
+# use ctrl+i to focus the above pane and tab isn't affected.
 keybind = ctrl+i=text:
 ##
 ## Open scrollback in $EDITOR
