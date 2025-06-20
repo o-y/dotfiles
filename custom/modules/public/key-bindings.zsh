@@ -4,7 +4,7 @@
 
 # Unset TTY control characters inside tmux to allow custom keybindings
 # to work. This prevents the terminal driver from intercepting keys
-# like Ctrl-Z (suspend) before they the zsh line editor.
+# like Ctrl-Z (suspend) before they reach the zsh line editor.
 if [[ -n "$TMUX" ]]; then
   stty stop undef   # Free up Ctrl-S
   stty start undef  # Free up Ctrl-Q
