@@ -5,12 +5,12 @@
 # Unset TTY control characters inside tmux to allow custom keybindings
 # to work. This prevents the terminal driver from intercepting keys
 # like Ctrl-Z (suspend) before they the zsh line editor.
-# if [[ -n "$TMUX" ]]; then
-#   stty stop undef   # Free up Ctrl-S
-#   stty start undef  # Free up Ctrl-Q
-#   stty susp undef   # Free up Ctrl-Z
-#   stty flush undef  # Free up Ctrl-O
-# fi
+if [[ -n "$TMUX" ]]; then
+  stty stop undef   # Free up Ctrl-S
+  stty start undef  # Free up Ctrl-Q
+  stty susp undef   # Free up Ctrl-Z
+  stty flush undef  # Free up Ctrl-O
+fi
 
 # Ensure precmds are run after cd
 fzf-redraw-prompt() {
