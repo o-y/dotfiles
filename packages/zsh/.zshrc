@@ -21,3 +21,4 @@ source $ZSH/oh-my-zsh.sh
 
 #### load custom scripts
 source ~/dotfiles/custom/init.zsh
+# TODO: Swap the order round after fixing the issue with oh-my-zsh breaking fpath completions.

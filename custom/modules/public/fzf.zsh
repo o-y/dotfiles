@@ -20,6 +20,7 @@ export FZF_DEFAULT_OPTS='
   --color=gutter:#1e2432,border:#323847,preview-border:#323847,label:#323847
   --color=query:#eaeaea
   --preview-window="border-rounded" 
+  --border="rounded"
   --padding="1"
   --prompt="> " 
   --pointer="◆ "
