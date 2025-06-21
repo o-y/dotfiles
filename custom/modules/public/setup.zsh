@@ -84,3 +84,9 @@ if [ -e "$HOME/.nvm" ]; then
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 fi
+
+# atuin
+if [ -e "$HOME/.atuin/bin/env" ]; then
+    . "$HOME/.atuin/bin/env"
+    eval "$($HOME/.atuin/bin/atuin init zsh --disable-up-arrow --disable-ctrl-r)"
+fi
