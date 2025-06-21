@@ -46,7 +46,7 @@ function tmux-session-manager {
       --no-sort --ansi \
       --prompt=' ' --border="rounded" --border-label="<  >" --color="label:#caaafe" \
       --bind 'tab:down,btab:up' \
-      --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
+      --bind 'ctrl-s:change-prompt(  )+reload(sesh list --icons)' \
       --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
       --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
       --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
@@ -55,13 +55,10 @@ function tmux-session-manager {
       --preview-window 'right:55%' \
       --preview '~/go/bin/sesh preview {}')
 
-  # Use the new variable name in the check
-  echo "could connect to: $selected_session"
   if [[ -n "$selected_session" ]]; then
-    echo "connecting to: $selected_session"
-    # Use the new variable name for the connection
     sesh connect "$selected_session"
   fi
+  zle redisplay
 }
 zle -N tmux-session-manager
 bindkey '^S' tmux-session-manager
@@ -71,23 +68,66 @@ bindkey '^S' tmux-session-manager
 ### CTRL-X - command line history search
 #########################################
 #########################################
-fzf-history-widget() {
-  # this also matches the height specified by the zoxide widget
-  local selected_command=$(fc -l -n -r 1 |
-    fzf --height=45% \
-        --tiebreak=index \
-        --query="$LBUFFER" \
-        --bind='ctrl-z:ignore' \
-        --border="rounded" --border-label="<  >" --color="label:#caaafe" \
-        --prompt='  ')
+_fzf_history_select_command_from_atuin() {
+  local -a fzf_common_opts=("${(@)argv}")
+  local selected_command=""
 
-  # if a command was selected, write that to the buffer
+  local colour_purple=$(printf '\033[34m')
+  local colour_pink=$(printf '\033[35m')
+  local colour_reset=$(printf '\033[0m')
+  local atuin_format_string="${colour_purple}{relativetime}${colour_reset} ${colour_pink}{duration}${colour_reset} {command}"
+
+  local selected_output=$(
+    atuin history list --reverse --print0 --format "$atuin_format_string" |
+      fzf "${fzf_common_opts[@]}" \
+          --ansi \
+          --tac \
+          --read0 \
+          --border-label="<  >"
+  )
+
+  if [[ -n "$selected_output" ]]; then
+    selected_command="${selected_output#* * }"
+  fi
+
+  print -r -- "$selected_command"
+}
+
+_fzf_history_select_command_from_fc() {
+  local -a fzf_common_opts=("${(@)argv}")
+  local selected_command=""
+
+  selected_command=$(
+    fc -l -n -r 1 | fzf "${fzf_common_opts[@]}" --border-label="<  >"
+  )
+
+  print -r -- "$selected_command"
+}
+
+fzf-history-widget() {
+  local selected_command=""
+
+  local -a fzf_base_opts=(
+    --height=45%
+    --tiebreak=index
+    --query="$LBUFFER"
+    --color="label:#caaafe"
+    --prompt='  '
+  )
+
+  if command -v atuin &>/dev/null; then
+    selected_command=$(_fzf_history_select_command_from_atuin "${fzf_base_opts[@]}")
+  else
+    selected_command=$(_fzf_history_select_command_from_fc "${fzf_base_opts[@]}")
+  fi
+
   if [[ -n "$selected_command" ]]; then
-    LBUFFER=$selected_command
+    LBUFFER="${selected_command}"
   fi
 
   zle redisplay
 }
+
 zle     -N   fzf-history-widget
 bindkey '^X' fzf-history-widget
 
