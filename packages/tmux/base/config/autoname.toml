@@ -12,7 +12,7 @@ colour = "#f3f59d"
 path = "/google/src/cloud/"
 icon = ""
 colour = "#ea999c"
-extract_tab_name = "^/google/src/cloud/[^/]+/([^/]+)/google$"
+extract_tab_name = "^/google/src/cloud/[^/]+/([^/]+)/[^/]+$"
 
 [[process]]
 names = ["zsh"]
@@ -79,3 +79,4 @@ icon = ""
 [[process]]
 names = ["blaze", "bazel"]
 icon = ""
+colour = "#4A9A4C"
