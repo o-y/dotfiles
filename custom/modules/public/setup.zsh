@@ -86,7 +86,6 @@ if [ -e "$HOME/.nvm" ]; then
 fi
 
 # atuin
-if [ -e "$HOME/.atuin/bin/env" ]; then
-    . "$HOME/.atuin/bin/env"
-    eval "$($HOME/.atuin/bin/atuin init zsh --disable-up-arrow --disable-ctrl-r)"
+if type atuin &> /dev/null; then
+    eval "$(atuin init zsh --disable-up-arrow --disable-ctrl-r)"
 fi
