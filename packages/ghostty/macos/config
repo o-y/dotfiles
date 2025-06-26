@@ -5,9 +5,6 @@ theme = "dark_master"
 window-padding-y = 15,15
 window-padding-x = 15
 
-# Shaders
-# custom-shader = ~/.config/ghostty/shaders/mnoise.glsl
-
 ###
 ### MACOS
 ###
