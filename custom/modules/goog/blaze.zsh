@@ -1,4 +1,4 @@
-function find_blaze_invocation() {
+function _find_blaze_invocation() {
   pattern="^/google/src/cloud/(.+)/(.+)/google3(/.*)?$"
 
   if [[ $PWD =~ $pattern ]]; then
@@ -7,43 +7,66 @@ function find_blaze_invocation() {
     if [[ -f $changelist_path ]]; then
       sponge_id=$(grep BUILD_ID "${changelist_path}" | cut -d' ' -f 2)
       echo $sponge_id
-      return 0
-    else
-      return 1  # build-changelist.txt not found in expected location
     fi
-  else
-    return 2  # not in a supported directory structure
   fi
 }
 
+_blaze_notify_dunst() {
+  (( ! $+commands[dunstify] )) && return 0
+
+  local title="$1"
+  local url="$2"
+  local -a dunst_args
+
+  dunst_args=("--appname=Blaze Build" "$title")
+
+  if [[ -n "$url" ]]; then
+    dunst_args+=("Action:browser,${url}")
+  fi
+
+  dunstify "${dunst_args[@]}"
+}
+
+_blaze_notify_google_chat() {
+  (( ! $+commands[google-chat-alert] )) && return 0
+
+  local title="$1"
+  local url="$2"
+  local message="$title"
+
+  if [[ -n "$url" ]]; then
+    message+=" - ${url}"
+  fi
+
+  google-chat-alert "$message"
+}
+
+_blaze_execution_hooks() {
+  local -i exit_code="$1"
+  local status_title
+  local sponge_url
+  local invocation_id
+
+  if (( exit_code == 0 )); then
+    status_title="Blaze Success!"
+  else
+    status_title="Blaze Failure!"
+  fi
+
+  invocation_id="$(_find_blaze_invocation)"
+  if [[ -n "$invocation_id" ]]; then
+    sponge_url="http://sponge2/${invocation_id}"
+  fi
+
+  _blaze_notify_dunst "$status_title" "$sponge_url"
+  _blaze_notify_google_chat "$status_title" "$sponge_url"
+}
+
 function wrapped_blaze() {
-  local exit_code
-  local target
+  command /usr/bin/blaze "$@"
+  local -i exit_code=$?
 
-  target="${!#}"
-  /usr/bin/blaze "$@"
-  exit_code=$?
-
-  # i should clean this up
-  if type dunstify &> /dev/null; then
-    if [ $exit_code -eq 0 ]; then
-      dunstify --appname="Blaze Build" \
-        "Blaze Success!" \
-        "Action:browser,http://sponge2/$(find_blaze_invocation)"
-    else
-      dunstify --appname="Blaze Build" \
-        "Blaze Failure!" \
-        "Action:browser,http://sponge2/$(find_blaze_invocation)"
-    fi
-  fi
-
-  if type google-chat-alert &> /dev/null; then
-    if [ $exit_code -eq 0 ]; then
-      google-chat-alert "Blaze Build Success - http://sponge2/$(find_blaze_invocation)"
-    else
-      google-chat-alert "Blaze Build Failure - http://sponge2/$(find_blaze_invocation)"
-    fi
-  fi
+  _blaze_execution_hooks $exit_code
 
   return $exit_code
 }
