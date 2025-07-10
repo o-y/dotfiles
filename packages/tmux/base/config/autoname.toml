@@ -8,11 +8,11 @@ shell_name = "zsh"
 icon = ""
 colour = "#f3f59d"
 
-[directories.google]
-path = "/google/src/cloud/"
-icon = ""
-colour = "#ea999c"
-extract_tab_name = "^/google/src/cloud/[^/]+/([^/]+)/[^/]+$"
+# [directories.google]
+# path = "/google/src/cloud/"
+# icon = ""
+# colour = "#ea999c"
+# extract_tab_name = "^/google/src/cloud/[^/]+/([^/]+)/[^/]+$"
 
 [[process]]
 names = ["zsh"]
