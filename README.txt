@@ -39,7 +39,7 @@ Dependencies
 --
 
 MacOS apps
-  - iTerm2 3.4.23 - https://iterm2.com/downloads/stable/iTerm2-3_4_23.zip
+  - Ghostty - https://ghostty.org/
   - Raycast - https://raycast.com
   - Better Display - https://github.com/waydabber/BetterDisplay
   - TopNotch - https://topnotch.app
@@ -60,10 +60,6 @@ Common dependencies
 --
 Application Config
 --
-
-iTerm:
-  - Profile: custom/static/themes/iterm/dark.json
-  - Theme: Minimal
 
 Visual Studio Code:
   - Theme: Bearded Theme - Arc
