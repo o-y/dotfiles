@@ -1,9 +1,34 @@
 ###
-### THEME
+### APPEARANCE
 ###
 theme = "dark_master"
 window-padding-y = 15,15
 window-padding-x = 15
+custom-shader = "shaders/cursor.glsl"
+
+###
+### PLATFORM-SPECIFIC
+###
+config-file = ?platform-config
+
+###
+### KEYBINDS
+###
+
+# Unbind new tab (used by tmux)
+keybind = cmd+t=unbind
+# Unbind new window (used by tmux)
+# keybind = cmd+n=unbind
+# Unbind detatch (used by tmux)
+keybind = ctrl+d=unbind
+# Unbind up (used by tmux)
+keybind = ctrl+i=unbind
+# Unbind down (used by tmux)
+keybind = ctrl+k=unbind
+# Unbind left (used by tmux)
+keybind = ctrl+j=unbind
+# Unbind right (used by tmux)
+keybind = ctrl+l=unbind
 
 ###
 ### TMUX KEYBINDS
@@ -55,9 +80,9 @@ keybind = ctrl+shift+k=text:
 ###
 # Reciever: tmux - ctrl+i -> sends  (E012)
 # This is required because ctrl+i sends the byte sequence character asii code
-# (0x09) as ctrl+i, therefore binding this within tmux stops tab from functioning
+# (0x09) as tab, therefore binding this within tmux stops tab from functioning
 # within the shell environment. By binding this natively within ghostty, we can
-# use ctrl+i to focus the above pane.
+# use ctrl+i to focus the above pane and tab isn't affected.
 keybind = ctrl+i=text:
 ##
 ## Open scrollback in $EDITOR

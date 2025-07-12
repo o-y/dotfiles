@@ -35,6 +35,14 @@ pub struct Args {
         help = "Defines what metadata should be retrieved given the process name and directory, valid values are: 'tab_colour', 'tab_icon', 'tab_name' and 'tab_name_expanded'.",
     )]
     pub retrieve: String,
+
+    #[arg(
+        short = 'v',
+        long,
+        help = "Whether to enable verbose logging",
+        default_value_t = false
+    )]
+    pub verbose: bool,
 }
 
 fn main() {
@@ -67,4 +75,12 @@ fn main() {
             std::process::exit(1);
         }
     }
+}
+
+fn handle_error(error: String, should_verbose_log: bool) {
+    if (should_verbose_log) {
+        eprintln!("[autoname] encountered exception: {}", error);
+    }
+    
+    
 }

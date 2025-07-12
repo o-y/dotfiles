@@ -1,3 +1,5 @@
+# zmodload zsh/zprof
+
 #### set zsh directory and custom directory for plugins
 export ZSH_CUSTOM="$HOME/dotfiles/custom/static/zsh-custom"
 export ZSH="$HOME/.oh-my-zsh"
@@ -22,3 +24,5 @@ source $ZSH/oh-my-zsh.sh
 #### load custom scripts
 source ~/dotfiles/custom/init.zsh
 # TODO: Swap the order round after fixing the issue with oh-my-zsh breaking fpath completions.
+
+# zprof
