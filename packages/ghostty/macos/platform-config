@@ -1,0 +1,8 @@
+###
+### MACOS
+###
+
+# https://github.com/ghostty-org/ghostty/discussions/3207
+# Allows alt to be picked up by tmux on macOS
+macos-option-as-alt=true
+macos-titlebar-style=hidden

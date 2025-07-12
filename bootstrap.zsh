@@ -80,13 +80,18 @@ stows_common=(
   "tmux/base/config:~/.tmux"
 
   # ---- ghostty ----
+  # as "linux" and "macos" represent scoped-configuration
+  # these are conditionally stowed. the themes, shaders
+  # and base config are conditional, therefore we can
+  # stow them straight into the ~/.config/ghostty directory.
+  "ghostty/base:~/.config/ghostty"
+  "ghostty/themes:~/.config/ghostty/themes"
+  "ghostty/shaders:~/.config/ghostty/shaders"
+  # ghostty/linux and ghostty/macos are conditionally stowed
+  # and contain files named "platform-config" which are
+  # sourced by ghostty (if they exist).
   "ghostty/linux:~/.config/ghostty when: is_linux"
   "ghostty/macos:~/.config/ghostty when: is_macos"
-  # as "linux" and "macos" represent scoped-configuration
-  # these are conditionally stowed. the themes is not
-  # conditional, therefore we can stow them straight into
-  # the ~/.config/ghostty directory.
-  "ghostty/themes:~/.config/ghostty/themes"
 )
 
 # symlinks for MacOS
