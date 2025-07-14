@@ -1,2 +1,14 @@
+###
+### Default encryption directory
+###
 custom/modules/private/** filter=git-crypt diff=git-crypt
 custom/static/private/** filter=git-crypt diff=git-crypt
+
+###
+### Encrypt Zsh files
+###
+# Corp GPG key
+**.corp.zsh filter=git-crypt-corp diff=git-crypt-corp
+
+# Personal GPG key (default)
+**.private.zsh filter=git-crypt diff=git-crypt
