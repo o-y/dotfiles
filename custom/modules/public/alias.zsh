@@ -4,7 +4,7 @@ alias f=fuck
 alias c=clear
 
 # This is a workaround for the `clear` command being
-#  overrided in some environments (e.g. Pixi, etc.)
+# overridden in some environments (e.g. Pixi, etc.)
 function clear() {
     if [[ -e /usr/bin/clear ]]; then
         /usr/bin/clear
