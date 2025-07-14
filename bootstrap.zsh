@@ -36,6 +36,7 @@ dependencies_linux=(
   "bc" "sudo apt install bc"
   "c++" "sudo apt install build-essential"
   "curl" "sudo apt install curl"
+  "pinentry-curses" "sudo apt install pinentry-curses"
 
   ## -- dependencies on cargo --
   "zoxide:cargo" "cargo install zoxide --locked" # the debian stable package is oudated and broken
@@ -103,15 +104,16 @@ stows_darwin=(
 
 # symlinks for Linux
 stows_linux=(
-  blaze
-  hgrc
+  "blaze"
+  "hgrc"
 
-  dunst:~/.config/dunst
-  kitty:~/.config/kitty
-  hypr:~/.config/hypr
-  swaylock:~/.config/swaylock
-  rofi:~/.config/rofi
-  waybar:~/.config/waybar
+  "gnupg:~/.gnupg"
+  "dunst:~/.config/dunst"
+  "kitty:~/.config/kitty"
+  "hypr:~/.config/hypr"
+  "swaylock:~/.config/swaylock"
+  "rofi:~/.config/rofi"
+  "waybar:~/.config/waybar"
 )
 
 ################################################################################
