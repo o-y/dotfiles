@@ -70,7 +70,7 @@ stows_common=(
   "nvim:~/.config/nvim"
   "sesh:~/.config/sesh"
 
-  # # jj config
+  # jj config
   "jj/google    when: is_google"
   "jj/personal  when: ! is_google"
 

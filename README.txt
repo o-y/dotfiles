@@ -30,6 +30,8 @@ Stower:
     - "jj/google    when: is_google"
     - "jj/personal  when: ! is_google" 
   - multiple stows may point to the same directory, and the right hand part of the stow (i.e. the package) may itself be a nested directory. in the example below the 'ghostty/base' config maintains shared logic with an optional source that points to a platform-specific file which is stowed based on the conditions of the 'when' statement.
+    $ function is_macos() [[ "$(uname)" == "Darwin" ]]
+    $ function is_linux() [[ "$(uname)" == "Linux" ]]
     - "ghostty/base:~/.config/ghostty"
     - "ghostty/linux:~/.config/ghostty when: is_linux"
     - "ghostty/macos:~/.config/ghostty when: is_macos"
