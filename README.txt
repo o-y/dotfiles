@@ -38,6 +38,7 @@ Stower:
 
 File Encryption:
   - the module system sources files at startup in custom/modules. Some files are encrypted using git-crypt, these will be ignored if not decrypted - to silence these warnings, execute 'touch ~/.silence-git-crypt-warnings'.
+  - two keys exist; personal (default) and corp (secondary).
 
 File Structure:
 - bootstrap.zsh       entrypoint (installer)
