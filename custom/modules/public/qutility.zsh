@@ -149,9 +149,51 @@ qtime() {
 }
 
 ##
-## qback - Send commands to the background
+## copy - universal platform/connection agonistic clipboard integration
 ##
-qback() {
-    
-}
+copy() {
+    local usage() {
+        echo "copy - universal copy to clipboard utility"
+        echo "Usage:"
+        echo "  pipe to copy: <command> | copy"
+        echo "  copy a file:  copy <file>"
+    }
 
+    if [ -t 0 ] && [ $# -eq 0 ]; then
+        usage
+        return 1
+    fi
+
+    # case 1 - executing within an SSH session
+    if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
+        local B64_ARGS=""
+        if [[ "$(uname)" == "Linux" ]]; then
+            B64_ARGS="-w0"
+        fi
+
+        printf "\e]52;c;%s\a" "$({ cat "$@" || cat; } | base64 $B64_ARGS)"
+        return
+    fi
+
+    # case 2 - executing on a local machine
+    case "$(uname)" in
+        Darwin)
+            pbcopy "$@"
+        ;;
+        Linux)
+            if command -v wl-copy &> /dev/null; then
+                wl-copy "$@"
+            elif command -v xclip &> /dev/null; then
+                xclip -selection clipboard -in "$@"
+            else
+                echo "[copy] error: ensure either 'wl-copy' (for wayland) or 'xclip' (for x11) is installed" >&2
+                return 1
+            fi
+        ;;
+    *)
+        echo "[copy] error: unsupported operating system - $(uname)" >&2
+        return 1
+        ;;
+    esac
+}
+alias qopy=copy
