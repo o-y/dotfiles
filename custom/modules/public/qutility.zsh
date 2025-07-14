@@ -149,14 +149,15 @@ qtime() {
 }
 
 ##
-## copy - universal platform/connection agonistic clipboard integration
+## copy - universal platform/connection/tmux agonistic clipboard integration
 ##
 copy() {
+    # --- Usage Info ---
     local usage() {
-        echo "copy - universal copy to clipboard utility"
-        echo "Usage:"
-        echo "  pipe to copy: <command> | copy"
-        echo "  copy a file:  copy <file>"
+        echo "copy - universal copy to clipboard utility" >&2
+        echo "Usage:" >&2
+        echo "  pipe to copy: <command> | copy" >&2
+        echo "  copy a file:  copy <file>" >&2
     }
 
     if [ -t 0 ] && [ $# -eq 0 ]; then
@@ -164,34 +165,51 @@ copy() {
         return 1
     fi
 
-    # case 1 - executing within an SSH session
+    # read all input from stdin (pipe) or file arguments into a variable
+    # which prevents issues with commands that might close stdin prematurely
+    local input_data=$({ cat "$@" || cat; })
+
+    if [[ -z "$input_data" ]]; then
+        echo "[copy] error: empty input data"
+        return 0
+    fi
+
+    # case 1: executing within an SSH session (use OSC 52)
     if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
         local B64_ARGS=""
         if [[ "$(uname)" == "Linux" ]]; then
             B64_ARGS="-w0"
         fi
+        
+        local content_b64=$(echo -n "$input_data" | base64 $B64_ARGS)
 
-        printf "\e]52;c;%s\a" "$({ cat "$@" || cat; } | base64 $B64_ARGS)"
+        # check if running inside tmux, if so, wrap the OSC 52 sequence
+        # in tmux's passthrough sequence `\ePtmux;\e...\e\\`.
+        if [[ -n "$TMUX" ]]; then
+            printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$content_b64"
+        else
+            printf "\e]52;c;%s\a" "$content_b64"
+        fi
         return
     fi
 
     # case 2 - executing on a local machine
     case "$(uname)" in
         Darwin)
-            pbcopy "$@"
+            echo -n "$input_data" | pbcopy
         ;;
         Linux)
             if command -v wl-copy &> /dev/null; then
-                wl-copy "$@"
+                echo -n "$input_data" | wl-copy
             elif command -v xclip &> /dev/null; then
-                xclip -selection clipboard -in "$@"
+                echo -n "$input_data" | xclip -selection clipboard
             else
-                echo "[copy] error: ensure either 'wl-copy' (for wayland) or 'xclip' (for x11) is installed" >&2
+                echo "[copy] error: ensure 'wl-copy' (Wayland) or 'xclip' (X11) is installed" >&2
                 return 1
             fi
         ;;
     *)
-        echo "[copy] error: unsupported operating system - $(uname)" >&2
+        echo "[copy] error: unsupported local operating system - $(uname)" >&2
         return 1
         ;;
     esac
