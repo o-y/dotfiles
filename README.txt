@@ -43,8 +43,9 @@ File Structure:
 - bootstrap.zsh       entrypoint (installer)
 - packages:           dotfiles/configuration managed by the boostrap.zsh file (stower)
 - custom/modules:     files that are automatically sourced at session init
+  - these files may include metadata in the same such as "foo.corp.zsh" or "bar.linux.zsh" which signifies the former is encrypted via git-crypt and the latter should only run if executing within a Linux environment
 - custom/static:      static resources/scripts required by external programs (e.g raycast)
-- custom/postinstall: files that are automatically sourced with the bootstrap.zsh flow (e.g installing rust, go behind confirmation dialogues)
+- custom/postinstall: files that are automatically sourced with the bootstrap.zsh flow (e.g installing rust, go, python dependencies, etc behind confirmation dialogues)
 
 --
 Dependencies
