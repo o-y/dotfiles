@@ -183,13 +183,20 @@ copy() {
         
         local content_b64=$(echo -n "$input_data" | base64 $B64_ARGS)
 
-        # check if running inside tmux, if so, wrap the OSC 52 sequence
-        # in tmux's passthrough sequence `\ePtmux;\e...\e\\`.
-        if [[ -n "$TMUX" ]]; then
-            printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$content_b64"
-        else
-            printf "\e]52;c;%s\a" "$content_b64"
-        fi
+        # ideally we'd only need to wrap the OSC 52 sequence in the
+        # tmux passthrough sequence if we are in a TMUX session, however
+        # without some form of env variable forwarding this can't be
+        # reliably detected, as an ssh session may exist within a local
+        # tmux session. 
+        # therefore we take the OSC 52 sequence:
+        #    "\e]52;c;%s\a" "$content_b64"
+        # and wrap it in the tmux passthrough:
+        #    "\ePtmux;\e...\\\"
+        # to form:
+        #     "\ePtmux;\e" + (OSC 52 sequence) + "\e\\"
+        # OR  "\ePtmux;\e\e]52;c;%s\a\e\\"
+
+        printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$content_b64"
         return
     fi
 
