@@ -196,6 +196,11 @@ copy() {
         #     "\ePtmux;\e" + (OSC 52 sequence) + "\e\\"
         # OR  "\ePtmux;\e\e]52;c;%s\a\e\\"
 
+        # TODO - I should work out a reusable mechanism for environment
+        # variable forwarding, then if the local and remote sessions are
+        # both tmux, we can send more escape sequences so copy still works
+        # (which is cursed as fuck) - https://unix.stackexchange.com/a/556764
+
         printf "\ePtmux;\e\e]52;c;%s\a\e\\" "$content_b64"
         return
     fi
