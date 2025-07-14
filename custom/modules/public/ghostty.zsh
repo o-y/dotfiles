@@ -1,3 +1,8 @@
+###
+### This is mirrored from the Ghostty project.
+### cp /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration ~/dotfiles/custom/modules/public/ghostty.zsh
+###
+
 # Based on (started as) a copy of Kitty's zsh integration. Kitty is
 # distributed under GPLv3, so this file is also distributed under GPLv3.
 # The license header is reproduced below:
@@ -281,7 +286,7 @@ _ghostty_deferred_init() {
             elif (( $+commands[infocmp] )); then
               local ssh_terminfo ssh_cpath_dir ssh_cpath
 
-              ssh_terminfo=$(infocmp -0 -x xterm-ghostty 2>/dev/null)
+              ssh_terminfo=$(infocmp -x xterm-ghostty 2>/dev/null)
 
               if [[ -n "$ssh_terminfo" ]]; then
                 print "Setting up xterm-ghostty terminfo on $ssh_hostname..." >&2

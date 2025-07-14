@@ -1,5 +1,5 @@
 #### Required by some TUI apps
-export TERM=xterm-256color
+# export TERM=xterm-256color
 
 #### Editor
 export EDITOR="nvim"

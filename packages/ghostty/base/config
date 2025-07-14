@@ -5,7 +5,12 @@ theme = "dark_master"
 window-padding-y = 15,15
 window-padding-x = 15
 custom-shader = "shaders/cursor.glsl"
-shell-integration-features = ssh-env,ssh-terminfo
+
+###
+### BEHAVIOUR
+###
+shell-integration = none
+shell-integration-features = title,cursor,ssh-env,ssh-terminfo
 
 ###
 ### PLATFORM-SPECIFIC
