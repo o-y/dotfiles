@@ -10,7 +10,7 @@ custom-shader = "shaders/cursor.glsl"
 ### BEHAVIOUR
 ###
 shell-integration = none
-shell-integration-features = title,cursor,ssh-env,ssh-terminfo
+shell-integration-features = title,cursor,ssh-env,ssh-terminfo,sudo
 
 ###
 ### PLATFORM-SPECIFIC
