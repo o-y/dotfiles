@@ -50,6 +50,7 @@ dependencies_common=(
   "pik:cargo" "cargo install pik --locked"
   "zellij:cargo" "cargo install zellij --locked"
   "atuin:cargo" "cargo install atuin --locked"
+  "coreutils:cargo-binstall" "cargo-binstall coreutils"
 )
 
 #########################################

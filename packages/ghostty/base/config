@@ -81,6 +81,12 @@ keybind = ctrl+shift+i=text:
 # Reciever: tmux - ctrl+shift+k -> sends  (E010)
 keybind = ctrl+shift+k=text:
 
+##
+## Open scrollback in $EDITOR
+##
+# Reciever: tmux - ctrl+shift+e -> sends  (E011)
+keybind = ctrl+shift+e=text:
+
 ###
 ### Focus panes 
 ###
@@ -90,8 +96,9 @@ keybind = ctrl+shift+k=text:
 # within the shell environment. By binding this natively within ghostty, we can
 # use ctrl+i to focus the above pane and tab isn't affected.
 keybind = ctrl+i=text:
+
 ##
-## Open scrollback in $EDITOR
+## Purge scrollback (as opposed to clearing the screen)
 ##
-# Reciever: tmux - ctrl+shift+e -> sends  (E011)
-keybind = ctrl+shift+e=text:
+# Reciever: tmux - ctrl+shift+o -> sends  (E013)
+keybind = ctrl+shift+o=text:
