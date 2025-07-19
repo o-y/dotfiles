@@ -49,7 +49,7 @@ fn main() {
     let args = Args::parse();
 
     if let Err(e) = validator::validate_args(&args) {
-        eprintln!("[autoname] validation Error: {}", e);
+        handle_error(e, args.verbose, args.retrieve.as_str());
         std::process::exit(1);
     }
 
@@ -71,16 +71,23 @@ fn main() {
             println!("{}", output_value);
         }
         Err(e) => {
-            eprintln!("[autoname] error loading configuration: {}", e);
+            handle_error(e, args.verbose, args.retrieve.as_str());
             std::process::exit(1);
         }
     }
 }
 
-fn handle_error(error: String, should_verbose_log: bool) {
-    if (should_verbose_log) {
+fn handle_error(error: String, should_verbose_log: bool, retrieve: &str) {
+    if should_verbose_log {
         eprintln!("[autoname] encountered exception: {}", error);
     }
-    
-    
+
+    let output_value = match retrieve {
+        "tab_icon" => "󱎘 ",
+        "tab_name" => "! N/A !",
+        "tab_colour" => "#ff6e6f",
+        "tab_name_expanded" => "! N/A !",
+        _ => unreachable!(),
+    };
+    println!("{}", output_value);
 }
