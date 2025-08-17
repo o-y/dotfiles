@@ -48,7 +48,7 @@ start_tmux() {
     "$1" new-session -s $(gen_cvcv)
 
     if [[ -e "$HOME/.kill-session-on-tmux-exit" ]]; then
-        
+        exit
     fi
 }
 

@@ -97,7 +97,7 @@ ensure_installed "Bun" \
                  "curl -fsSL https://bun.sh/install | bash" \
                  bun
 
-################ Install Python Dependencies
+################ Install Python Dependencies ################
 ensure_installed "pyenv" \
                  "curl -fsSL https://pyenv.run | bash" \
                  pyenv
@@ -112,3 +112,8 @@ function miniforge-installer() {
     wget -O "$file" "$url" && sh "$file" -b -p "${HOME}/miniforge3" && rm "$file" # we can't pipe into sh because the script strangly verifies itself ends in ".sh"...
 }
 ensure_installed "Conda Miniforge" "miniforge-installer" conda
+
+################ Install common utilities ################
+ensure_installed "fx - Terminal JSON viewer" \
+                 "curl https://fx.wtf/install.sh | sh" \
+                 fx
