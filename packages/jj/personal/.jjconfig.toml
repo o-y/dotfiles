@@ -10,5 +10,51 @@ name = "zv"
 email = "zv@zv.wtf"
 
 [aliases]
+sq = ["squash"]
 e = ["edit"]
 rm = ["abandon"]
+watch = ["util", "exec", "hwatch", "--", "--no-title", "--colour", "jj", "--ignore-working-copy", "--colour=always", "log"]
+
+[colors]
+### ---------------------
+### Daemon status colours
+### ---------------------
+"daemon_unflushed" = "bright black"
+"daemon_unflushed_slow" = "red"
+
+### ---------------------
+### CL status colours
+### ---------------------
+"drafts" = "red"
+"lgtm" = "bright green"
+"mailed" = "green"
+"unresolved" = "bright red"
+
+### ---------------------
+### Commit status colours
+### ---------------------
+
+# Commit author username/LDAP.
+"author" = "yellow"
+
+# Change ID colour for submitted commits.
+"submitted change_id" = "green"
+
+# CL number colours: distinct for normal vs. immutable (sync point) CLs.
+"submitted mutable cl" = "bright blue"
+"submitted immutable cl" = "bright black"
+
+# Other submitted commit elements.
+"submitted commit_id" = "green"
+"submitted email" = "green"
+"submitted username" = "green"
+
+# Node styling for immutable commits in the log graph.
+"node immutable" = { fg = "bright black", bold = true }
+
+# Timestamp colours: default and for submitted commits.
+"timestamp" = {fg = "cyan", bold = true }
+"submitted timestamp" = { fg = "bright black", bold = false }
+
+"commit working_copy empty" = "bright black"
+"commit empty" = "bright black"
