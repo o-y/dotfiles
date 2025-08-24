@@ -9,7 +9,7 @@ Installer:
   - each line expects a dependency following the notation ["dependency", "install_command"], such as:
     - "fzf" "brew install fzf"
     - "fzf" "sudo apt install fzf"
-  - the dependency may include a single colon following the notation ["dependency:dependent"]. Which means the 'dependent' requires the 'dependent' to exist on the system, e.g:
+  - the dependency may include a single colon following the notation ["dependency:dependent"]. Which means the 'dependency' requires the 'dependent' to exist on the system, e.g:
     - "poetry:pipx" "pipx install poetry"    - requires 'pipx' to exist on the system to install 'poetry'
     - "foo:bar" "bar install --user foo"     - requires 'bar' to exist on the system to install 'foo'
   - the installer is ran twice, therefore a predicated instance can install a dependency which is used by successive installers.
@@ -17,8 +17,8 @@ Installer:
 Stower:
   - provides a declerative format for specifying darwin, linux and common config file/directory locations.
   - each line expects a package following the notation ["package", "optional - location", "optional - when:condition"]
-  - each package should exist in the "packages" directory, if it exists then it is symlinked to ~/ by default, otherwise the location on the right hand side of the colon.
-  - the general concept being that any configuration for any application/binary/tool should exist in a modular 'packages/foo' directory, and stow internally handles symlinking the contents, keeping both files and directories mirrored between the host and the repo.
+  - each package should exist in the "packages" directory, if it exists then it is symlinked to the users $HOME directory by default, otherwise the location on the right hand side of the colon.
+  - the general concept being that any configuration for any application/binary/tool should exist in a modular 'packages/foo' directory, and stow internally handles symlinking the contents, keeping both files and directories mirrored between the host and source.
   - e.g:
     - "blaze"                    - contents symlinked to ~/
     - "hgrc"                     - contents symlinked to ~/

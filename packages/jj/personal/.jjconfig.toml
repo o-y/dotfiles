@@ -9,6 +9,10 @@ program = "meld"
 name = "zv"
 email = "zv@zv.wtf"
 
+[signing]
+behavior = "own"
+backend = "gpg"
+
 [aliases]
 sq = ["squash"]
 e = ["edit"]
