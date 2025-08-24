@@ -1,5 +1,5 @@
 # if you see errors such as "unsafe permissions on homedir"
-# whilst running gpg related commands, then fun this script
+# whilst running gpg related commands, then run this script.
 # these errors occur because the vendoring of files does not
 # respect certain requirements, such as only user-readable
 # permissions that the gpg agent requires. perhaps the notion
