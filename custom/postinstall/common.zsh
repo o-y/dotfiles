@@ -1,5 +1,23 @@
 echo "[~] postinstall :: starting common-post-install subroutine" 
 
+######## Hooks ########
+
+pre_source_hook() {
+  echo "[~] postinstall :: hook - running pre-source hook"
+  echo "[~] postinstall :: hook - locking zshrc and zshenv files"
+
+  [ -f "$HOME/.zshrc" ]  && chmod a-w ~/.zshrc
+  [ -f "$HOME/.zshenv" ] && chmod a-w ~/.zshenv
+}
+
+post_source_hook() {
+  echo "[~] postinstall :: hook - running post-source hook"
+  echo "[~] postinstall :: hook - unlocking zshrc and zshenv files"
+
+  [ -f "$HOME/.zshrc" ]  && chmod u+w ~/.zshrc
+  [ -f "$HOME/.zshenv" ] && chmod u+w ~/.zshenv
+}
+
 ######## Platform Install Scripts ########
 PATH_TO_SCRIPT=$(realpath "$0")
 SCRIPT_DIR=$(dirname "$PATH_TO_SCRIPT")
@@ -13,6 +31,7 @@ source_helper() {
   fi
 }
 
+pre_source_hook
 for file in "$SCRIPT_DIR/modules"/*; do
   filename=$(basename "$file")
   if [[ $filename == *.darwin.zsh ]]; then
@@ -23,3 +42,4 @@ for file in "$SCRIPT_DIR/modules"/*; do
     source_helper "$file" "common"
   fi
 done
+post_source_hook
