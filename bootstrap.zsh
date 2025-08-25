@@ -72,6 +72,7 @@ stows_common=(
   "nvim:~/.config/nvim"
   "sesh:~/.config/sesh"
   "jjui:~/.config/jjui"
+  "atuin:~/.config/atuin"
 
   # jj config
   "jj/google    when: is_google"
