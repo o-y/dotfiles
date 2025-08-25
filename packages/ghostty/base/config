@@ -18,6 +18,11 @@ shell-integration-features = title,cursor,ssh-env,ssh-terminfo,sudo
 config-file = ?platform-config
 
 ###
+### LINK DETECTION
+###
+link-url = true
+
+###
 ### KEYBINDS
 ###
 

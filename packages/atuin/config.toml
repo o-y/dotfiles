@@ -1,0 +1,28 @@
+## date format used, either "us" or "uk"
+dialect = "uk"
+
+## which search mode to use
+## possible values: prefix, fulltext, fuzzy, skim
+search_mode = "fuzzy"
+
+## which style to use
+## possible values: auto, full, compact
+style = "compact"
+
+## Configure whether or not to show tabs for search and inspect
+show_tabs = false
+
+## Defaults to true. If enabled, upon hitting enter Atuin will immediately execute the command. Press tab to return to the shell and edit.
+# This applies for new installs. Old installs will keep the old behaviour unless configured otherwise.
+enter_accept = false
+
+[stats]
+common_prefix = ["sudo"]
+
+[preview]
+## which preview strategy to use to calculate the preview height (respects max_preview_height).
+## possible values: auto, static
+## auto: length of the selected command.
+## static: length of the longest command stored in the history.
+## fixed: use max_preview_height as fixed height.
+strategy = "auto"
