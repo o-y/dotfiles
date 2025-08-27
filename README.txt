@@ -1,4 +1,4 @@
-$ git clone git@github.com:o-y/dotfiles ~/dotfiles --depth 1 && cd ~/dotfiles && zsh ./bootstrap.zsh
+$ git clone git@github.com:o-y/dotfiles ~/dotfiles --depth 1 && cd ~/dotfiles && zsh bootstrap.zsh
 
 --
 Bootstrap config
@@ -35,6 +35,7 @@ Stower:
     - "ghostty/base:~/.config/ghostty"
     - "ghostty/linux:~/.config/ghostty when: is_linux"
     - "ghostty/macos:~/.config/ghostty when: is_macos"
+  - stow directories may also include zsh files named "presym.hook.zsh" and "postsym.hook.zsh" which are executes before and after (where successful) stow commands, this is helpful if some amount of pre or post processing needs to happen (e.g. forceably deleting existing files, or chowning newly symlinked files after stowing, etc). see packages/atuin for an example of this
 
 File Encryption:
   - the module system sources files at startup in custom/modules. Some files are encrypted using git-crypt, these will be ignored if not decrypted - to silence these warnings, execute 'touch ~/.silence-git-crypt-warnings'.
