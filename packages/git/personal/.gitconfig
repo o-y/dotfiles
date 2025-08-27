@@ -1,6 +1,7 @@
 [user]
 email = zv@zv.wtf
 name = o-y
+signingkey = 7F10E12BC852B7E
 
 [commit]
 gpgsign = true

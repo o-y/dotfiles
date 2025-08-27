@@ -64,8 +64,7 @@ function is_linux() [[ "$(uname)" == "Linux" ]]
 # common symlinks
 stows_common=(
   "zsh"
-  "git"
-
+  
   "zellij:~/.config/zellij"
   "helix:~/.config/helix"
   "kando:~/.config/kando"
@@ -74,14 +73,18 @@ stows_common=(
   "jjui:~/.config/jjui"
   "atuin:~/.config/atuin"
 
-  # jj config
-  "jj/google    when: is_google"
-  "jj/personal  when: ! is_google"
-
-  # tmux config
+  # ---- tmux ----
   "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
   "tmux/base/plugins:~/.tmux/plugins"
   "tmux/base/config:~/.tmux"
+
+  # ---- jj -----
+  "jj/google    when: is_google"
+  "jj/personal  when: ! is_google"
+
+  # ---- git ----
+  "git/google   when: is_google"
+  "git/personal when: ! is_google"
 
   # ---- ghostty ----
   # as "linux" and "macos" represent scoped-configuration

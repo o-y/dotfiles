@@ -1,0 +1,13 @@
+[user]
+email = zv@zv.wtf
+name = o-y
+signingkey = 7F10E12BC852B7EF
+
+[commit]
+gpgsign = true
+
+[gpg]
+program = /usr/local/bin/gpg
+
+[push]
+autoSetupRemote = true
