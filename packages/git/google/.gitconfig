@@ -7,7 +7,10 @@ signingkey = 7F10E12BC852B7EF
 gpgsign = true
 
 [gpg]
-program = /usr/local/bin/gpg
+program = gpg
 
 [push]
 autoSetupRemote = true
+
+[tag]
+gpgSign = true
