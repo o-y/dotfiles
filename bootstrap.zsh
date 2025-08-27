@@ -204,9 +204,24 @@ function process_stows() {
   # trims leading and trailing spaces from a string
   function trim() { echo "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'; }
 
+  # executes a hook if it exists in the given (sub)package which is being stowed
+  function execute_hook() {
+    local hook_type="$1" # presym | postsym
+    local package="$2"
+    local packages_dir="$3"
+    
+    local hook_file="$packages_dir/$package/${hook_type}.hook.zsh"
+    if [[ -f "$hook_file" ]]; then
+      echo "[~] stower :: executing ${hook_type} hook for '$package'..."
+      zsh "$hook_file"
+    fi
+  }
+
+  local root_packages_directory="$HOME/dotfiles/packages"
+
   for stow_entry in "$@"; do
     local stow_segment="$stow_entry"
-    local packages_directory="$HOME/dotfiles/packages"
+    local packages_directory="$root_packages_directory"
 
     ##
     ## detect and parse the optional "... [when:condition]" clause
@@ -291,9 +306,26 @@ function process_stows() {
       continue
     fi
 
-    # execute the stow command
+    ##
+    ## execute hooks if they exist in the top-level package as a zsh file
+    ##
+    ## this logic makes the assumption that hooks are located in immediate
+    ## directories which are being stowed, this may mean for instance that 
+    ## the stow config may point to platform/host/metdata specific configs
+    ## which may not be at the root of the ~/dotfiles/packages/$package
+    ## directory.
+    ##
+    execute_hook "presym" "$package" "$packages_directory"
+
+    ##
+    ## stow (symlink) the package into the target directory
+    ##
+    ## if the stow succeeds (which should be the VAST majority of cases),
+    ## then where applicable the post-symhook will also be executed.
+    ##
     if stow "$package" --dir="$packages_directory" --target="$target_dir" 2> /dev/null; then
       echo "[~] stower :: symlinked '$package' from '$packages_directory' to '$target_dir'."
+      execute_hook "postsym" "$package" "$packages_directory"
     else
       echo "[!] stower :: critical - failed to symlink '$package' from '$packages_directory' to '$target_dir'."
     fi

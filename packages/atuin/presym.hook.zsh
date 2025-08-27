@@ -6,4 +6,3 @@
 # vendored instance.
 
 rm -rf ~/.config/atuin/config.toml
-zsh ~/dotfiles/bootstrap.zsh
