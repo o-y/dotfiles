@@ -60,6 +60,7 @@
   background: #2f2f48;
   color: #f5f6fa;
 }
+
 @keyframes CustomMediaAnimation {
   0% {
     background-position: 0% 41%;
@@ -71,3 +72,4 @@
     background-position: 0% 41%;
   }
 }
+
