@@ -23,10 +23,10 @@ if type brew &> /dev/null; then
     fpath+=("/opt/homebrew/share/zsh/site-functions")
 fi
 
-# linux brew
-if [ -e "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
+# linux brew (should remove this)
+# if [ -e "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+#     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# fi
 
 # fpath
 if [ -e "$HOME/dotfiles/custom/static/fpath" ]; then
@@ -88,4 +88,9 @@ fi
 # atuin
 if type atuin &> /dev/null; then
     eval "$(atuin init zsh --disable-ctrl-r)"
+fi
+
+# mise
+if [ -e "$HOME/.local/bin/mise" ]; then
+    eval "$($HOME/.local/bin/mise activate zsh)"
 fi
