@@ -117,3 +117,7 @@ ensure_installed "Conda Miniforge" "miniforge-installer" conda
 ensure_installed "fx - Terminal JSON viewer" \
                  "curl https://fx.wtf/install.sh | sh" \
                  fx
+
+ensure_installed "mise - dev tools, env vars, task runner" \
+                 "curl https://mise.run | sh" \
+                 mise
