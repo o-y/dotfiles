@@ -1,6 +1,6 @@
 #### Required by some TUI apps
 # NOTE: This is now handled by Ghostty which forwards this variable to remotes as well.
-export TERM=xterm-256color
+export TERM=xterm-ghostty
 
 #### Editor
 export EDITOR="nvim"
