@@ -94,3 +94,8 @@ fi
 if [ -e "$HOME/.local/bin/mise" ]; then
     eval "$($HOME/.local/bin/mise activate zsh)"
 fi
+
+# antigravity
+if [ -e "$HOME/.antigravity/antigravity/bin" ]; then
+    export PATH="$PATH:$HOME/.antigravity/antigravity/bin"
+fi
