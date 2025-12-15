@@ -57,7 +57,7 @@ dependencies_common=(
 ################# STOWS #################
 #########################################
 
-function is_google() [[ "$(hostname)" =~ '\.corp\.goo(gle|glers)\.com$' ]]
+function is_google() [[ "$(hostname)" =~ '\.corp\.goo(gle|glers)\.com$' || 'razorback.roam.internal' ]]
 function is_macos() [[ "$(uname)" == "Darwin" ]]
 function is_linux() [[ "$(uname)" == "Linux" ]]
 
