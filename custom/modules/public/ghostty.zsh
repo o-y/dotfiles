@@ -3,6 +3,8 @@
 ### cp /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration ~/dotfiles/custom/modules/public/ghostty.zsh
 ###
 
+# vim:ft=zsh
+#
 # Based on (started as) a copy of Kitty's zsh integration. Kitty is
 # distributed under GPLv3, so this file is also distributed under GPLv3.
 # The license header is reproduced below:
@@ -45,6 +47,13 @@ _entrypoint() {
 
     [[ -o interactive ]]              || builtin return 0  # non-interactive shell
     (( ! $+_ghostty_state ))          || builtin return 0  # already initialized
+
+    # We require zsh 5.1+ (released Sept 2015) for features like functions_source,
+    # introspection arrays, and array pattern substitution.
+    if ! { builtin autoload -- is-at-least 2>/dev/null && is-at-least 5.1; }; then
+        builtin echo "Zsh ${ZSH_VERSION} is too old for ghostty shell integration (5.1+ required)" >&2
+        builtin return 1
+    fi
 
     # 0: no OSC 133 [AC] marks have been written yet.
     # 1: the last written OSC 133 C has not been closed with D yet.
@@ -225,6 +234,13 @@ _ghostty_deferred_init() {
 	  builtin print -rnu $_ghostty_fd \$'\\e[0 q'"
     fi
 
+    # Add Ghostty binary to PATH if the path feature is enabled
+    if [[ "$GHOSTTY_SHELL_FEATURES" == *"path"* ]] && [[ -n "$GHOSTTY_BIN_DIR" ]]; then
+      if [[ ":$PATH:" != *":$GHOSTTY_BIN_DIR:"* ]]; then
+        builtin export PATH="$PATH:$GHOSTTY_BIN_DIR"
+      fi
+    fi
+
     # Sudo
     if [[ "$GHOSTTY_SHELL_FEATURES" == *"sudo"* ]] && [[ -n "$TERMINFO" ]]; then
       # Wrap `sudo` command to ensure Ghostty terminfo is preserved
@@ -286,7 +302,7 @@ _ghostty_deferred_init() {
             elif (( $+commands[infocmp] )); then
               local ssh_terminfo ssh_cpath_dir ssh_cpath
 
-              ssh_terminfo=$(infocmp -x xterm-ghostty 2>/dev/null)
+              ssh_terminfo=$(infocmp -0 -x xterm-ghostty 2>/dev/null)
 
               if [[ -n "$ssh_terminfo" ]]; then
                 print "Setting up xterm-ghostty terminfo on $ssh_hostname..." >&2
