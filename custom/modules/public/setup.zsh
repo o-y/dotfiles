@@ -23,11 +23,6 @@ if type brew &> /dev/null; then
     fpath+=("/opt/homebrew/share/zsh/site-functions")
 fi
 
-# linux brew (should remove this)
-# if [ -e "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
-#     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-# fi
-
 # fpath
 if [ -e "$HOME/dotfiles/custom/static/fpath" ]; then
     fpath+="$HOME/dotfiles/custom/static/fpath"
@@ -67,15 +62,6 @@ fi
 # vscode (code binary)
 if [ -e "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]; then
     export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-fi
-
-# pyenv
-if ! type pyenv &> /dev/null; then
-    if [ -e "$HOME/.pyenv/bin" ]; then
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init - zsh)"
-    fi
 fi
 
 # nvm
