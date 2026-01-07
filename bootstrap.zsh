@@ -43,7 +43,7 @@ dependencies_linux=(
 )
 
 dependencies_common=(
-  ## -- dependencies on pipx --
+  ## -- dependencies on python --
   "poetry:pipx" "pipx install poetry"
 
   ## -- dependencies on cargo --
@@ -51,6 +51,9 @@ dependencies_common=(
   "atuin:cargo" "cargo install atuin --locked"
   "coreutils:cargo-binstall" "cargo-binstall coreutils"
   "dumbpipe:cargo" "cargo install dumbpipe --locked"
+
+  ## -- dependencies on go --
+  "snitch" "go install github.com/karol-broda/snitch@latest"
 )
 
 #########################################

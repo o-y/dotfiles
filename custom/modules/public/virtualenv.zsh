@@ -5,8 +5,7 @@
 # pyenv
 if ! type pyenv &> /dev/null; then
     if [ -e "$HOME/.pyenv/bin" ]; then
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
+        export PATH="$PATH:$HOME/.pyenv/bin"
         eval "$(pyenv init - zsh)"
     fi
 fi

@@ -54,15 +54,23 @@ Dependencies
 --
 
 MacOS apps
-  - Ghostty - https://ghostty.org/
-  - Raycast - https://raycast.com
-  - Better Display - https://github.com/waydabber/BetterDisplay
-  - TopNotch - https://topnotch.app
-  - VS Code - https://code.visualstudio.com/download
-  - Anki - https://apps.ankiweb.net/
-  - Discord - https://discordapp.com/download
-  - Spotify - https://open.spotify.com/download
-  - Android Studio - https://developer.android.com/studio
+  - Coding:
+    - Ghostty - https://ghostty.org/
+    - VS Code - https://code.visualstudio.com/download
+    - Android Studio - https://developer.android.com/studio
+    - Intellij Idea - https://www.jetbrains.com/idea
+  - Utilities:
+    - Raycast - https://raycast.com
+    - Better Display - https://github.com/waydabber/BetterDisplay
+    - TopNotch - https://topnotch.app
+    - Dropover -  https://dropoverapp.com
+    - Music Decoy - https://lowtechguys.com/musicdecoy
+    - Cling - https://lowtechguys.com/cling
+    - Clop - https://lowtechguys.com/clop
+  - General:  
+    - Anki - https://apps.ankiweb.net/
+    - Discord - https://discordapp.com/download
+    - Spotify - https://open.spotify.com/download
 
 MacOS dependencies
   - Brew - https://brew.sh
