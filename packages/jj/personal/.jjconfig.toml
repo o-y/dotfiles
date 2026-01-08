@@ -1,3 +1,5 @@
+"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+
 [ui]
 paginate = "never"
 default-command = "log"
@@ -13,52 +15,139 @@ email = "zv@zv.wtf"
 behavior = "own"
 backend = "gpg"
 
+[remotes.origin]
+auto-track-bookmarks = "glob:*"
+
+[snapshot]
+auto-update-stale = true
+
 [aliases]
-sq = ["squash"]
+c = ["commit"]
+d = ["describe"]
 e = ["edit"]
+n = ["new"]
 rm = ["abandon"]
-watch = ["util", "exec", "hwatch", "--", "--no-title", "--colour", "jj", "--ignore-working-copy", "--colour=always", "log"]
+sq = ["squash"]
+s = ["squash"]
+l = ["log"]
+
+# Take content from any change, and move it into @. The inverse of 'eject'
+# - jj consume xyz path/to/file`
+consume = ["squash","--use-destination-message", "--keep-emptied", "--into", "@", "--from"]
+
+# Eject content from @ into any other change. The inverse of 'consume'
+# - jj eject xyz path/to/file
+eject = ["squash", "--use-destination-message", "--keep-emptied", "--from", "@", "--into"]
+
+# Squash the stack of commits from the working copy down to a destination commit.
+# Usage: jj squash-stack <destination>
+squash-stack = ["util", "exec", "--", "zsh", "-c", """
+  set -eu
+  local source_rev
+  local dest_rev
+
+  if [[ "$#" -eq 1 ]]; then
+    # If only one argument is given, assume the source is the working copy '@'
+    source_rev="@"
+    dest_rev="$1"
+  elif [[ "$#" -eq 2 ]]; then
+    # If two arguments are given, use them as source and destination
+    source_rev="$1"
+    dest_rev="$2"
+  else
+    echo "Error: Incorrect number of arguments."
+    echo "Usage: jj squash-stack [source] <destination>"
+    echo "  e.g.: jj squash-stack xyz base"
+    exit 1
+  fi
+
+  echo "Squashing between '[$dest_rev, $source_rev)' into '$dest_rev'"
+  jj squash --from "$dest_rev..$source_rev" --into "$dest_rev" --use-destination-message
+""", ""]
+ss = ["squash-stack"]
+
+# Move all bookmarks that are ancestors of @- to be at @-.
+tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
 
 [colors]
-### ---------------------
-### Daemon status colours
-### ---------------------
-"daemon_unflushed" = "bright black"
-"daemon_unflushed_slow" = "red"
-
-### ---------------------
-### CL status colours
-### ---------------------
-"drafts" = "red"
-"lgtm" = "bright green"
-"mailed" = "green"
-"unresolved" = "bright red"
-
-### ---------------------
-### Commit status colours
-### ---------------------
-
-# Commit author username/LDAP.
-"author" = "yellow"
-
-# Change ID colour for submitted commits.
-"submitted change_id" = "green"
-
-# CL number colours: distinct for normal vs. immutable (sync point) CLs.
-"submitted mutable cl" = "bright blue"
-"submitted immutable cl" = "bright black"
-
-# Other submitted commit elements.
-"submitted commit_id" = "green"
-"submitted email" = "green"
-"submitted username" = "green"
-
-# Node styling for immutable commits in the log graph.
+# Nodes
 "node immutable" = { fg = "bright black", bold = true }
+"node working_copy" = { fg = "bright blue", bold = true }
+"node conflict" = "bright red"
 
-# Timestamp colours: default and for submitted commits.
-"timestamp" = {fg = "cyan", bold = true }
-"submitted timestamp" = { fg = "bright black", bold = false }
+# Unique ID Prefixes (Labels used in the template below)
+"commit submitted change_id shortest" = "magenta"
+"commit change_id shortest" = "magenta"
 
-"commit working_copy empty" = "bright black"
-"commit empty" = "bright black"
+# Author colors
+"user author" = "bright blue"
+"author" = "bright black"
+
+# Timestamps & Metadata
+"timestamp ago" = { fg = "cyan", bold = true }
+"empty" = "bright black"
+"description placeholder" = "bright black"
+
+# Domain Tags
+"google" = { bg = "#68e2d0", bold = true, fg = "black" }
+"dns" = { bg = "red", bold = true, fg = "#ecf0f1" }
+
+[template-aliases]
+'format_short_id(id)' = 'id.shortest(4)'
+
+'format_description_tags(desc)' = '''
+coalesce(
+  if(desc.starts_with("[Google] "),
+    label("google", "[Google]") ++ " " ++ desc.remove_prefix("[Google] ")),
+  if(desc.starts_with("[DNS] "),
+    label("dns", "[DNS]") ++ " " ++ desc.remove_prefix("[DNS] ")),
+  desc
+)
+'''
+
+[templates]
+git_push_bookmark = '"zv/jj-" ++ change_id.short(4)'
+
+log_node = '''
+label("node",
+  coalesce(
+    if(!self, label("elided", "⇋")),
+    if(current_working_copy, label("working_copy", "◉")),
+    if(conflict, label("conflict", "x")),
+    if(immutable, label("immutable", "◆")),
+    "○"
+  )
+)
+'''
+
+log = '''
+label(if(immutable, "immutable"),
+  separate(" ",
+    label(
+      if(immutable, "commit submitted change_id shortest", "commit change_id shortest"),
+      format_short_id(change_id) ++ if(divergent, "!!")
+    ),
+    
+    if(author.email().local() == "zv",
+      label("user author", author.email().local()),
+      label("author", author.email().local())
+    ),
+    
+    label("timestamp ago", committer.timestamp().ago()),
+    
+    bookmarks,
+    tags,
+    working_copies,
+
+    if(conflict, label("conflict", "CONFLICT")),
+    if(empty, label("empty", "(empty)")),
+
+    label("description",
+      if(description,
+        truncate_end(100, format_description_tags(description.first_line()), "…"),
+        label("description placeholder", "(no description set)")
+      )
+    )
+  )
+) ++ "\n"
+'''
