@@ -85,3 +85,8 @@ fi
 if [ -e "$HOME/.antigravity/antigravity/bin" ]; then
     export PATH="$PATH:$HOME/.antigravity/antigravity/bin"
 fi
+
+# Radicle
+if [ -e "$HOME/.radicle/bin" ]; then
+    export PATH="$PATH:$HOME/.radicle/bin"
+fi
