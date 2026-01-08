@@ -1,165 +1,160 @@
 "$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
 
+# Useful references:
+# - https://github.com/jj-vcs/jj/blob/main/docs/templates.md
+
 [ui]
 paginate = "never"
 default-command = "log"
-
-[merge-tools.meld]
-program = "meld"
 
 [user]
 name = "zv"
 email = "zv@zv.wtf"
 
+[aliases]
+l = ["log"]
+n = ["new"]
+e = ["edit"]
+d = ["describe"]
+c = ["commit"]
+s = ["squash"]
+sq = ["squash"]
+rm = ["abandon"]
+tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
+consume = ["squash","--use-destination-message", "--keep-emptied", "--into", "@", "--from"]
+eject = ["squash", "--use-destination-message", "--keep-emptied", "--from", "@", "--into"]
+
+[merge-tools.meld]
+program = "meld"
+
 [signing]
 behavior = "own"
 backend = "gpg"
 
-[remotes.origin]
-auto-track-bookmarks = "glob:*"
-
 [snapshot]
 auto-update-stale = true
 
-[aliases]
-c = ["commit"]
-d = ["describe"]
-e = ["edit"]
-n = ["new"]
-rm = ["abandon"]
-sq = ["squash"]
-s = ["squash"]
-l = ["log"]
-
-# Take content from any change, and move it into @. The inverse of 'eject'
-# - jj consume xyz path/to/file`
-consume = ["squash","--use-destination-message", "--keep-emptied", "--into", "@", "--from"]
-
-# Eject content from @ into any other change. The inverse of 'consume'
-# - jj eject xyz path/to/file
-eject = ["squash", "--use-destination-message", "--keep-emptied", "--from", "@", "--into"]
-
-# Squash the stack of commits from the working copy down to a destination commit.
-# Usage: jj squash-stack <destination>
-squash-stack = ["util", "exec", "--", "zsh", "-c", """
-  set -eu
-  local source_rev
-  local dest_rev
-
-  if [[ "$#" -eq 1 ]]; then
-    # If only one argument is given, assume the source is the working copy '@'
-    source_rev="@"
-    dest_rev="$1"
-  elif [[ "$#" -eq 2 ]]; then
-    # If two arguments are given, use them as source and destination
-    source_rev="$1"
-    dest_rev="$2"
-  else
-    echo "Error: Incorrect number of arguments."
-    echo "Usage: jj squash-stack [source] <destination>"
-    echo "  e.g.: jj squash-stack xyz base"
-    exit 1
-  fi
-
-  echo "Squashing between '[$dest_rev, $source_rev)' into '$dest_rev'"
-  jj squash --from "$dest_rev..$source_rev" --into "$dest_rev" --use-destination-message
-""", ""]
-ss = ["squash-stack"]
-
-# Move all bookmarks that are ancestors of @- to be at @-.
-tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
-
 [colors]
 # Nodes
-"node immutable" = { fg = "bright black", bold = true }
-"node working_copy" = { fg = "bright blue", bold = true }
-"node conflict" = "bright red"
+"node working_copy"  = "bright blue"
+"node immutable"     = "bright black"
+"node conflict"      = "bright red"
+"node divergent"     = "bright red"
 
-# Unique ID Prefixes (Labels used in the template below)
-"commit submitted change_id shortest" = "magenta"
-"commit change_id shortest" = "magenta"
+# Commit identifier (format_short_id)
+"log commit change_id shortest prefix"  = { fg = "bright blue", bold = true }
+"log commit change_id shortest rest"    = { fg = "bright black", dim = true}
 
-# Author colors
-"user author" = "bright blue"
-"author" = "bright black"
+"log commit divergent change_id shortest prefix"  = { fg = "bright red", bold = true }
+"log commit divergent change_id shortest rest"    = { fg = "white", dim = false }
 
-# Timestamps & Metadata
-"timestamp ago" = { fg = "cyan", bold = true }
-"empty" = "bright black"
-"description placeholder" = "bright black"
+# Divergence / Conflict
+"log commit divergent"  = { fg = "bright red", bold = true }
+"log commit conflict"   = { fg = "red", bold = true }
+
+# Author (zv vs others)
+"log commit author zv"  = { fg = "bright yellow", bold = true }
+"log commit author"     = "bright black"
+
+# Descriptions
+"log commit description"        = { fg = "white", bold = true }
+"log commit empty_description"  = "bright black"
+
+# Metadata
+"log commit timestamp ago" = "bright black"
+"log commit empty"         = "bright black"
 
 # Domain Tags
 "google" = { bg = "#68e2d0", bold = true, fg = "black" }
-"dns" = { bg = "red", bold = true, fg = "#ecf0f1" }
+"dns"    = { bg = "red", bold = true, fg = "#ecf0f1" }
 
 [template-aliases]
+# Utility functions
+'comment(text)' = ''
 'format_short_id(id)' = 'id.shortest(4)'
 
-'format_description_tags(desc)' = '''
+# Logic for Blue 'zv' vs Gray others
+'format_author' = '''
+if(author.email().local() == "zv",
+  label("author zv", author.email().local()),
+  label("author", author.email().local())
+)
+'''
+
+# Logic for commit ID with hidden/divergent labels
+'format_short_change_id_with_change_offset(commit)' = '''
 coalesce(
-  if(desc.starts_with("[Google] "),
-    label("google", "[Google]") ++ " " ++ desc.remove_prefix("[Google] ")),
-  if(desc.starts_with("[DNS] "),
-    label("dns", "[DNS]") ++ " " ++ desc.remove_prefix("[DNS] ")),
-  desc
+  if(commit.hidden(),
+    label("hidden",
+      format_short_change_id(commit.change_id()) ++ format_change_offset(commit),
+    ),
+  ),
+  if(commit.divergent(),
+    label("divergent",
+      format_short_change_id(commit.change_id()) ++ format_change_offset(commit),
+    ),
+  ),
+
+  if(commit.divergent(),
+    label("divergent", format_short_change_id(commit.change_id())),
+    format_short_change_id(commit.change_id())
+  )
+)
+'''
+
+# Logic for colored domain tags in descriptions
+'format_description' = '''
+if(description,
+  truncate_end(100, coalesce(
+    if(description.first_line().starts_with("[Google] "),
+      label("google", "[Google]") ++ " " ++ description.first_line().remove_prefix("[Google] ")),
+    if(description.first_line().starts_with("[DNS] "),
+      label("dns", "[DNS]") ++ " " ++ description.first_line().remove_prefix("[DNS] ")),
+    description.first_line()
+  ), "…"),
+  label("empty_description", "(no description set)")
 )
 '''
 
 [templates]
-git_push_bookmark = '"zv/jj-" ++ change_id.short(4)'
-
+# https://en.wikipedia.org/wiki/Box-drawing_characters
 log_node = '''
-label("node",
-  coalesce(
-    if(!self, label("elided", "⇋")),
-    if(current_working_copy, label("working_copy", "◉")),
-    if(conflict, label("conflict", "x")),
-    if(immutable, label("immutable", "◆")),
-    "○"
+label("node", coalesce(
+  comment('# 1. Handle elided (hidden) revision ranges'),
+  if(!self, "╪" ++ label("elided", "═")),
+
+  comment('# 2. Current working copy (  icon with a corner connector)'),
+  if(current_working_copy, "╭" ++ label("working_copy", "")),
+
+  comment('# 3. Fixed glyphs for Conflicts (x) and Immutable commits (◆)'),
+  if(conflict, label("conflict", "x")),
+  if(immutable, "╽" ++ label("immutable", " ")),
+
+  comment('# 4. Dynamic Node Generation'),
+  comment('# Check if the commit has any parents. If parents.len() is 0,'),
+  comment('# we use the corner "╭" to prevent lines from crossing off into nothing.'),
+  comment('# Is a Head (no children above it)'),
+  comment('# Is an Interior node (has children above it)'),
+  if(self.contained_in("heads(all())"),
+    if(divergent, "╭" ++ label("divergent", "╼"), "╭╼"),
+    if(divergent, "├" ++ label("divergent", "╼"), "├╼")
   )
-)
+))
 '''
 
 log = '''
 label(if(immutable, "immutable"),
   separate(" ",
-    label(
-      if(immutable, "commit submitted change_id shortest", "commit change_id shortest"),
-      format_short_id(change_id) ++ if(divergent, "!!")
-    ),
-    
-    if(author.email().local() == "zv",
-      label("user author", author.email().local()),
-      label("author", author.email().local())
-    ),
-    
-    label("timestamp ago", committer.timestamp().ago()),
-    
+    format_short_change_id_with_change_offset(self),
+    format_author,
+    committer.timestamp().ago(),
     bookmarks,
     tags,
     working_copies,
-
-    if(conflict, label("conflict", "CONFLICT")),
     if(empty, label("empty", "(empty)")),
-
-    label("description",
-      if(description,
-        truncate_end(100, format_description_tags(description.first_line()), "…"),
-        label("description placeholder", "(no description set)")
-      )
-    )
+    format_description,
+    if(conflict, label("conflict", "CONFLICT")),
+    if(divergent, label("divergent", "DIVERGENT")),
   )
 ) ++ "\n"
-'''
-
-draft_commit_description = '''
-  concat(
-    coalesce(description, default_commit_description, "\n"),
-    surround(
-      "\nJJ: This commit contains the following changes:\n", "",
-      indent("JJ:     ", diff.stat(72)),
-    ),
-    "\nJJ: ignore-rest\n",
-    diff.git(),
-  )
 '''
