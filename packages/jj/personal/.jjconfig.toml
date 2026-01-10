@@ -20,6 +20,7 @@ c = ["commit"]
 s = ["squash"]
 sq = ["squash"]
 rm = ["abandon"]
+# credits: https://github.com/thoughtpolice/a/blob/canon/tilde/aseipp/dotfiles/jj/config.toml
 tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
 consume = ["squash","--use-destination-message", "--keep-emptied", "--into", "@", "--from"]
 eject = ["squash", "--use-destination-message", "--keep-emptied", "--from", "@", "--into"]
@@ -46,11 +47,15 @@ auto-update-stale = true
 "log commit change_id shortest rest"    = { fg = "bright black", dim = true}
 
 "log commit divergent change_id shortest prefix"  = { fg = "bright red", bold = true }
-"log commit divergent change_id shortest rest"    = { fg = "white", dim = false }
+"log commit divergent change_id shortest rest"    = { fg = "white", dim = false, bold = false }
+
+"log commit conflict change_id shortest prefix"  = { fg = "bright red", bold = true }
+"log commit conflict change_id shortest rest"    = { fg = "white", dim = false, bold = false }
+
 
 # Divergence / Conflict
 "log commit divergent"  = { fg = "bright red", bold = true }
-"log commit conflict"   = { fg = "red", bold = true }
+"log commit conflict"   = { fg = "bright red", bold = true }
 
 # Author (zv vs others)
 "log commit author zv"  = { fg = "bright yellow", bold = true }
@@ -65,8 +70,13 @@ auto-update-stale = true
 "log commit empty"         = "bright black"
 
 # Domain Tags
-"google" = { bg = "#68e2d0", bold = true, fg = "black" }
-"dns"    = { bg = "red", bold = true, fg = "#ecf0f1" }
+"ctx" = { fg = "#68e2d0", bold = true }
+"dns"    = { fg = "red", bold = true }
+
+[revset-aliases]
+# credits:  https://github.com/thoughtpolice/a/blob/canon/tilde/aseipp/dotfiles/jj/config.toml
+'user(x)' = 'author(x) | committer(x)'
+'mine()' = 'user(exact:"zv@zv.wtf") | user(exact:"zv-corp@zv.wtf")'
 
 [template-aliases]
 # Utility functions
@@ -81,33 +91,12 @@ if(author.email().local() == "zv",
 )
 '''
 
-# Logic for commit ID with hidden/divergent labels
-'format_short_change_id_with_change_offset(commit)' = '''
-coalesce(
-  if(commit.hidden(),
-    label("hidden",
-      format_short_change_id(commit.change_id()) ++ format_change_offset(commit),
-    ),
-  ),
-  if(commit.divergent(),
-    label("divergent",
-      format_short_change_id(commit.change_id()) ++ format_change_offset(commit),
-    ),
-  ),
-
-  if(commit.divergent(),
-    label("divergent", format_short_change_id(commit.change_id())),
-    format_short_change_id(commit.change_id())
-  )
-)
-'''
-
 # Logic for colored domain tags in descriptions
 'format_description' = '''
 if(description,
   truncate_end(100, coalesce(
-    if(description.first_line().starts_with("[Google] "),
-      label("google", "[Google]") ++ " " ++ description.first_line().remove_prefix("[Google] ")),
+    if(description.first_line().starts_with("[CTX] "),
+      label("ctx", "[CTX]") ++ " " ++ description.first_line().remove_prefix("[CTX] ")),
     if(description.first_line().starts_with("[DNS] "),
       label("dns", "[DNS]") ++ " " ++ description.first_line().remove_prefix("[DNS] ")),
     description.first_line()
@@ -116,28 +105,44 @@ if(description,
 )
 '''
 
+# Logic for commit ID with hidden/divergent labels
+'format_short_change_id_with_change_offset(commit)' = '''
+coalesce(
+  if(commit.conflict(), label("conflict", format_short_change_id(commit.change_id()))),
+  if(commit.hidden(),
+    label("hidden", 
+      separate("", format_short_change_id(commit.change_id()), format_change_offset(commit))
+    )
+  ),
+  if(commit.divergent(),
+    label("divergent", 
+      separate("", format_short_change_id(commit.change_id()), format_change_offset(commit))
+    )
+  ),
+  format_short_change_id(commit.change_id())
+)
+'''
+
 [templates]
 # https://en.wikipedia.org/wiki/Box-drawing_characters
 log_node = '''
 label("node", coalesce(
-  comment('# 1. Handle elided (hidden) revision ranges'),
+  comment('# 1. Elided revisions (2 chars)'),
   if(!self, "╪" ++ label("elided", "═")),
 
-  comment('# 2. Current working copy (  icon with a corner connector)'),
-  if(current_working_copy, "╭" ++ label("working_copy", "")),
+  comment('# 2. Visible commits (Connector + Glyph = 2 chars)'),
+  concat(
+    comment('# Pick Connector'),
+    if(self.contained_in("heads(all())"), "╭", "├"),
 
-  comment('# 3. Fixed glyphs for Conflicts (x) and Immutable commits (◆)'),
-  if(conflict, label("conflict", "x")),
-  if(immutable, "╽" ++ label("immutable", " ")),
-
-  comment('# 4. Dynamic Node Generation'),
-  comment('# Check if the commit has any parents. If parents.len() is 0,'),
-  comment('# we use the corner "╭" to prevent lines from crossing off into nothing.'),
-  comment('# Is a Head (no children above it)'),
-  comment('# Is an Interior node (has children above it)'),
-  if(self.contained_in("heads(all())"),
-    if(divergent, "╭" ++ label("divergent", "╼"), "╭╼"),
-    if(divergent, "├" ++ label("divergent", "╼"), "├╼")
+    comment('# Pick Glyph (The icon)'),
+    coalesce(
+      if(current_working_copy, label("working_copy", "")),
+      if(conflict, label("conflict", "x")),
+      if(divergent, label("divergent", "╼")),
+      if(immutable, label("immutable", "╼")),
+      "╼"
+    )
   )
 ))
 '''
@@ -154,7 +159,11 @@ label(if(immutable, "immutable"),
     if(empty, label("empty", "(empty)")),
     format_description,
     if(conflict, label("conflict", "CONFLICT")),
-    if(divergent, label("divergent", "DIVERGENT")),
+    if(divergent, label("divergent", "DIVERGENT"))
   )
-) ++ "\n"
+)
 '''
+
+# Connor's going viral.
+# https://github.com/thoughtpolice/a/blob/canon/tilde/aseipp/dotfiles/jj/config.toml#L310
+git_push_bookmark = '"zv/jj/" ++ stringify(truncate_end(32, description.first_line().lower())).replace(regex:"[^a-zA-Z0-9]+", "-").replace(regex:"^-.*", "").replace(regex:"-*$", "") ++ "/" ++ change_id.short(4)'
