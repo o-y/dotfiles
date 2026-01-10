@@ -2,6 +2,11 @@
 ### HOOK: Called before any modules are sourced
 ###
 zsh_pre_init() {
+    # if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
+    #    compdef() { : }
+    #    return 0
+    # fi
+
     ###
     ### Activate completions system
     ###
@@ -12,10 +17,19 @@ zsh_pre_init() {
 
     zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-    zstyle :compinstall filename "$(realpath ./)"
+    zstyle :compinstall filename "$PWD"
 
+    setopt local_options extended_glob
     autoload -Uz compinit
-    compinit
+
+    local zwc_file="${ZDOTDIR:-$HOME}/.zcompdump"
+    # only check for new completions once every 24 hours
+    if [[ "$zwc_file"(#qN.mh-24) ]]; then
+        compinit -C
+    else
+        compinit
+        zcompile "$zwc_file"
+    fi
 
     ###
     ### Execute Tmux

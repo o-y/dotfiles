@@ -1,5 +1,5 @@
 function parse_git_branch() {
-    local branch=$(git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/\1/p')
+    local branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     [[ -n "$branch" ]] && echo " [$branch]" || echo ""
 }
 
@@ -33,6 +33,13 @@ NEWLINE=$'\n'
 COLOR_DEF=$'\e[38;5;250m'
 
 precmd() {
+    # Skip heavy prompt logic for non-interactive command execution
+    if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
+        PROMPT='~%b '
+        export PROMPT
+        return
+    fi
+
     # FIRST LINE
     PROMPT='%B'                                # start of bold sequence
     PROMPT+="${COLOR_USR}%n"                   # display username
@@ -60,4 +67,4 @@ chpwd() {
     precmd
 }
 
-chpwd
+[[ -z "$ZSH_EXECUTION_STRING" ]] && chpwd
