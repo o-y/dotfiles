@@ -13,7 +13,6 @@ zmodload zsh/mathfunc
 # --- Startup Logic ---
 
 # Find if any critical files or directories have changed.
-# We skip the expensive structural check for non-interactive command execution to hit sub-70ms latency.
 if [[ ! -f "$STATIC_LOADER" ]]; then
   # Scenario: Cache is missing - generate and source synchronously
   source "${PATH_TO_SCRIPT:h}/hooks.zsh"
