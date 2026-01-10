@@ -38,16 +38,25 @@ Stower:
   - stow directories may also include zsh files named "presym.hook.zsh" and "postsym.hook.zsh" which are executes before and after (where successful) stow commands, this is helpful if some amount of pre or post processing needs to happen (e.g. forceably deleting existing files, or chowning newly symlinked files after stowing, etc). see packages/atuin for an example of this
 
 File Encryption:
-  - the module system sources files at startup in custom/modules. Some files are encrypted using git-crypt, these will be ignored if not decrypted - to silence these warnings, execute 'touch ~/.silence-git-crypt-warnings'.
+  - the module system sources files via a static loader. Some files are encrypted using git-crypt, these will be ignored if not decrypted - to silence these warnings, execute 'touch ~/.silence-git-crypt-warnings'.
   - two keys exist; personal (default) and corp (secondary).
+
+Zsh Initialization:
+  - static loader (~/.zsh_static_loader.zsh) to reduce startup latency by caching the modules that should be sourced.
+  - structural change detection (add/remove/rename) in custom/modules triggers regeneration of this cache, this way Zsh doesn't need to iterate through the modules directory and determine which files should be sourced every time the shell starts.
+  - NOTE: I experimented with concatinating all modules into a single file and zcompiling this, but that had negligible impacts on prompt availability (literally, ~10ms) which didn't seem worth the trade-off of losing the modularity of the system. 
+  - filename metadata:
+    - ".nodefer." - synchronous sourcing (prompt, critical dependencies).
+    - ".darwin.", ".linux." - platform filtering at cache-generation time.
 
 File Structure:
 - bootstrap.zsh       entrypoint (installer)
-- packages:           dotfiles/configuration managed by the boostrap.zsh file (stower)
-- custom/modules:     files that are automatically sourced at session init
-  - these files may include metadata in the same such as "foo.corp.zsh" or "bar.linux.zsh" which signifies the former is encrypted via git-crypt and the latter should only run if executing within a Linux environment
-- custom/static:      static resources/scripts required by external programs (e.g raycast)
-- custom/postinstall: files that are automatically sourced with the bootstrap.zsh flow (e.g installing rust, go, python dependencies, etc behind confirmation dialogues)
+- packages/           configuration managed by bootstrap.zsh (stower)
+- custom/init.zsh     Zsh initialization entrypoint; cache and regeneration
+- custom/compiler.zsh static loader generator logic
+- custom/modules/     modular config sourced by static loader
+- custom/static/      resources for external programs (e.g. raycast)
+- custom/postinstall/ secondary bootstrap modules (rust, py, go deps)
 
 --
 Dependencies
