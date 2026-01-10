@@ -9,8 +9,7 @@ custom-shader = "shaders/amber_v4.glsl"
 ###
 ### BEHAVIOUR
 ###
-shell-integration = none
-shell-integration-features = title,cursor,ssh-env,ssh-terminfo,sudo
+shell-integration-features = title,sudo,cursor,ssh-env,ssh-terminfo
 
 ###
 ### PLATFORM-SPECIFIC

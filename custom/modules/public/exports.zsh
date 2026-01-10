@@ -1,5 +1,8 @@
 #### Required by some TUI apps
 # NOTE: This is now handled by Ghostty which forwards this variable to remotes as well.
+# If commands such as 'clear' start failing, this is probably because the terminfo is
+# missing, in which case, try running:
+# TERMINFO="/Applications/Ghostty.app/Contents/Resources/terminfo" infocmp -x xterm-ghostty | tic -x -
 export TERM=xterm-ghostty
 
 #### Editor
