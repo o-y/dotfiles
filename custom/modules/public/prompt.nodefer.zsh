@@ -34,11 +34,11 @@ COLOR_DEF=$'\e[38;5;250m'
 
 precmd() {
     # Skip heavy prompt logic for non-interactive command execution
-    if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
-        PROMPT='~%b '
-        export PROMPT
-        return
-    fi
+    # if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
+    #     PROMPT='~%b '
+    #     export PROMPT
+    #     return
+    # fi
 
     # FIRST LINE
     PROMPT='%B'                                # start of bold sequence
@@ -58,13 +58,4 @@ precmd() {
     export PROMPT
 }
 
-# unlike precmd, chpwd is ran after a command is executed, therefore
-# it needs to be called once when we start a new session
-# however this doesn't play well with widgets which change the current
-# directory, thus the need to use chpwd as well
-# TODO: consolidate this into a single function, this is fucked.
-chpwd() {
-    precmd
-}
-
-[[ -z "$ZSH_EXECUTION_STRING" ]] && chpwd
+# [[ -z "$ZSH_EXECUTION_STRING" ]] && chpwd
