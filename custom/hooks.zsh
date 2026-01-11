@@ -18,18 +18,13 @@ zsh_pre_init() {
     zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
     zstyle :compinstall filename "$PWD"
-
     setopt local_options extended_glob
-    autoload -Uz compinit
 
-    local zwc_file="${ZDOTDIR:-$HOME}/.zcompdump"
-    # only check for new completions once every 24 hours
-    if [[ "$zwc_file"(#qN.mh-24) ]]; then
-        compinit -C
-    else
-        compinit
-        zcompile "$zwc_file"
-    fi
+    # 1. Cache: stub compdef to queue completion requests until compinit is loaded
+    typeset -ga _comp_def_queue
+    compdef() { 
+      _comp_def_queue+=("$*")
+    }
 
     ###
     ### Execute Tmux
@@ -47,11 +42,36 @@ zsh_pre_init() {
     fi
 }
 
+_load_compinit() {
+    unset -f compdef
+    autoload -Uz compinit
+
+    # 2. Load: only check for new completions once every 24 hours
+    local zwc_file="${ZDOTDIR:-$HOME}/.zcompdump"
+    if [[ "$zwc_file"(#qN.mh-24) ]]; then
+        compinit -C
+    else
+        compinit
+        zcompile "$zwc_file"
+    fi
+
+    # 3. Replay: Use the global _comp_def_queue array and load these into the context
+    for cmd in "${_comp_def_queue[@]}"; do
+        compdef ${(z)cmd}
+    done
+    unset _comp_def_queue
+}
+
 ###
 ### HOOK: Called after modules are sourced
 ###
 zsh_post_init() {
-    
+    # Now that modules are loaded, zsh-defer should be available
+    if (( $+functions[zsh-defer] )); then
+        zsh-defer _load_compinit
+    else
+        _load_compinit
+    fi
 }
 
 start_tmux() {
