@@ -1,5 +1,7 @@
-zmodload zsh/zprof
-
-source ~/dotfiles/custom/init.zsh
-
-zprof
+if [[ -n "$ZSH_PROFILE" ]]; then
+  zmodload zsh/zprof
+  source ~/dotfiles/custom/init.zsh
+  zprof
+else
+  source ~/dotfiles/custom/init.zsh
+fi

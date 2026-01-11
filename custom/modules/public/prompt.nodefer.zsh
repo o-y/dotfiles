@@ -34,11 +34,11 @@ COLOR_DEF=$'\e[38;5;250m'
 
 precmd() {
     # Skip heavy prompt logic for non-interactive command execution
-    # if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
-    #     PROMPT='~%b '
-    #     export PROMPT
-    #     return
-    # fi
+    if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
+        PROMPT='~%b '
+        export PROMPT
+        return
+    fi
 
     # FIRST LINE
     PROMPT='%B'                                # start of bold sequence
@@ -57,5 +57,3 @@ precmd() {
 
     export PROMPT
 }
-
-# [[ -z "$ZSH_EXECUTION_STRING" ]] && chpwd
