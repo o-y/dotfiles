@@ -136,9 +136,15 @@ generate_static_loader() {
         # Deferred block (Standard Modules)
         if (( ${#defer_lines} > 0 )); then
             echo "### --- DEFERRED MODULES --- ###"
+            # Create an outer deferred function so we're not posting a tonne of deferred calls
+            # on the hot-path.
+            echo "_zsh_deferred_load() {"
             for line in "${defer_lines[@]}"; do
-                printf '%s\n' "$line"
+                printf '    %s\n' "$line"
             done
+            echo "}"
+            echo "zsh-defer _zsh_deferred_load"
+
             printf '\n'
         fi
 

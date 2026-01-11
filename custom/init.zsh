@@ -6,9 +6,6 @@ PATH_TO_SCRIPT=${0:A}
 MODULES_DIR=${PATH_TO_SCRIPT:h}/modules
 STATIC_LOADER="$HOME/.zsh_static_loader.zsh"
 
-# load modules
-zmodload zsh/mathfunc
-
 # --- Startup Logic ---
 
 # Find if any critical files or directories have changed.
