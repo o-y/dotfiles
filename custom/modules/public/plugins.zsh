@@ -6,5 +6,5 @@ S_PLUGINS=(
 )
 
 for plugin in $S_PLUGINS; do
-    zsh-defer source "$S_PLUGINS_DIRECTORY/$plugin"
+    source "$S_PLUGINS_DIRECTORY/$plugin"
 done
