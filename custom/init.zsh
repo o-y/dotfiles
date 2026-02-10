@@ -8,8 +8,10 @@ STATIC_LOADER="$HOME/.zsh_static_loader.zsh"
 
 # --- Startup Logic ---
 
-# Find if any critical files or directories have changed.
-if [[ ! -f "$STATIC_LOADER" ]]; then
+if [[ -f "$STATIC_LOADER" ]]; then
+  source "$STATIC_LOADER"
+elif [[ ! -f "$STATIC_LOADER" ]]; then
+  # Find if any critical files or directories have changed.
   # Scenario: Cache is missing - generate and source synchronously
   source "${PATH_TO_SCRIPT:h}/hooks.zsh"
   source "${PATH_TO_SCRIPT:h}/compiler.zsh"
@@ -31,5 +33,3 @@ elif [[ -z "$ZSH_EXECUTION_STRING" ]]; then
     generate_static_loader
   fi
 fi
-
-source "$STATIC_LOADER"

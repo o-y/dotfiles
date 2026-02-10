@@ -19,3 +19,13 @@ foreground=#eaeaea
 cursor-color=#c7c7c7
 selection-background=#6b6e6a
 selection-foreground=#ffffff
+
+
+; menu background lightened 80% = #c6cedd
+; menu background lightened 20% = #36435B
+; menu background = #141922
+
+
+; editor background = #1C2433
+;     lighted 10% = #2b384f
+;     ighted 20% = 
