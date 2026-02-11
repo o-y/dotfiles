@@ -1,0 +1,315 @@
+{
+  "name": "custom",
+  "editor": {
+    "bg": [
+      28,
+      36,
+      51
+    ],
+    "fg": [
+      234,
+      234,
+      234
+    ],
+    "cursor": [
+      199,
+      199,
+      199
+    ],
+    "inactive_cursor": [
+      104,
+      104,
+      104
+    ],
+    "selection_bg": [
+      107,
+      110,
+      106
+    ],
+    "current_line_bg": "Black",
+    "line_number_fg": [
+      104,
+      104,
+      104
+    ],
+    "line_number_bg": [
+      0,
+      0,
+      0
+    ]
+  },
+  "ui": {
+    "tab_active_fg": "White",
+    "tab_active_bg": [
+      28,
+      36,
+      51
+    ],
+    "tab_inactive_fg": [
+      52,
+      65,
+      93
+    ],
+    "tab_inactive_bg": [
+      19,
+      24,
+      34
+    ],
+    "tab_separator_bg": [
+      19,
+      24,
+      34
+    ],
+    "status_bar_fg": [
+      52,
+      65,
+      93
+    ],
+    "status_bar_bg": [
+      25,
+      31,
+      43
+    ],
+    "prompt_fg": [
+      255,
+      255,
+      255
+    ],
+    "prompt_bg": [
+      25,
+      31,
+      43
+    ],
+    "prompt_selection_fg": [
+      255,
+      255,
+      255
+    ],
+    "prompt_selection_bg": "Default",
+    "popup_border_fg": [
+      54,
+      67,
+      91
+    ],
+    "popup_bg": [
+      25,
+      31,
+      43
+    ],
+    "popup_selection_bg": "Default",
+    "popup_text_fg": [
+      234,
+      234,
+      234
+    ],
+    "suggestion_bg": [
+      0,
+      0,
+      0
+    ],
+    "suggestion_selected_bg": [
+      107,
+      110,
+      106
+    ],
+    "help_bg": [
+      25,
+      31,
+      43
+    ],
+    "help_fg": [
+      234,
+      234,
+      234
+    ],
+    "help_key_fg": [
+      154,
+      230,
+      240
+    ],
+    "help_separator_fg": [
+      104,
+      104,
+      104
+    ],
+    "help_indicator_fg": [
+      255,
+      110,
+      111
+    ],
+    "help_indicator_bg": [
+      0,
+      0,
+      0
+    ],
+    "split_separator_fg": [
+      43,
+      56,
+      79
+    ],
+    "terminal_bg": "Default",
+    "terminal_fg": "Default",
+    "tab_hover_bg": [
+      15,
+      19,
+      27
+    ],
+    "menu_bg": [
+      25,
+      31,
+      43
+    ],
+    "menu_hover_bg": [
+      20,
+      25,
+      34
+    ],
+    "menu_highlight_bg": "Default",
+    "menu_dropdown_bg": [
+      20,
+      25,
+      34
+    ],
+    "menu_disabled_bg": [
+      20,
+      25,
+      34
+    ],
+    "menu_border_fg": [
+      54,
+      67,
+      91
+    ],
+    "menu_active_bg": [
+      20,
+      25,
+      34
+    ],
+    "menu_disabled_fg": [
+      54,
+      67,
+      91
+    ],
+    "menu_dropdown_fg": "White",
+    "split_separator_hover_fg": [
+      59,
+      75,
+      107
+    ],
+    "scrollbar_thumb_fg": "Reset",
+    "scrollbar_thumb_hover_fg": "Black",
+    "scrollbar_track_fg": [
+      28,
+      36,
+      51
+    ],
+    "menu_separator_fg": [
+      54,
+      67,
+      91
+    ],
+    "popup_selection_fg": "Default",
+    "menu_fg": [
+      57,
+      71,
+      99
+    ],
+    "compose_margin_bg": "Red"
+  },
+  "search": {
+    "match_bg": [
+      243,
+      245,
+      157
+    ],
+    "match_fg": [
+      0,
+      0,
+      0
+    ]
+  },
+  "diagnostic": {
+    "error_fg": [
+      255,
+      110,
+      111
+    ],
+    "error_bg": [
+      60,
+      30,
+      30
+    ],
+    "warning_fg": [
+      243,
+      245,
+      157
+    ],
+    "warning_bg": [
+      60,
+      60,
+      30
+    ],
+    "info_fg": [
+      202,
+      170,
+      254
+    ],
+    "info_bg": [
+      30,
+      30,
+      60
+    ],
+    "hint_fg": [
+      199,
+      199,
+      199
+    ],
+    "hint_bg": [
+      0,
+      0,
+      0
+    ]
+  },
+  "syntax": {
+    "keyword": [
+      255,
+      146,
+      207
+    ],
+    "string": [
+      90,
+      170,
+      88
+    ],
+    "comment": [
+      104,
+      104,
+      104
+    ],
+    "function": [
+      154,
+      230,
+      240
+    ],
+    "type": [
+      202,
+      170,
+      254
+    ],
+    "variable": [
+      234,
+      234,
+      234
+    ],
+    "constant": [
+      243,
+      245,
+      157
+    ],
+    "operator": [
+      234,
+      234,
+      234
+    ]
+  }
+}

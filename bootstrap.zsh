@@ -75,6 +75,7 @@ stows_common=(
   "sesh:~/.config/sesh"
   "jjui:~/.config/jjui"
   "atuin:~/.config/atuin"
+  "fresh:~/.config/fresh"
 
   # ---- tmux ----
   "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
