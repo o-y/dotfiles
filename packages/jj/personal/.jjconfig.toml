@@ -78,7 +78,7 @@ auto-update-stale = true
 
 # Domain Tags
 "ctx" = { fg = "#68e2d0", bold = true }
-"dns"    = { fg = "red", bold = true }
+"dns" = { fg = "red", bold = true }
 
 [revset-aliases]
 # credits:  https://github.com/thoughtpolice/a/blob/canon/tilde/aseipp/dotfiles/jj/config.toml

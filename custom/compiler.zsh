@@ -1,14 +1,17 @@
 # --- Helpers ---
 
+local device_uname=$(uname)
+
+# Returns success if the file is encrypted via git-crypt
 _compiler_is_encrypted() {
   [[ -r "$1" && "$(head -n 1 "$1" 2>/dev/null)" == *GITCRYPT* ]]
 }
 
 _compiler_should_skip_platform() {
-  local uname="$(uname -s)"
-  case "$1" in
-    *.darwin.zsh) [[ "$uname" != "Darwin" ]] && return 0 ;;
-    *.linux.zsh)  [[ "$uname" != "Linux" ]]  && return 0 ;;
+  local file="$1"
+  case "$file" in
+    *.darwin.zsh) [[ "$device_uname" != "Darwin" ]] && return 0 ;;
+    *.linux.zsh)  [[ "$device_uname" != "Linux" ]]  && return 0 ;;
   esac
   return 1
 }
