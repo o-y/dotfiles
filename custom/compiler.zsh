@@ -7,10 +7,11 @@ _compiler_is_encrypted() {
 
 # Returns success if the file belongs to an OS other than the current one
 _compiler_should_skip_platform() {
+  local uname="$(uname -s)"
   local file="$1"
   case "$file" in
-    *.darwin.zsh) [[ "$UNAME" != "Darwin" ]] && return 0 ;;
-    *.linux.zsh)  [[ "$UNAME" != "Linux" ]]  && return 0 ;;
+    *.darwin.zsh) [[ "$uname" != "Darwin" ]] && return 0 ;;
+    *.linux.zsh)  [[ "$uname" != "Linux" ]]  && return 0 ;;
   esac
   return 1
 }
@@ -46,6 +47,7 @@ _compiler_process_file() {
   fi
 
   if _compiler_should_skip_platform "$file"; then
+    echo "skipping: $file"
     return
   fi
 
