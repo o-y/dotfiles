@@ -26,7 +26,11 @@
       110,
       106
     ],
-    "current_line_bg": "Black",
+    "current_line_bg": [
+      19,
+      24,
+      34
+    ],
     "line_number_fg": [
       104,
       104,
@@ -196,8 +200,8 @@
       75,
       107
     ],
-    "scrollbar_thumb_fg": "Reset",
-    "scrollbar_thumb_hover_fg": "Black",
+    "scrollbar_thumb_fg": "Default",
+    "scrollbar_thumb_hover_fg": "Default",
     "scrollbar_track_fg": [
       28,
       36,
