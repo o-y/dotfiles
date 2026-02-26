@@ -2,11 +2,6 @@
 ### HOOK: Called before any modules are sourced
 ###
 zsh_pre_init() {
-    # if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
-    #    compdef() { : }
-    #    return 0
-    # fi
-
     ###
     ### Activate completions system
     ###
