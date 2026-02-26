@@ -47,7 +47,6 @@ _compiler_process_file() {
   fi
 
   if _compiler_should_skip_platform "$file"; then
-    echo "skipping: $file"
     return
   fi
 
