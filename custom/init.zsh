@@ -21,15 +21,14 @@ if [[ -f "$STATIC_LOADER" ]]; then
   source "$STATIC_LOADER"
 
   # In the background, check if any watched source is newer than the cached loader.
-  # If so, regenerate it and log — the user will need to `exec zsh` to pick it up.
   {
     local _stale=0
     local _log="$HOME/.zsh_loader_regen.log"
 
     # Rebuild if:
-    # 1. Orchestration files change (hooks, compiler, init)
-    # 2. Inlined content changes (dependencies/ OR *.nodefer.*)
-    # 3. Directory structure changes (new/deleted modules)
+    # 1. orchestration files change
+    # 2. inlined content changes
+    # 3. directory structure changes
     local -a _watched=(
       "${PATH_TO_SCRIPT:h}/hooks.zsh"
       "${PATH_TO_SCRIPT:h}/compiler.zsh"
@@ -44,7 +43,7 @@ if [[ -f "$STATIC_LOADER" ]]; then
     local isStale=${#_stale_files}
     if (( isStale )); then
       _rebuild_loader
-      print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S')] zsh-load cache regenerated (sources changed) — run \`exec zsh\` to apply" \
+      print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S')] zsh-load cache regenerated (sources changed) — run $ exec zsh to apply" \
         >> "$_log"
     fi
   } &!
