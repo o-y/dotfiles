@@ -2,19 +2,6 @@
 ### HOOK: Called before any modules are sourced
 ###
 zsh_pre_init() {
-    ###
-    ### Activate completions system
-    ###
-    ### This needs to happen early on because various scripts which
-    ### append completions to the $fpath or declare completions using
-    ### compdef require the completions system to be loaded.
-    ###
-
-    zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-    zstyle :compinstall filename "$PWD"
-    setopt local_options extended_glob
-
     # 1. Cache: stub compdef to queue completion requests until compinit is loaded
     typeset -ga _comp_def_queue
     compdef() { 
@@ -28,7 +15,7 @@ zsh_pre_init() {
     ### to extract the binary location, as we haven't yet sourced the
     ### modules which add cargo, brew, etc to the $PATH.
     ###
-    if [[ -z "$TMUX" && -e "$HOME/.execute-tmux-on-init" ]]; then
+    if [[ -e "$HOME/.execute-tmux-on-init" ]]; then
         if [ -e "/opt/homebrew/bin/tmux" ]; then
             start_tmux "/opt/homebrew/bin/tmux"
         elif type tmux &> /dev/null; then
@@ -38,6 +25,11 @@ zsh_pre_init() {
 }
 
 _load_compinit() {
+    zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+    zstyle :compinstall filename "$PWD"
+    setopt local_options extended_glob
+
     unset -f compdef
     autoload -Uz compinit
 
@@ -61,7 +53,6 @@ _load_compinit() {
 ### HOOK: Called after modules are sourced
 ###
 zsh_post_init() {
-    # Now that modules are loaded, zsh-defer should be available
     if (( $+functions[zsh-defer] )); then
         zsh-defer _load_compinit
     else
@@ -70,6 +61,10 @@ zsh_post_init() {
 }
 
 start_tmux() {
+    if [[ ! -z "$TMUX" ]]; then
+        return 0
+    fi
+
     if [[ $TERM_PROGRAM == "vscode" || $TERMINAL_EMULATOR == "JetBrains-JediTerm" ]]; then
         return 0
     fi

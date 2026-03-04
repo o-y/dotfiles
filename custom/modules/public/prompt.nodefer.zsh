@@ -33,13 +33,6 @@ NEWLINE=$'\n'
 COLOR_DEF=$'\e[38;5;250m'
 
 precmd() {
-    # Skip heavy prompt logic for non-interactive command execution
-    if [[ -n "$ZSH_EXECUTION_STRING" ]]; then
-        PROMPT='~%b '
-        export PROMPT
-        return
-    fi
-
     # FIRST LINE
     PROMPT='%B'                                # start of bold sequence
     PROMPT+="${COLOR_USR}%n"                   # display username

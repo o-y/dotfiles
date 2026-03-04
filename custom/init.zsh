@@ -15,6 +15,21 @@ _rebuild_loader() {
   generate_static_loader
 }
 
+# --- Trap to hook logs back to the stdout
+TRAPUSR1() {
+  _notify_cache_regen() {
+    zle && zle -M "[dotfiles] zsh cache regenerated - run 'exec zsh' to apply or any command to dismiss"
+  }
+
+  # If possible, post to zsh-defer so the function is executed at the end of the queue
+  if (( $+functions[zsh-defer] )); then
+    zsh-defer -12pr _notify_cache_regen
+  else
+    _notify_cache_regen
+  fi
+}
+
+
 # --- Startup Logic ---
 
 if [[ -f "$STATIC_LOADER" ]]; then
@@ -45,9 +60,11 @@ if [[ -f "$STATIC_LOADER" ]]; then
       _rebuild_loader
       print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S')] zsh-load cache regenerated (sources changed) — run $ exec zsh to apply" \
         >> "$_log"
+      
+      # Trigger the trap...
+      kill -USR1 $$
     fi
   } &!
-
 else
   # Scenario: Cache is missing — generate and source synchronously.
   echo "Generating zsh-load cache..."
