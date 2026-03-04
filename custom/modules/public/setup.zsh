@@ -1,70 +1,34 @@
-# cargo
-if [ -e "$HOME/.cargo/env" ]; then
-    . "$HOME/.cargo/env"
-fi
+# --- PATH setup ---
+[[ -d "$HOME/.cargo/bin" ]]    && path+=("$HOME/.cargo/bin")
+[[ -d "$HOME/go/bin" ]]        && path+=("$HOME/go/bin")
+[[ -d "$HOME/.local/bin" ]]    && path+=("$HOME/.local/bin")
+[[ -d "$HOME/.bun/bin" ]]      && path+=("$HOME/.bun/bin")
+[[ -d "$HOME/.pixi/bin" ]]     && path+=("$HOME/.pixi/bin")
+[[ -d "$HOME/.radicle/bin" ]]  && path+=("$HOME/.radicle/bin")
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && path+=("$HOME/.antigravity/antigravity/bin")
+[[ -d "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]] && path+=("/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
 
-# go
-if [ -e "$HOME/go/bin" ]; then
-    export PATH="$PATH:$HOME/go/bin"
-fi
+# mac brew (cached eval)
+[[ -x "/opt/homebrew/bin/brew" ]] && _eval_cache /opt/homebrew/bin/brew shellenv
 
-# local path
-if [ -e "$HOME/.local/bin" ]; then
-    export PATH="$PATH:$HOME/.local/bin"
-fi
-
-# mac brew
-if [ -e "/opt/homebrew/bin/brew" ]; then
-    _eval_cache /opt/homebrew/bin/brew shellenv
-fi
-
-# brew fpath
-if type brew &> /dev/null; then
-    fpath+=("/opt/homebrew/share/zsh/site-functions")
-fi
-
-# fpath
-if [ -e "$HOME/dotfiles/custom/static/fpath" ]; then
-    fpath+="$HOME/dotfiles/custom/static/fpath"
-fi
-
-# zsh-completions fpath
-if [ -e "$ZSH_CUSTOM/plugins/zsh-completions/src" ]; then
-    fpath+="$ZSH_CUSTOM/plugins/zsh-completions/src"
-fi
+# fpath setup (batched)
+(( $+commands[brew] )) && fpath+=("/opt/homebrew/share/zsh/site-functions")
+[[ -d "$HOME/dotfiles/custom/static/fpath" ]] && fpath+=("$HOME/dotfiles/custom/static/fpath")
+[[ -d "${ZSH_CUSTOM:-__none__}/plugins/zsh-completions/src" ]] && fpath+=("$ZSH_CUSTOM/plugins/zsh-completions/src")
 
 # zoxide
-if type zoxide &> /dev/null; then
-    _eval_cache zoxide init zsh --cmd cd
-fi
+(( $+commands[zoxide] )) && _eval_cache zoxide init zsh --cmd cd
 
-# mdproxy (google)
-if [ -e "$HOME/mdproxy/data/mdproxy_zshrc" ]; then
-    source "$HOME/mdproxy/data/mdproxy_zshrc"
-fi
+# thefuck (cached)
+(( $+commands[thefuck] )) && _eval_cache thefuck --alias
 
-# thefuck
-if type thefuck &> /dev/null; then
-    _eval_cache thefuck --alias
-fi
+# bun completions (cached)
+[[ -f "$HOME/.bun/_bun" ]] && _eval_cache source "$HOME/.bun/_bun"
 
-# bun
-if [ -e "$HOME/.bun/_bun" ]; then
-    source "$HOME/.bun/_bun"
-    export PATH="$PATH:$HOME/.bun/bin"
-fi
+# jj completions (cached)
+(( $+commands[jj] )) && _eval_cache COMPLETE=zsh jj
 
-# jj
-if type jj &> /dev/null; then
-    source <(COMPLETE=zsh jj)
-fi
-
-# vscode (code binary)
-if [ -e "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]; then
-    export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-fi
-
-# nvm
+# nvm (lazy-loaded)
 export NVM_DIR="$HOME/.nvm"
 if [[ -d "$NVM_DIR" ]]; then
     _lazy_load_nvm() {
@@ -78,22 +42,8 @@ if [[ -d "$NVM_DIR" ]]; then
     done
 fi
 
-# atuin
-if type atuin &> /dev/null; then
-    _eval_cache atuin init zsh --disable-ctrl-r
-fi
+# atuin (cached)
+(( $+commands[atuin] )) && _eval_cache atuin init zsh --disable-ctrl-r
 
-# mise
-if [ -e "$HOME/.local/bin/mise" ]; then
-    _eval_cache $HOME/.local/bin/mise activate zsh
-fi
-
-# antigravity
-if [ -e "$HOME/.antigravity/antigravity/bin" ]; then
-    export PATH="$PATH:$HOME/.antigravity/antigravity/bin"
-fi
-
-# Radicle
-if [ -e "$HOME/.radicle/bin" ]; then
-    export PATH="$PATH:$HOME/.radicle/bin"
-fi
+# mise (cached)
+[[ -x "$HOME/.local/bin/mise" ]] && _eval_cache $HOME/.local/bin/mise activate zsh

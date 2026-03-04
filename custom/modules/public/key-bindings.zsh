@@ -6,10 +6,7 @@
 # to work. This prevents the terminal driver from intercepting keys
 # like Ctrl-Z (suspend) before they reach the zsh line editor.
 if [[ -n "$TMUX" ]]; then
-  stty stop undef   # Free up Ctrl-S
-  stty start undef  # Free up Ctrl-Q
-  stty susp undef   # Free up Ctrl-Z
-  stty flush undef  # Free up Ctrl-O
+  stty stop undef start undef susp undef flush undef  # Free up Ctrl-S/Q/Z/O
 fi
 
 # Ensure precmds are run after cd
@@ -147,38 +144,3 @@ bindkey '^O' clear-scrollback
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '^E' edit-command-line
-
-###########################################
-###########################################
-### CTRL-H - keybind help menu
-###########################################
-###########################################
-function keybind-help-menu {
-  BUFFER=""
-  # zle redisplay
-  # echo -ne "\033[1K\r"  # Clears the current line
-
-  echo ""
-  echo "\033[1;37m^H · displaying keybinds... ↴\033[0m"
-
-  echo """
-  \033[90m[ ]\033[0m\033[90m[1][2][3][4][5]\033[0m
-  \033[90m[  ][Q][W]\033[1;35m[E]\033[0m\033[90m[R]\033[0m
-  \033[90m[   ]\033[1;31m[A]\033[0m\033[1;32m[S]\033[0m\033[90m[D][F]\033[0m
-  \033[90m[↑ ][ ]\033[1;34m[Z]\033[0m\033[1;33m[X]\033[0m\033[90m[C][V]\033[0m
-  \033[90m[][ ]\033[1;37m[^]\033[0m\033[90m[  ][]\033[0m
-
-  \033[1;37m^\033[1;35mE\033[0m -> \033[1;35medit buffer in $EDITOR\033[0m
-  \033[1;37m^\033[1;31mA\033[0m -> \033[1;31mls (list directories)\033[0m
-  \033[1;37m^\033[1;32mS\033[0m -> \033[1;32mwindow file picker\033[0m
-  \033[1;37m^\033[1;34mZ\033[0m -> \033[1;34minline file picker\033[0m
-  \033[1;37m^\033[1;33mX\033[0m -> \033[1;33mview command history\033[0m
-  \033[90m^H -> help menu (this ui)\033[0m
-  \033[90m^G -> prepend sudo to the buffer\033[0m
-  """
-
-  echo ""
-  zle reset-prompt
-}
-zle -N keybind-help-menu
-bindkey '^H' keybind-help-menu

@@ -69,4 +69,5 @@ else
   # Scenario: Cache is missing — generate and source synchronously.
   echo "Generating zsh-load cache..."
   _rebuild_loader
+  exec zsh
 fi
