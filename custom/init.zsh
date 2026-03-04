@@ -49,9 +49,7 @@ if [[ -f "$STATIC_LOADER" ]]; then
       "${PATH_TO_SCRIPT:h}/compiler.zsh"
       "$PATH_TO_SCRIPT"
       "$MODULES_DIR"
-      "$MODULES_DIR"/dependencies/**/*.zsh(N)
-      "$MODULES_DIR"/**/*.nodefer.*.zsh(N)
-      "$MODULES_DIR"/**/*.nodefer.zsh(N)
+      "$MODULES_DIR"/**/*.zsh(N)
     )
 
     local -a _stale_files=( ${^_watched}(Nne:'[[ $REPLY -nt $STATIC_LOADER ]]':) )
