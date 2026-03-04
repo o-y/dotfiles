@@ -15,7 +15,7 @@ fi
 
 # mac brew
 if [ -e "/opt/homebrew/bin/brew" ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+    _eval_cache /opt/homebrew/bin/brew shellenv
 fi
 
 # brew fpath
@@ -35,7 +35,7 @@ fi
 
 # zoxide
 if type zoxide &> /dev/null; then
-    eval "$(zoxide init zsh --cmd cd)"
+    _eval_cache zoxide init zsh --cmd cd
 fi
 
 # mdproxy (google)
@@ -45,7 +45,7 @@ fi
 
 # thefuck
 if type thefuck &> /dev/null; then
-    eval $(thefuck --alias)
+    _eval_cache thefuck --alias
 fi
 
 # bun
@@ -65,20 +65,27 @@ if [ -e "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]; the
 fi
 
 # nvm
-if [ -e "$HOME/.nvm" ]; then
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export NVM_DIR="$HOME/.nvm"
+if [[ -d "$NVM_DIR" ]]; then
+    _lazy_load_nvm() {
+        unfunction node npm npx yarn pnpm nvm 2>/dev/null
+        [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+        [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
+        "$@"
+    }
+    for cmd in node npm npx yarn pnpm nvm; do
+        eval "$cmd() { _lazy_load_nvm $cmd \"\$@\" }"
+    done
 fi
 
 # atuin
 if type atuin &> /dev/null; then
-    eval "$(atuin init zsh --disable-ctrl-r)"
+    _eval_cache atuin init zsh --disable-ctrl-r
 fi
 
 # mise
 if [ -e "$HOME/.local/bin/mise" ]; then
-    eval "$($HOME/.local/bin/mise activate zsh)"
+    _eval_cache $HOME/.local/bin/mise activate zsh
 fi
 
 # antigravity

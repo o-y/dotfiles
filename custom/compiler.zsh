@@ -1,170 +1,104 @@
 # --- Internal Helper Functions ---
 
-# Returns success if the file is encrypted via git-crypt
 _compiler_is_encrypted() {
   [[ -r "$1" && "$(head -n 1 "$1" 2>/dev/null)" == *GITCRYPT* ]]
 }
 
-# Returns success if the file belongs to an OS other than the current one
 _compiler_should_skip_platform() {
   local uname="$(uname -s)"
-  local file="$1"
-  case "$file" in
+  case "$1" in
     *.darwin.zsh) [[ "$uname" != "Darwin" ]] && return 0 ;;
     *.linux.zsh)  [[ "$uname" != "Linux" ]]  && return 0 ;;
   esac
   return 1
 }
 
-# Determines if a file should be sourced deferred or immediately
 _compiler_should_defer() {
-  local file="$1" mode="$2"
-
-  # Synchronous mode or explicit '.nodefer.' tag prevents deferral
-  [[ "$mode" == "sync" || "$file" == *.nodefer.* ]] && return 1
-
+  [[ "$2" == "sync" || "$1" == *.nodefer.* ]] && return 1
   return 0
 }
 
-# Returns the correct source command string for a given file
 _compiler_get_source_cmd() {
-  local file="$1" mode="$2"
-
-  if _compiler_should_defer "$file" "$mode"; then
-    printf 'zsh-defer source "%s"' "$file"
+  if _compiler_should_defer "$1" "$2"; then
+    # this used to use zsh-defer as well, but this branch is left
+    # so the option is easy to reintroduce.
+    printf 'source "%s"' "$1"
   else
-    printf 'source "%s"' "$file"
+    printf 'source "%s"' "$1"
   fi
 }
 
-# High-level processor: filters and collects the source command into the appropriate array
 _compiler_process_file() {
   local file="$1" mode="$2"
-
-  if _compiler_is_encrypted "$file"; then
-    skipped_files+=("$file")
+  
+  if _compiler_is_encrypted "$file" || _compiler_should_skip_platform "$file"; then
+    if _compiler_is_encrypted "$file"; then skipped_files+=("$file"); fi
     return
   fi
-
-  if _compiler_should_skip_platform "$file"; then
-    return
-  fi
-
+  
   local cmd=$(_compiler_get_source_cmd "$file" "$mode")
-  if [[ "$cmd" == zsh-defer* ]]; then
+  
+  if _compiler_should_defer "$file" "$mode"; then
     defer_lines+=("$cmd")
   else
     sync_lines+=("$cmd")
   fi
 }
 
-# Emits the shell logic for the git-crypt warning system
-_compiler_emit_warning_logic() {
-  cat <<'EOF'
-if [[ ! -e "$HOME/silence-git-crypt-warnings" && ! -e "$HOME/.silence-git-crypt-warnings" ]]; then
-  echo "[!] WARNING: The following encrypted files were skipped:"
-  echo "[!] --- ↓"
-  for file in "${skipped_files[@]}"; do
-    echo "[!]     $file"
-  done
-  echo "[!] --- ↑"
-  echo "[!] Run '$ git-crypt unlock' to decrypt them."
-  echo "[!] To silence these warnings, execute '$ touch ~/.silence-git-crypt-warnings'"
-fi
-EOF
-}
-
 # --- Main Generator Logic ---
 
-# Generates the static loader script
 generate_static_loader() {
   local output_file="$STATIC_LOADER"
-  local tmp_file="${output_file}.tmp"
-  local sync_lines=()
-  local defer_lines=()
-  local skipped_files=()
+  local tmp_zsh="${output_file}.tmp"
+  local tmp_zwc="${output_file}.zwc.tmp"
+  local sync_lines=() defer_lines=() skipped_files=()
 
-  # 1. Collect all module commands
   for file in "$MODULES_DIR"/dependencies/**/*.zsh(N); do
     _compiler_process_file "$file" "sync"
   done
-
   for file in "$MODULES_DIR"/{public,private,goog}/**/*.zsh(N); do
     _compiler_process_file "$file" "defer"
   done
 
-    # 2. Emit the script
-    {
-        echo "################################################################"
-        echo "### Generated static zsh loader - do not edit manually"
-        echo "### Generated at: $(date)"
-        echo "### ~ https://github.com/o-y/dotfiles"
-        echo "################################################################"
-        echo ""
+  {
+    echo "### Generated at: $(date)"
+    cat "${MODULES_DIR:h}/hooks.zsh"
+    echo ""
+    echo "zsh_pre_init"
+    echo ""
 
-        # Inline Hooks
-        echo "### ------------------------------------- ###"
-        echo "### ----------- INLINED HOOKS ----------- ###"
-        echo "### ------------------------------------- ###"
-        cat "${MODULES_DIR:h}/hooks.zsh"
-        echo ""
-        echo "zsh_pre_init"
-        echo ""
-
-        # Synchronous block (critical Dependencies + .nodefer modules)
-        if (( ${#sync_lines} > 0 )); then
-            echo "### --- SYNCHRONOUS MODULES (INLINED) --- ###"
-            for line in "${sync_lines[@]}"; do
-                # extract file path from 'source "/path/to/file"'
-                local file_to_inline="${${line%\"}#*\"}"
-                if [[ -r "$file_to_inline" ]]; then
-                    echo "### ------------------------------------- ###"
-                    echo "### > $file_to_inline"
-                    echo "### ------------------------------------- ###"
-                    echo ""
-                    cat "$file_to_inline"
-                    echo ""
-                else
-                    echo "$line"
-                fi
-            done
-            printf '\n'
+    if (( ${#sync_lines} )); then
+      for line in "${sync_lines[@]}"; do
+        local f="${${line%\"}#*\"}"
+        if [[ -r "$f" ]]; then
+          echo "### > $f"
+          cat "$f"
+          echo ""
+        else
+          echo "$line"
         fi
+      done
+    fi
 
-        echo "zsh_post_init"
-        echo ""
+    echo "zsh_post_init"
+    echo ""
 
-        # Deferred block (Standard Modules)
-        if (( ${#defer_lines} > 0 )); then
-            echo "### --- DEFERRED MODULES --- ###"
-            # Create an outer deferred function so we're not posting a tonne of deferred calls
-            # on the hot-path.
-            echo "_zsh_deferred_load() {"
-            for line in "${defer_lines[@]}"; do
-                printf '    %s\n' "$line"
-            done
-            echo "}"
-            echo "zsh-defer _zsh_deferred_load"
+    if (( ${#defer_lines} )); then
+      echo "_zsh_deferred_load() {"
+      for line in "${defer_lines[@]}"; do
+        echo "  zsh-defer $line"
+      done
+      echo "}"
+      echo "zsh-defer _zsh_deferred_load"
+    fi
+  } > "$tmp_zsh"
 
-            printf '\n'
-        fi
-
-        # Handle Encrypted/Skipped Files
-        if (( ${#skipped_files} > 0 )); then
-            echo "################################################################"
-            echo "### SKIPPED ENCRYPTED FILES"
-            echo "################################################################"
-            echo ""
-            echo "skipped_files=("
-            for f in "${skipped_files[@]}"; do
-                printf '  "%s"\n' "$f"
-            done
-            echo ")"
-            
-            _compiler_emit_warning_logic
-        fi
-    } > "$tmp_file"
-
-    mv "$tmp_file" "$output_file"
-    zcompile "$output_file"
+  if zcompile "$tmp_zsh"; then
+    mv -f "${tmp_zsh}.zwc" "$tmp_zwc"
+    mv -f "$tmp_zsh" "$output_file"
+    [[ -f "$tmp_zwc" ]] && mv -f "$tmp_zwc" "${output_file}.zwc"
+  else
+    echo "Error: zcompile failed for $tmp_zsh" >&2
+    return 1
+  fi
 }
