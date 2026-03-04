@@ -1,4 +1,4 @@
-# --- Internal Helper Functions ---
+# --- Helpers ---
 
 _compiler_is_encrypted() {
   [[ -r "$1" && "$(head -n 1 "$1" 2>/dev/null)" == *GITCRYPT* ]]
@@ -18,40 +18,45 @@ _compiler_should_defer() {
   return 0
 }
 
-_compiler_get_source_cmd() {
-  if _compiler_should_defer "$1" "$2"; then
-    # this used to use zsh-defer as well, but this branch is left
-    # so the option is easy to reintroduce.
-    printf 'source "%s"' "$1"
-  else
-    printf 'source "%s"' "$1"
-  fi
-}
-
 _compiler_process_file() {
   local file="$1" mode="$2"
-  
+
   if _compiler_is_encrypted "$file" || _compiler_should_skip_platform "$file"; then
-    if _compiler_is_encrypted "$file"; then skipped_files+=("$file"); fi
+    _compiler_is_encrypted "$file" && skipped_files+=("$file")
     return
   fi
-  
-  local cmd=$(_compiler_get_source_cmd "$file" "$mode")
-  
+
   if _compiler_should_defer "$file" "$mode"; then
-    defer_lines+=("$cmd")
+    defer_files+=("$file")
   else
-    sync_lines+=("$cmd")
+    sync_files+=("$file")
   fi
 }
 
-# --- Main Generator Logic ---
+# Emits a file's content with a header comment, optionally indented.
+# Usage: _compiler_emit_file <file> [indent]
+_compiler_emit_file() {
+  local file="$1" indent="${2:-}"
+  if [[ -r "$file" ]]; then
+    echo "${indent}### > $file"
+    if [[ -n "$indent" ]]; then
+      sed "s/^/${indent}/" "$file"
+    else
+      cat "$file"
+    fi
+    echo ""
+  else
+    echo "${indent}source \"$file\""
+  fi
+}
+
+# --- Main ---
 
 generate_static_loader() {
   local output_file="$STATIC_LOADER"
   local tmp_zsh="${output_file}.tmp"
   local tmp_zwc="${output_file}.zwc.tmp"
-  local sync_lines=() defer_lines=() skipped_files=()
+  local sync_files=() defer_files=() skipped_files=()
 
   for file in "$MODULES_DIR"/dependencies/**/*.zsh(N); do
     _compiler_process_file "$file" "sync"
@@ -67,26 +72,17 @@ generate_static_loader() {
     echo "zsh_pre_init"
     echo ""
 
-    if (( ${#sync_lines} )); then
-      for line in "${sync_lines[@]}"; do
-        local f="${${line%\"}#*\"}"
-        if [[ -r "$f" ]]; then
-          echo "### > $f"
-          cat "$f"
-          echo ""
-        else
-          echo "$line"
-        fi
-      done
-    fi
+    for f in "${sync_files[@]}"; do
+      _compiler_emit_file "$f"
+    done
 
     echo "zsh_post_init"
     echo ""
 
-    if (( ${#defer_lines} )); then
+    if (( ${#defer_files} )); then
       echo "_zsh_deferred_load() {"
-      for line in "${defer_lines[@]}"; do
-        echo "  zsh-defer $line"
+      for f in "${defer_files[@]}"; do
+        _compiler_emit_file "$f" "  "
       done
       echo "}"
       echo "zsh-defer _zsh_deferred_load"

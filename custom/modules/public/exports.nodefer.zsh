@@ -9,7 +9,7 @@ export TERM=xterm-ghostty
 export EDITOR="nvim"
 
 #### GPG
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 
 #### Required for Conda which overrides clear - https://askubuntu.com/a/1402408
 export TERMINFO=/usr/share/terminfo
