@@ -14,5 +14,3 @@
 # if [ -e "$HOME/miniforge3/bin/conda" ]; then
 #     eval "$($HOME/miniforge3/bin/conda shell.zsh hook)"
 # fi
-
-# pixi — PATH setup moved to setup.zsh (batched path block)
