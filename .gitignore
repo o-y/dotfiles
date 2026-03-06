@@ -130,3 +130,6 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+### NodeJs ###
+node_modules/
