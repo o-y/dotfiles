@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
-import { blazeBuild, blazeTest } from '../lib/blaze';
 import { ExecutionSummary } from './ExecutionSummary';
-import { randomUUID } from 'crypto';
-import { BepStreamer, type TargetStatus } from '../lib/reconciliation';
+import { type TargetStatus } from '../lib/reconciliation';
+import { runExecution } from '../lib/engine';
 
 export interface ExecutionResult {
   version: number;
@@ -25,72 +24,6 @@ function getSpongeId(link?: string | null): string | null {
   if (!link) return null;
   const match = link.match(/sponge2\/([a-f0-9-]+)/);
   return match ? match[1] ?? null : null;
-}
-
-/**
- * Hook to manage execution of a Blaze command asynchronously.
- */
-function useBlazeExecution(targets: string[], runner: typeof blazeBuild | typeof blazeTest, version: number) {
-  const [log, setLog] = useState<string>('Initializing...\n');
-  const logRef = useRef<string>('');
-  const [doneState, setDoneState] = useState(targets.length === 0);
-  const [exitCode, setExitCode] = useState<number | null>(null);
-  const [spongeLink, setSpongeLink] = useState<string | null>(null);
-  const [spongeId, setSpongeId] = useState<string | null>(null);
-  const [statusMap, setStatusMap] = useState<Map<string, TargetStatus>>(new Map());
-
-  const [prevVersion, setPrevVersion] = useState(version);
-  const [prevTargets, setPrevTargets] = useState(targets);
-
-  const targetsChanged = targets.length !== prevTargets.length || targets.some((t, i) => t !== prevTargets[i]);
-  const versionChanged = version !== prevVersion || targetsChanged;
-
-  if (versionChanged) {
-      setLog(targets.length === 0 ? 'Skipped.' : 'Initializing...\n');
-      logRef.current = '';
-      setDoneState(targets.length === 0);
-      setExitCode(null);
-      setSpongeLink(null);
-      setSpongeId(null);
-      setStatusMap(new Map());
-      setPrevVersion(version);
-      setPrevTargets(targets);
-  }
-
-  const done = versionChanged ? (targets.length === 0) : doneState;
-
-  useEffect(() => {
-    if (targets.length === 0) return;
-
-    const bepFile = `/tmp/blazer-${randomUUID()}.json`;
-    const streamer = new BepStreamer(bepFile, setStatusMap);
-    streamer.start();
-
-    const appendLog = (data: Buffer | string) => {
-      const d = data.toString();
-      logRef.current += d;
-      setLog(l => (l + d).slice(-5000));
-    };
-
-    runner(targets, bepFile, {
-      onStdout: appendLog,
-      onStderr: appendLog,
-      onSpongeLink: link => {
-        setSpongeLink(link ?? null);
-        setSpongeId(getSpongeId(link));
-      },
-      onClose: code => {
-        setExitCode(code || 0);
-        setLog(l => l + `\n[DONE] Exit code: ${code}`);
-        setDoneState(true);
-        setTimeout(() => streamer.stop(), 500);
-      }
-    });
-
-    return () => streamer.stop();
-  }, [targets, runner, version]);
-
-  return { log, logRef, done, exitCode, spongeLink, spongeId, statusMap };
 }
 
 interface LogPanelProps {
@@ -149,42 +82,79 @@ export function ExecutionRenderer({ buildTargets, testTargets }: ExecutionProps)
   const [version, setVersion] = useState(0);
   const [history, setHistory] = useState<ExecutionResult[]>([]);
   
+  const [buildLog, setBuildLog] = useState('');
+  const [testLog, setTestLog] = useState('');
+  const [buildDone, setBuildDone] = useState(buildTargets.length === 0);
+  const [testDone, setTestDone] = useState(testTargets.length === 0);
+  const [buildExitCode, setBuildExitCode] = useState<number | null>(null);
+  const [testExitCode, setTestExitCode] = useState<number | null>(null);
+  const [buildSponge, setBuildSponge] = useState<string | null>(null);
+  const [testSponge, setTestSponge] = useState<string | null>(null);
+  const [buildStatusMap, setBuildStatusMap] = useState<Map<string, TargetStatus>>(new Map());
+  const [testStatusMap, setTestStatusMap] = useState<Map<string, TargetStatus>>(new Map());
+
   useInput((input, key) => {
     if (key?.ctrl && input === 'c') exit();
   });
 
-  const build = useBlazeExecution(buildTargets, blazeBuild, version);
-  const test = useBlazeExecution(testTargets, blazeTest, version);
+  useEffect(() => {
+    setBuildLog(buildTargets.length === 0 ? 'Skipped.' : 'Initializing...\n');
+    setTestLog(testTargets.length === 0 ? 'Skipped.' : 'Initializing...\n');
+    setBuildDone(buildTargets.length === 0);
+    setTestDone(testTargets.length === 0);
+    setBuildExitCode(null);
+    setTestExitCode(null);
+    setBuildSponge(null);
+    setTestSponge(null);
+    setBuildStatusMap(new Map());
+    setTestStatusMap(new Map());
 
-  const handleReexecute = () => {
-    if (build.done && test.done) {
-       setVersion(v => v + 1);
-    }
-  };
-
-  const expectedDoneBuild = buildTargets.length === 0;
-  const expectedDoneTest = testTargets.length === 0;
+    runExecution(buildTargets, testTargets, {
+      onBuildStdout: (d) => setBuildLog(l => (l + d).slice(-5000)),
+      onBuildStderr: (d) => setBuildLog(l => (l + d).slice(-5000)),
+      onBuildSponge: (link) => setBuildSponge(link),
+      onTestStdout: (d) => setTestLog(l => (l + d).slice(-5000)),
+      onTestStderr: (d) => setTestLog(l => (l + d).slice(-5000)),
+      onTestSponge: (link) => setTestSponge(link),
+      onStatusUpdate: (bMap, tMap) => {
+        setBuildStatusMap(bMap);
+        setTestStatusMap(tMap);
+      },
+      onComplete: (bCode, tCode) => {
+        setBuildExitCode(bCode);
+        setTestExitCode(tCode);
+        setBuildDone(true);
+        setTestDone(true);
+      }
+    });
+  }, [version, buildTargets, testTargets]);
 
   useEffect(() => {
-    if (build.done && test.done) {
+    if (buildDone && testDone) {
        setHistory(prev => {
          const last = prev[prev.length - 1];
          if (last && last.version === version) return prev;
          return [...prev, {
            version,
-           buildMap: new Map(build.statusMap),
-           testMap: new Map(test.statusMap),
-           buildExitCode: build.exitCode,
-           testExitCode: test.exitCode,
-           buildSpongeId: build.spongeId,
-           testSpongeId: test.spongeId,
+           buildMap: new Map(buildStatusMap),
+           testMap: new Map(testStatusMap),
+           buildExitCode,
+           testExitCode,
+           buildSpongeId: getSpongeId(buildSponge),
+           testSpongeId: getSpongeId(testSponge),
            timestamp: new Date()
          }];
        });
     }
-  }, [build.done, test.done, version, build.statusMap, test.statusMap, build.exitCode, test.exitCode, build.spongeId, test.spongeId]);
+  }, [buildDone, testDone, version, buildStatusMap, testStatusMap, buildExitCode, testExitCode, buildSponge, testSponge]);
 
-  const done = build.done && test.done;
+  const handleReexecute = () => {
+    if (buildDone && testDone) {
+       setVersion(v => v + 1);
+    }
+  };
+
+  const done = buildDone && testDone;
 
   return (
     <Box flexDirection="column">
@@ -192,10 +162,10 @@ export function ExecutionRenderer({ buildTargets, testTargets }: ExecutionProps)
         {buildTargets.length > 0 && (
           <LogPanel 
             title="BUILD" 
-            exitCode={build.exitCode} 
-            log={build.log} 
-            done={build.done} 
-            spongeLink={build.spongeLink} 
+            exitCode={buildExitCode} 
+            log={buildLog} 
+            done={buildDone} 
+            spongeLink={buildSponge} 
             marginRight={1} 
           />
         )}
@@ -203,10 +173,10 @@ export function ExecutionRenderer({ buildTargets, testTargets }: ExecutionProps)
         {testTargets.length > 0 && (
           <LogPanel 
             title="TEST" 
-            exitCode={test.exitCode} 
-            log={test.log} 
-            done={test.done} 
-            spongeLink={test.spongeLink} 
+            exitCode={testExitCode} 
+            log={testLog} 
+            done={testDone} 
+            spongeLink={testSponge} 
             marginLeft={1} 
           />
         )}
@@ -215,12 +185,12 @@ export function ExecutionRenderer({ buildTargets, testTargets }: ExecutionProps)
       <ExecutionSummary
         buildTargets={buildTargets}
         testTargets={testTargets}
-        buildExitCode={build.exitCode}
-        testExitCode={test.exitCode}
-        buildSpongeId={build.spongeId}
-        testSpongeId={test.spongeId}
-        buildMap={build.statusMap}
-        testMap={test.statusMap}
+        buildExitCode={buildExitCode}
+        testExitCode={testExitCode}
+        buildSpongeId={getSpongeId(buildSponge)}
+        testSpongeId={getSpongeId(testSponge)}
+        buildMap={buildStatusMap}
+        testMap={testStatusMap}
         done={done}
         history={history}
         onReexecute={handleReexecute}

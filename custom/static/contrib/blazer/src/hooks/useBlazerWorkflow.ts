@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { getChangedFiles } from '../lib/jj';
-import { getAffectedTargets, expandAffectedTargets, type AffectedTargets } from '../lib/targets';
+import { type AffectedTargets, getAffectedTargetsForCommit, expandTargets } from '../lib/workflow';
 
 export type ViewState = 'SELECT_COMMIT' | 'LOADING_TARGETS' | 'SELECT_BUILD_TARGETS' | 'SELECT_TEST_TARGETS' | 'EXECUTE' | 'ERROR';
 
@@ -22,8 +21,7 @@ export function useBlazerWorkflow() {
       setView('LOADING_TARGETS');
       setTargetStream('');
       try {
-        const files = await getChangedFiles(commit);
-        const targets = await getAffectedTargets(files, data => setTargetStream(log => (log + data).slice(-5000)));
+        const targets = await getAffectedTargetsForCommit(commit, data => setTargetStream(log => (log + data).slice(-5000)));
         setAffectedTargets(targets);
         setView('SELECT_BUILD_TARGETS');
       } catch (err: any) {
@@ -43,21 +41,10 @@ export function useBlazerWorkflow() {
       if (!affectedTargets) return;
       
       try {
-        const allDetected = [...affectedTargets.buildTargets, ...affectedTargets.testTargets];
-        const expanded = await expandAffectedTargets(allDetected, coverage, onOutput);
-        
-        if (expanded.length === 0) return;
-
-        const newBuilds = expanded.filter(t => !t.includes('test'));
-        const newTests = expanded.filter(t => t.includes('test'));
-
-        setAffectedTargets({
-          buildTargets: Array.from(new Set([...affectedTargets.buildTargets, ...newBuilds])).sort(),
-          testTargets: Array.from(new Set([...affectedTargets.testTargets, ...newTests])).sort()
-        });
+        const expanded = await expandTargets(affectedTargets, coverage, onOutput);
+        setAffectedTargets(expanded);
       } catch (err: any) {
         onOutput?.(`\n[Expansion Error] ${err.message || String(err)}\n`);
-        // We don't want to flip the whole app to ERROR view for a non-critical expansion failure
       }
     }
   };

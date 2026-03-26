@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { render, Text, Box } from 'ink';
-import { Clerc } from 'clerc';
+import { Clerc, defineCommand } from 'clerc';
 import { completionsPlugin } from '@clerc/plugin-completions';
+import { helpPlugin } from '@clerc/plugin-help';
 import Spinner from 'ink-spinner';
 
 import { CommitSelector } from './src/components/CommitSelector';
@@ -9,6 +10,7 @@ import { TargetSelector } from './src/components/TargetSelector';
 import { ExecutionRenderer } from './src/components/ExecutionRenderer';
 import { useBlazerWorkflow } from './src/hooks/useBlazerWorkflow';
 import { NotificationProvider } from './src/hooks/useNotification';
+import { runCLI } from './src/cli';
 
 
 /**
@@ -67,19 +69,60 @@ const App = () => {
   );
 };
 
-Clerc.create()
+const uiCommand = defineCommand({
+  name: 'ui',
+  description: 'Launch the interactive terminal user interface (TUI). This is the default mode.',
+}, () => {
+  const { waitUntilExit } = render(
+    <NotificationProvider>
+      <App />
+    </NotificationProvider>
+  );
+  return waitUntilExit();
+});
+
+const runCommand = defineCommand({
+  name: 'run',
+  description: 'Execute build and test targets in pure CLI mode for a specific commit.',
+  parameters: [
+    '[commit]'
+  ],
+  flags: {
+    build: {
+      type: [String],
+      description: 'Explicitly specify build targets to run. Overrides affected targets if provided.',
+      alias: 'b',
+    },
+    test: {
+      type: [String],
+      description: 'Explicitly specify test targets to run. Overrides affected targets if provided.',
+      alias: 't',
+    },
+    coverage: {
+      type: Number,
+      description: 'Expansion radius percentage (0-100) to find proximity targets and rdeps.',
+      alias: 'c',
+      default: 0,
+    }
+  }
+}, async ({ parameters, flags }) => {
+  const commit = parameters.commit || 'p4base';
+  await runCLI(commit, flags);
+});
+
+const blazer = Clerc.create()
   .name('blazer')
   .scriptName('blazer')
-  .description('Blazer: The ultimate TUI for remote JJ builds using Blaze')
-  .version('0.1.0')
+  .description('Blazer: The ultimate TUI and CLI for remote JJ builds using Blaze. Efficiently build and test only what has changed.')
+  .version('0.2.0')
   .use(completionsPlugin())
-  .command('run', 'Start the blazer TUI', {})
-  .on('run', () => {
-    const { waitUntilExit } = render(
-      <NotificationProvider>
-        <App />
-      </NotificationProvider>
-    );
-    return waitUntilExit();
-  })
-  .parse();
+  .use(helpPlugin())
+  .command(uiCommand)
+  .command(runCommand);
+
+// Default to UI if no arguments provided
+if (process.argv.length === 2) {
+  process.argv.push('ui');
+}
+
+blazer.parse();
