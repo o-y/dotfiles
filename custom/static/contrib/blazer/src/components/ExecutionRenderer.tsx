@@ -5,6 +5,17 @@ import { ExecutionSummary } from './ExecutionSummary';
 import { randomUUID } from 'crypto';
 import { BepStreamer, type TargetStatus } from '../lib/reconciliation';
 
+export interface ExecutionResult {
+  version: number;
+  buildMap: Map<string, TargetStatus>;
+  testMap: Map<string, TargetStatus>;
+  buildExitCode: number | null;
+  testExitCode: number | null;
+  buildSpongeId: string | null;
+  testSpongeId: string | null;
+  timestamp: Date;
+}
+
 export interface ExecutionProps {
   buildTargets: string[];
   testTargets: string[];
@@ -19,21 +30,37 @@ function getSpongeId(link?: string | null): string | null {
 /**
  * Hook to manage execution of a Blaze command asynchronously.
  */
-function useBlazeExecution(targets: string[], runner: typeof blazeBuild | typeof blazeTest) {
+function useBlazeExecution(targets: string[], runner: typeof blazeBuild | typeof blazeTest, version: number) {
   const [log, setLog] = useState<string>('Initializing...\n');
   const logRef = useRef<string>('');
-  const [done, setDone] = useState(targets.length === 0);
+  const [doneState, setDoneState] = useState(targets.length === 0);
   const [exitCode, setExitCode] = useState<number | null>(null);
   const [spongeLink, setSpongeLink] = useState<string | null>(null);
   const [spongeId, setSpongeId] = useState<string | null>(null);
   const [statusMap, setStatusMap] = useState<Map<string, TargetStatus>>(new Map());
 
+  const [prevVersion, setPrevVersion] = useState(version);
+  const [prevTargets, setPrevTargets] = useState(targets);
+
+  const targetsChanged = targets.length !== prevTargets.length || targets.some((t, i) => t !== prevTargets[i]);
+  const versionChanged = version !== prevVersion || targetsChanged;
+
+  if (versionChanged) {
+      setLog(targets.length === 0 ? 'Skipped.' : 'Initializing...\n');
+      logRef.current = '';
+      setDoneState(targets.length === 0);
+      setExitCode(null);
+      setSpongeLink(null);
+      setSpongeId(null);
+      setStatusMap(new Map());
+      setPrevVersion(version);
+      setPrevTargets(targets);
+  }
+
+  const done = versionChanged ? (targets.length === 0) : doneState;
+
   useEffect(() => {
-    if (targets.length === 0) {
-      setLog('Skipped.');
-      setDone(true);
-      return;
-    }
+    if (targets.length === 0) return;
 
     const bepFile = `/tmp/blazer-${randomUUID()}.json`;
     const streamer = new BepStreamer(bepFile, setStatusMap);
@@ -55,13 +82,13 @@ function useBlazeExecution(targets: string[], runner: typeof blazeBuild | typeof
       onClose: code => {
         setExitCode(code || 0);
         setLog(l => l + `\n[DONE] Exit code: ${code}`);
-        setDone(true);
+        setDoneState(true);
         setTimeout(() => streamer.stop(), 500);
       }
     });
 
     return () => streamer.stop();
-  }, [targets, runner]);
+  }, [targets, runner, version]);
 
   return { log, logRef, done, exitCode, spongeLink, spongeId, statusMap };
 }
@@ -119,13 +146,43 @@ function LogPanel({ title, exitCode, log, done, spongeLink, marginRight = 0, mar
  */
 export function ExecutionRenderer({ buildTargets, testTargets }: ExecutionProps) {
   const { exit } = useApp();
+  const [version, setVersion] = useState(0);
+  const [history, setHistory] = useState<ExecutionResult[]>([]);
   
   useInput((input, key) => {
-    if (key.ctrl && input === 'c') exit();
+    if (key?.ctrl && input === 'c') exit();
   });
 
-  const build = useBlazeExecution(buildTargets, blazeBuild);
-  const test = useBlazeExecution(testTargets, blazeTest);
+  const build = useBlazeExecution(buildTargets, blazeBuild, version);
+  const test = useBlazeExecution(testTargets, blazeTest, version);
+
+  const handleReexecute = () => {
+    if (build.done && test.done) {
+       setVersion(v => v + 1);
+    }
+  };
+
+  const expectedDoneBuild = buildTargets.length === 0;
+  const expectedDoneTest = testTargets.length === 0;
+
+  useEffect(() => {
+    if (build.done && test.done) {
+       setHistory(prev => {
+         const last = prev[prev.length - 1];
+         if (last && last.version === version) return prev;
+         return [...prev, {
+           version,
+           buildMap: new Map(build.statusMap),
+           testMap: new Map(test.statusMap),
+           buildExitCode: build.exitCode,
+           testExitCode: test.exitCode,
+           buildSpongeId: build.spongeId,
+           testSpongeId: test.spongeId,
+           timestamp: new Date()
+         }];
+       });
+    }
+  }, [build.done, test.done, version, build.statusMap, test.statusMap, build.exitCode, test.exitCode, build.spongeId, test.spongeId]);
 
   const done = build.done && test.done;
 
@@ -165,6 +222,8 @@ export function ExecutionRenderer({ buildTargets, testTargets }: ExecutionProps)
         buildMap={build.statusMap}
         testMap={test.statusMap}
         done={done}
+        history={history}
+        onReexecute={handleReexecute}
       />
     </Box>
   );
