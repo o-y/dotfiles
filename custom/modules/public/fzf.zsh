@@ -13,6 +13,11 @@
 ## search_text = lighten(accent, 40%) = #76829f
 ## --
 
+# --- For fzf-tab vvv
+zstyle ':fzf-tab:*' fzf-pad 6
+zstyle ':fzf-tab:*' fzf-min-height 9
+# --- For fzf-tab ^^^
+
 export FZF_DEFAULT_OPTS='
   --color=fg:-1,fg+:#eaeaea,bg:-1,bg+:#1b202d
   --color=hl:#f3f59d,hl+:#ca9ee6,info:#525c75,marker:#caaafe
@@ -26,8 +31,8 @@ export FZF_DEFAULT_OPTS='
   --pointer="◆ "
   --border-label-pos="0"
   --no-separator
+  --height=100%
   --no-scrollbar'
-
 
 ## By default a border is not shown, but this can be enabled by calling fzf with this option:
 ## --border-label-pos="0" --border="rounded" --border-label="<optional border label>"

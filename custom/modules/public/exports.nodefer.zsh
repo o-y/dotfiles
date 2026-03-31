@@ -27,3 +27,6 @@ setopt INC_APPEND_HISTORY_TIME
 
 HISTSIZE=1000000 # In-memory per-session state
 SAVEHIST=1000000 # Number of entries to save in ~/.zsh_history
+
+#### CD'ing
+setopt autocd

@@ -5,6 +5,7 @@
 PATH_TO_SCRIPT=${0:A}
 MODULES_DIR=${PATH_TO_SCRIPT:h}/modules
 STATIC_LOADER="$HOME/.zsh_static_loader.zsh"
+EAGERLY_INIT_DOTFILES="$HOME/.eagerly_init_zsh_static_loader"
 
 # --- Helpers ---
 
@@ -29,43 +30,51 @@ TRAPUSR1() {
   fi
 }
 
+# Evaluates if watched sources are newer than the cache, and rebuilds if needed.
+_check_and_rebuild() {
+  local is_sync=$1
+  local -a watched=(
+    "${PATH_TO_SCRIPT:h}/hooks.zsh"
+    "${PATH_TO_SCRIPT:h}/compiler.zsh"
+    "$PATH_TO_SCRIPT"
+    "$MODULES_DIR"
+    "$MODULES_DIR"/**/*.zsh(N)
+  )
+
+  # Expand and filter for files newer than the cache (-nt)
+  local -a stale_files=( ${^watched}(Nne:'[[ $REPLY -nt $STATIC_LOADER ]]':) )
+
+  # Exit early if cache is fully up-to-date
+  (( ${#stale_files} == 0 )) && return 0
+
+  if (( is_sync )); then
+    echo "zsh-load cache is out-of-date. Regenerating synchronously..."
+    _rebuild_loader
+    exec zsh
+  else
+    local log_file="$HOME/.zsh_loader_regen.log"
+    _rebuild_loader
+    print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S')] zsh-load cache regenerated (sources changed) — run 'exec zsh' to apply" \
+      >> "$log_file"
+    
+    # Signal the parent shell
+    kill -USR1 $$
+  fi
+}
 
 # --- Startup Logic ---
 
-if [[ -f "$STATIC_LOADER" ]]; then
-  source "$STATIC_LOADER"
-
-  # In the background, check if any watched source is newer than the cached loader.
-  {
-    local _stale=0
-    local _log="$HOME/.zsh_loader_regen.log"
-
-    # Rebuild if:
-    # 1. orchestration files change
-    # 2. inlined content changes
-    # 3. directory structure changes
-    local -a _watched=(
-      "${PATH_TO_SCRIPT:h}/hooks.zsh"
-      "${PATH_TO_SCRIPT:h}/compiler.zsh"
-      "$PATH_TO_SCRIPT"
-      "$MODULES_DIR"
-      "$MODULES_DIR"/**/*.zsh(N)
-    )
-
-    local -a _stale_files=( ${^_watched}(Nne:'[[ $REPLY -nt $STATIC_LOADER ]]':) )
-    local isStale=${#_stale_files}
-    if (( isStale )); then
-      _rebuild_loader
-      print -r -- "[$(date '+%Y-%m-%dT%H:%M:%S')] zsh-load cache regenerated (sources changed) — run $ exec zsh to apply" \
-        >> "$_log"
-      
-      # Trigger the trap...
-      kill -USR1 $$
-    fi
-  } &!
-else
-  # Scenario: Cache is missing — generate and source synchronously.
+if [[ ! -f "$STATIC_LOADER" ]]; then
+  # Scenario 1: Cache is entirely missing
   echo "Generating zsh-load cache..."
   _rebuild_loader
   exec zsh
+elif [[ -f "$EAGERLY_INIT_DOTFILES" ]]; then
+  # Scenario 2: Eager initialization
+  _check_and_rebuild true
+  source "$STATIC_LOADER"
+else
+  # Scenario 3: Lazy initialization
+  source "$STATIC_LOADER"
+  _check_and_rebuild false &!
 fi

@@ -14,6 +14,10 @@
 	path = custom/static/zsh-custom/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k
 
+[submodule "zsh-autocomplete"]
+	path = custom/static/zsh-custom/plugins/zsh-autocomplete
+	url = https://github.com/marlonrichert/zsh-autocomplete.git
+
 [submodule "fzf-tab"]
 	path = custom/static/zsh-custom/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
@@ -21,3 +25,4 @@
 [submodule "tpm"]
 	path = packages/tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+
