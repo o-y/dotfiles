@@ -8,15 +8,15 @@
 [[ -d "$HOME/.antigravity/antigravity/bin" ]] && path+=("$HOME/.antigravity/antigravity/bin")
 [[ -d "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]] && path+=("/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
 
-# mac brew (cached eval)
+# mac brew (cached)
 [[ -x "/opt/homebrew/bin/brew" ]] && _eval_cache /opt/homebrew/bin/brew shellenv
 
-# fpath setup (batched)
+# fpath setup
 (( $+commands[brew] )) && fpath+=("/opt/homebrew/share/zsh/site-functions")
 [[ -d "$HOME/dotfiles/custom/static/fpath" ]] && fpath+=("$HOME/dotfiles/custom/static/fpath")
 [[ -d "${ZSH_CUSTOM:-__none__}/plugins/zsh-completions/src" ]] && fpath+=("$ZSH_CUSTOM/plugins/zsh-completions/src")
 
-# zoxide
+# zoxide (cached)
 (( $+commands[zoxide] )) && _eval_cache zoxide init zsh --cmd cd
 
 # thefuck (cached)

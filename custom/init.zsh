@@ -70,7 +70,7 @@ if [[ ! -f "$STATIC_LOADER" ]]; then
   _rebuild_loader
   exec zsh
 elif [[ -f "$EAGERLY_INIT_DOTFILES" ]]; then
-  # Scenario 2: Eager initialization
+  # Scenario 2: Eager initialization synchronously
   _check_and_rebuild true
   source "$STATIC_LOADER"
 else
