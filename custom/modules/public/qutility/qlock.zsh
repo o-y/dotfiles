@@ -85,39 +85,3 @@ _qlock() {
     esac
 }
 compdef _qlock qlock
-
-##
-## _qlock_live_hints
-##
-_qlock_live_hints() {
-    if [[ "$BUFFER" == qlock\ * ]]; then
-        _QLOCK_HINT_ACTIVE=1
-        local -a current_words
-        current_words=(${(z)BUFFER})
-        
-        local word_count=${#current_words[@]}
-        [[ "$BUFFER" =~ " $" ]] && ((word_count++))
-
-        local hint=""
-        case $word_count in
-            2) 
-                hint="󰁔 action (on | off | status)" 
-                ;;
-            3) 
-                hint="󰁔 target (<file-path> | <alias>)" 
-                ;;
-        esac
-
-        if [[ -n "$hint" ]]; then
-            zle -M "$hint"
-        else
-            zle -M "" 
-        fi
-    elif (( _QLOCK_HINT_ACTIVE == 1 )); then
-        _QLOCK_HINT_ACTIVE=0
-        zle -M ""
-    fi
-}
-
-autoload -Uz add-zle-hook-widget
-add-zle-hook-widget line-pre-redraw _qlock_live_hints
