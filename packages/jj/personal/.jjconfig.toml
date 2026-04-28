@@ -11,6 +11,13 @@ default-command = "log"
 name = "zv"
 email = "zv@zv.wtf"
 
+[[--scope]]
+# Matches if this environment variable is present or set to a specific value
+--when.environments = ["GOOGLE_CORP"] 
+[--scope.user]
+email = "zv-corp@zv.wtf"
+signing-key = "0C6FA69D3ED6ED3C"
+
 [aliases]
 l = ["log"]
 n = ["new"]
