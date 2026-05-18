@@ -84,11 +84,11 @@ async function blazeCommand(
 /**
  * Spawns a `blaze build` command.
  */
-export function blazeBuild(targets: string[], bepFile?: string, handlers?: BlazeOutputHandlers): void {
+export function blazeBuild(targets: string[], bepFile?: string, handlers?: BlazeOutputHandlers, extraArgs: string[] = []): void {
   const bepArgs = bepFile ? [`--build_event_json_file=${bepFile}`] : [];
   blazeCommand(
     'build',
-    ['--curses=no', '--color=no', '--keep_going', ...bepArgs, ...targets],
+    ['--curses=no', '--color=no', '--keep_going', ...bepArgs, ...extraArgs, ...targets],
     handlers,
     ['--output_base=/tmp/blazer-build']
   );
@@ -97,11 +97,11 @@ export function blazeBuild(targets: string[], bepFile?: string, handlers?: Blaze
 /**
  * Spawns a `blaze test` command.
  */
-export function blazeTest(targets: string[], bepFile?: string, handlers?: BlazeOutputHandlers): void {
+export function blazeTest(targets: string[], bepFile?: string, handlers?: BlazeOutputHandlers, extraArgs: string[] = []): void {
   const bepArgs = bepFile ? [`--build_event_json_file=${bepFile}`] : [];
   blazeCommand(
     'test',
-    ['--test_output=errors', '--curses=no', '--color=no', '--keep_going', '--test_keep_going', ...bepArgs, ...targets],
+    ['--test_output=errors', '--curses=no', '--color=no', '--keep_going', '--test_keep_going', ...bepArgs, ...extraArgs, ...targets],
     handlers,
     ['--output_base=/tmp/blazer-test']
   );

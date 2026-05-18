@@ -27,16 +27,24 @@ export async function expandTargets(
   coverage: number,
   onProgress?: (data: string) => void
 ): Promise<AffectedTargets> {
-  const allDetected = [...current.buildTargets, ...current.testTargets];
-  const expanded = await expandAffectedTargets(allDetected, coverage, onProgress);
+  const allLabels = [...current.buildTargets.map(t => t.label), ...current.testTargets.map(t => t.label)];
+  const expanded = await expandAffectedTargets(allLabels, coverage, onProgress);
   
   if (expanded.length === 0) return current;
 
-  const newBuilds = expanded.filter(t => !t.includes('test'));
-  const newTests = expanded.filter(t => t.includes('test'));
+  const newBuilds = expanded.filter(t => !t.kind.includes('test'));
+  const newTests = expanded.filter(t => t.kind.includes('test'));
+
+  const merge = (existing: TargetInfo[], additions: TargetInfo[]) => {
+    const map = new Map<string, string>();
+    [...existing, ...additions].forEach(t => map.set(t.label, t.kind));
+    return Array.from(map.entries())
+      .map(([label, kind]) => ({ label, kind }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  };
 
   return {
-    buildTargets: Array.from(new Set([...current.buildTargets, ...newBuilds])).sort(),
-    testTargets: Array.from(new Set([...current.testTargets, ...newTests])).sort()
+    buildTargets: merge(current.buildTargets, newBuilds),
+    testTargets: merge(current.testTargets, newTests)
   };
 }

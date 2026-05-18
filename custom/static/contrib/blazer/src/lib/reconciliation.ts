@@ -30,9 +30,30 @@ export function getSeverity(status: TargetStatus): number {
   return 0; // UNKNOWN
 }
 
+export interface TestCase {
+  name: string;
+  status: 'PASSED' | 'FAILED' | 'ERROR' | 'SKIPPED' | 'FLAKY' | 'TIMEOUT';
+  durationMillis?: number;
+}
+
+export interface DetailedTargetResult {
+  label: string;
+  status: TargetStatus;
+  testCases: TestCase[];
+  outputFiles: string[];
+  testSummary?: {
+    totalRunCount: number;
+    passedCount: number;
+    failedCount: number;
+    flakyCount?: number;
+  };
+}
+
 export interface BepEvent {
   id?: {
     targetCompleted?: { label: string };
+    testResult?: { label: string };
+    testSummary?: { label: string };
     aborted?: { 
       id?: { targetCompleted?: { label: string } }; 
       label?: string 
@@ -40,16 +61,30 @@ export interface BepEvent {
   };
   aborted?: { reason: string };
   completed?: { success: boolean };
+  testResult?: {
+    status: string;
+    testActionOutput?: Array<{ uri: string }>;
+  };
+  testSummary?: {
+    overallStatus: string;
+    totalRunCount: number;
+    passedCount: number;
+    failedCount: number;
+  };
 }
 
 export class BepStreamer {
   private statusMap = new Map<string, TargetStatus>();
+  private detailedResults = new Map<string, DetailedTargetResult>();
   private position = 0;
   private buffer = '';
   private interval: ReturnType<typeof setInterval> | null = null;
   private isProcessing = false;
 
-  constructor(private filePath: string, private onUpdate: (map: Map<string, TargetStatus>) => void) {}
+  constructor(
+    private filePath: string, 
+    private onUpdate: (map: Map<string, TargetStatus>, detailed?: Map<string, DetailedTargetResult>) => void
+  ) {}
 
   public start() {
     this.interval = setInterval(async () => {
@@ -69,7 +104,6 @@ export class BepStreamer {
            let hasUpdates = false;
            let nlIndex;
            
-           // Process complete lines from the buffer
            while ((nlIndex = this.buffer.indexOf('\n')) !== -1) {
               const line = this.buffer.slice(0, nlIndex).trim();
               this.buffer = this.buffer.slice(nlIndex + 1);
@@ -81,13 +115,12 @@ export class BepStreamer {
                     hasUpdates = true;
                   }
                 } catch (e) {
-                  // Ignore JSON parse errors for incomplete lines
                 }
               }
            }
            
            if (hasUpdates) {
-             this.onUpdate(new Map(this.statusMap));
+             this.onUpdate(new Map(this.statusMap), new Map(this.detailedResults));
            }
          }
        } finally {
@@ -98,33 +131,74 @@ export class BepStreamer {
 
   private processEvent(evt: BepEvent): boolean {
     const label = evt.id?.targetCompleted?.label 
+               || evt.id?.testResult?.label
+               || evt.id?.testSummary?.label
                || evt.id?.aborted?.label 
                || evt.id?.aborted?.id?.targetCompleted?.label;
                
     if (!label) return false;
 
     if (evt.completed) {
-      this.statusMap.set(label, evt.completed.success ? 'SUCCESSFUL' : 'FAILED');
+      const status = evt.completed.success ? 'SUCCESSFUL' : 'FAILED';
+      this.statusMap.set(label, status);
+      this.updateDetailed(label, { status });
+      return true;
+    }
+
+    if (evt.testResult) {
+      const outputs = evt.testResult.testActionOutput?.map(o => o.uri).filter(Boolean) || [];
+      this.updateDetailed(label, { outputFiles: outputs });
+      return true;
+    }
+
+    if (evt.testSummary) {
+      this.updateDetailed(label, {
+        testSummary: {
+          totalRunCount: evt.testSummary.totalRunCount,
+          passedCount: evt.testSummary.passedCount,
+          failedCount: evt.testSummary.failedCount,
+        }
+      });
       return true;
     }
     
     if (evt.aborted) {
-      if (evt.aborted.reason === 'INCOMPLETE') {
-         this.statusMap.set(label, 'BROKEN');
-         return true;
-      }
-      if (evt.aborted.reason === 'SKIPPED') {
-         this.statusMap.set(label, 'SKIPPED');
-         return true;
+      let status: TargetStatus = 'UNKNOWN';
+      if (evt.aborted.reason === 'INCOMPLETE') status = 'BROKEN';
+      if (evt.aborted.reason === 'SKIPPED') status = 'SKIPPED';
+      
+      if (status !== 'UNKNOWN') {
+        this.statusMap.set(label, status);
+        this.updateDetailed(label, { status });
+        return true;
       }
     }
     
     return false;
   }
 
+  private updateDetailed(label: string, update: Partial<DetailedTargetResult>) {
+    const existing = this.detailedResults.get(label) || {
+      label,
+      status: 'PENDING',
+      testCases: [],
+      outputFiles: []
+    };
+    this.detailedResults.set(label, { ...existing, ...update });
+  }
+
   public stop() {
     if (this.interval) clearInterval(this.interval);
   }
+}
+
+/**
+ * Extracts the Sponge ID from a full Sponge URL.
+ */
+export function getSpongeId(link?: string | null): string | null {
+  if (!link) return null;
+  const match = link.match(/sponge2\/([a-f0-9-]+)/);
+  return match ? match[1] ?? null : null;
 }
 
 /**

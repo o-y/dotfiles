@@ -11,6 +11,7 @@ import { ExecutionRenderer } from './src/components/ExecutionRenderer';
 import { useBlazerWorkflow } from './src/hooks/useBlazerWorkflow';
 import { NotificationProvider } from './src/hooks/useNotification';
 import { runCLI } from './src/cli';
+import { runAgent } from './src/agent';
 
 
 /**
@@ -38,11 +39,11 @@ const App = () => {
         );
       case 'SELECT_BUILD_TARGETS':
         return state.affectedTargets && (
-          <TargetSelector key="build" type="BUILD" targets={state.affectedTargets.buildTargets} onSubmit={state.actions.selectBuildTargets} onExpand={state.actions.expandTargets} />
+          <TargetSelector key="build" type="BUILD" targets={state.affectedTargets.buildTargets.map(t => t.label)} onSubmit={state.actions.selectBuildTargets} onExpand={state.actions.expandTargets} />
         );
       case 'SELECT_TEST_TARGETS':
         return state.affectedTargets && (
-          <TargetSelector key="test" type="TEST" targets={state.affectedTargets.testTargets} onSubmit={state.actions.selectTestTargets} onExpand={state.actions.expandTargets} />
+          <TargetSelector key="test" type="TEST" targets={state.affectedTargets.testTargets.map(t => t.label)} onSubmit={state.actions.selectTestTargets} onExpand={state.actions.expandTargets} />
         );
       case 'EXECUTE':
         return <ExecutionRenderer buildTargets={state.selectedBuilds} testTargets={state.selectedTests} />;
@@ -110,6 +111,40 @@ const runCommand = defineCommand({
   await runCLI(commit, flags);
 });
 
+const agentCommand = defineCommand({
+  name: 'agent',
+  description: 'LLM-optimized output for blazer. Runs builds and tests with minimal noise and structured output.',
+  parameters: [
+    '[commit]'
+  ],
+  flags: {
+    build: {
+      type: [String],
+      description: 'Explicitly specify build targets.',
+      alias: 'b',
+    },
+    test: {
+      type: [String],
+      description: 'Explicitly specify test targets.',
+      alias: 't',
+    },
+    coverage: {
+      type: Number,
+      description: 'Expansion radius percentage (0-100).',
+      alias: 'c',
+      default: 0,
+    },
+    dryRun: {
+      type: Boolean,
+      description: 'List targets that would be built/tested without executing.',
+      default: false,
+    }
+  }
+}, async ({ parameters, flags }) => {
+  const commit = parameters.commit || 'p4base';
+  await runAgent(commit, flags);
+});
+
 const blazer = Clerc.create()
   .name('blazer')
   .scriptName('blazer')
@@ -118,7 +153,8 @@ const blazer = Clerc.create()
   .use(completionsPlugin())
   .use(helpPlugin())
   .command(uiCommand)
-  .command(runCommand);
+  .command(runCommand)
+  .command(agentCommand);
 
 // Default to UI if no arguments provided
 if (process.argv.length === 2) {

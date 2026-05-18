@@ -47,8 +47,8 @@ export async function runCLI(commit: string, flags: { build?: string[], test?: s
     });
   }
 
-  const buildTargets = (flags.build && flags.build.length > 0) ? flags.build : (flags.test && flags.test.length > 0 ? [] : targets.buildTargets);
-  const testTargets = (flags.test && flags.test.length > 0) ? flags.test : (flags.build && flags.build.length > 0 ? [] : targets.testTargets);
+  const buildTargets = (flags.build && flags.build.length > 0) ? flags.build : (flags.test && flags.test.length > 0 ? [] : targets.buildTargets.map(t => t.label));
+  const testTargets = (flags.test && flags.test.length > 0) ? flags.test : (flags.build && flags.build.length > 0 ? [] : targets.testTargets.map(t => t.label));
 
   if (buildTargets.length === 0 && testTargets.length === 0) {
     console.log(chalk.yellow('\nNo affected targets found.'));
@@ -59,6 +59,7 @@ export async function runCLI(commit: string, flags: { build?: string[], test?: s
 
   let buildSponge = '';
   let testSponge = '';
+  const printedTargets = new Set<string>();
 
   const buildWriter = createPrefixedWriter('[BUILD] ', chalk.cyan);
   const buildErrWriter = createPrefixedWriter('[BUILD] ', chalk.cyan, chalk.dim);
@@ -72,6 +73,37 @@ export async function runCLI(commit: string, flags: { build?: string[], test?: s
     onTestStderr: testErrWriter,
     onBuildSponge: (link) => { buildSponge = link; },
     onTestSponge: (link) => { testSponge = link; },
+    onStatusUpdate: (bMap, tMap) => {
+      // Print targets as they finish
+      const allDone = new Map([...bMap.entries(), ...tMap.entries()]);
+      for (const [label, status] of allDone) {
+        if (!printedTargets.has(label) && status !== 'PENDING' && status !== 'UNKNOWN') {
+          let color = chalk.green;
+          let statusText = 'PASS';
+          if (status === 'FAILED' || status === 'BROKEN') {
+            color = chalk.red;
+            statusText = 'FAIL';
+          } else if (status === 'SKIPPED') {
+            color = chalk.gray;
+            statusText = 'SKIP';
+          }
+          
+          process.stdout.write(`   ${color(`[${statusText.padEnd(7)}]`)} ${label}\n`);
+          printedTargets.add(label);
+        }
+      }
+
+      // Update a simple progress line (without ANSI clear to be safe with streaming logs)
+      const finished = Array.from(allDone.values()).filter(s => s !== 'PENDING' && s !== 'UNKNOWN').length;
+      const total = buildTargets.length + testTargets.length;
+      const pct = Math.round((finished / total) * 100);
+      const passing = Array.from(allDone.values()).filter(s => s === 'SUCCESSFUL').length;
+      const failing = Array.from(allDone.values()).filter(s => s === 'FAILED' || s === 'BROKEN').length;
+      
+      if (finished % 5 === 0 || finished === total) { // Throttled progress logs
+        process.stdout.write(chalk.dim(`   [PROGRESS] ${finished}/${total} (${pct}%) — ${passing} PASS, ${failing} FAIL\n`));
+      }
+    }
   });
 
   // Final Summary

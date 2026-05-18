@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
 import { ExecutionSummary } from './ExecutionSummary';
-import { type TargetStatus } from '../lib/reconciliation';
+import { type TargetStatus, getSpongeId } from '../lib/reconciliation';
 import { runExecution } from '../lib/engine';
 
 export interface ExecutionResult {
@@ -18,12 +18,6 @@ export interface ExecutionResult {
 export interface ExecutionProps {
   buildTargets: string[];
   testTargets: string[];
-}
-
-function getSpongeId(link?: string | null): string | null {
-  if (!link) return null;
-  const match = link.match(/sponge2\/([a-f0-9-]+)/);
-  return match ? match[1] ?? null : null;
 }
 
 interface LogPanelProps {

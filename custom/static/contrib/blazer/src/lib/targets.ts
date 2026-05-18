@@ -2,9 +2,14 @@ import { dirname, join, isAbsolute } from 'node:path';
 import { $ } from 'bun';
 import { blazeQueryAsync } from './blaze';
 
+export interface TargetInfo {
+  label: string;
+  kind: string;
+}
+
 export interface AffectedTargets {
-  buildTargets: string[];
-  testTargets: string[];
+  buildTargets: TargetInfo[];
+  testTargets: TargetInfo[];
 }
 
 /**
@@ -34,7 +39,7 @@ async function runDepServer(files: string[], onOutput?: (data: string) => void):
   
   onOutput?.(`[DepServer] Evaluating ${files.length} changed files...\n`);
 
-  const query = async (args: string[]): Promise<string[]> => {
+  const query = async (args: string[]): Promise<TargetInfo[]> => {
     const out = await $`/google/bin/releases/depserver-contrib-tools/affected_targets/affected_targets ${args} ${absoluteFiles}`.cwd(workspace).quiet().nothrow();
     const stdout = out.text();
     const stderr = out.stderr.toString('utf-8');
@@ -42,7 +47,9 @@ async function runDepServer(files: string[], onOutput?: (data: string) => void):
     if (onOutput && stderr) onOutput(stderr);
     
     if (out.exitCode === 0) {
-      return stdout.trim().split('\n').filter(l => l.startsWith('//'));
+      return stdout.trim().split('\n')
+        .filter(l => l.startsWith('//'))
+        .map(label => ({ label, kind: 'unknown_rule' }));
     }
     throw new Error(`exited with code ${out.exitCode}.\n${stderr}`);
   };
@@ -85,14 +92,16 @@ async function runBlazeQuery(files: string[], onOutput?: (data: string) => void)
 
   const output = await blazeQueryAsync(queryExpr, ['--output=label_kind', '--keep_going', '--order_output=no'], onOutput);
   
-  const buildTargets: string[] = [];
-  const testTargets: string[] = [];
+  const buildTargets: TargetInfo[] = [];
+  const testTargets: TargetInfo[] = [];
   
   for (const line of output.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean)) {
     const match = line.match(/^(\S+(?: \S+)*?)\s+rule\s+(.*)$/);
     if (match) {
-      if ((match[1] || '').includes('test')) testTargets.push(match[2] || '');
-      else buildTargets.push(match[2] || '');
+      const kind = match[1] || 'unknown_rule';
+      const label = match[2] || '';
+      if (kind.includes('test')) testTargets.push({ label, kind });
+      else buildTargets.push({ label, kind });
     }
   }
 
@@ -114,14 +123,27 @@ export async function getAffectedTargets(files: string[], onOutput?: (data: stri
     })
   ]);
 
-  const builds = new Set([...depServerRes.buildTargets, ...blazeQueryRes.buildTargets]);
-  const tests = new Set([...depServerRes.testTargets, ...blazeQueryRes.testTargets]);
+  const merge = (a: TargetInfo[], b: TargetInfo[]) => {
+    const map = new Map<string, string>();
+    [...a, ...b].forEach(t => {
+      // Prefer non-unknown kinds
+      if (!map.has(t.label) || map.get(t.label) === 'unknown_rule') {
+        map.set(t.label, t.kind);
+      }
+    });
+    return Array.from(map.entries())
+      .map(([label, kind]) => ({ label, kind }))
+      .sort((x, y) => x.label.localeCompare(y.label));
+  };
 
-  onOutput?.(`[blazer] Synthesized unique ${builds.size} build targets and ${tests.size} test targets.\n`);
+  const builds = merge(depServerRes.buildTargets, blazeQueryRes.buildTargets);
+  const tests = merge(depServerRes.testTargets, blazeQueryRes.testTargets);
+
+  onOutput?.(`[blazer] Synthesized unique ${builds.length} build targets and ${tests.length} test targets.\n`);
 
   return {
-    buildTargets: Array.from(builds).sort(),
-    testTargets: Array.from(tests).sort()
+    buildTargets: builds,
+    testTargets: tests
   };
 }
 
@@ -154,7 +176,7 @@ export async function expandAffectedTargets(
   targets: string[], 
   coverage: number, 
   onOutput?: (data: string) => void
-): Promise<string[]> {
+): Promise<TargetInfo[]> {
   if (targets.length === 0 || coverage === 0) return [];
 
   const targetSet = new Set(targets);
@@ -171,11 +193,9 @@ export async function expandAffectedTargets(
   onOutput?.(`[Expansion] Searching for proximity targets in ${localScopes.length} local trees...\n`);
 
   // 2. Build query for immediate rdeps and siblings
-  // Using set() and limiting roots to avoid overly long command lines
   const rootSample = targets.length > 100 ? targets.slice(0, 100) : targets;
   const roots = `set(${rootSample.join(' ')})`;
   
-  // Combine siblings and direct rdeps within identified local scopes
   const rdepsQuery = `rdeps(${scopeExpr}, ${roots}, 1)`;
   const siblingQuery = pkgs.size > 0 ? Array.from(pkgs).map(p => `${p}:*`).join(' + ') : 'set()';
   
@@ -183,18 +203,19 @@ export async function expandAffectedTargets(
 
   const output = await blazeQueryAsync(queryExpr, ['--output=label_kind', '--keep_going', '--order_output=no'], onOutput);
   
-  const discovered = new Set<string>();
+  const discovered = new Map<string, string>();
   for (const line of output.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean)) {
     const match = line.match(/^(\S+(?: \S+)*?)\s+rule\s+(.*)$/);
     if (match) {
+      const kind = match[1] || 'unknown_rule';
       const label = match[2] || '';
       if (label && !targetSet.has(label)) {
-        discovered.add(label);
+        discovered.set(label, kind);
       }
     }
   }
 
-  const discoveredList = Array.from(discovered);
+  const discoveredList = Array.from(discovered.entries()).map(([label, kind]) => ({ label, kind }));
   onOutput?.(`[Expansion] Found ${discoveredList.length} potential new targets.\n`);
 
   if (coverage >= 100) return discoveredList;
@@ -202,11 +223,10 @@ export async function expandAffectedTargets(
   // 3. Sampling logic with stable pseudo-random selection
   const targetCount = Math.ceil(discoveredList.length * (coverage / 100));
   
-  // Simple deterministic shuffle based on string content to keep it stable-ish
   const sorted = discoveredList.sort((a, b) => {
-    const hashA = a.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const hashB = b.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return hashA - hashB || a.localeCompare(b);
+    const hashA = a.label.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hashB = b.label.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return hashA - hashB || a.label.localeCompare(b.label);
   });
 
   return sorted.slice(0, targetCount);
