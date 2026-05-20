@@ -16,7 +16,7 @@ email = "zv@zv.wtf"
 --when.environments = ["GOOGLE_CORP"] 
 [--scope.user]
 email = "zv-corp@zv.wtf"
-signing-key = "0C6FA69D3ED6ED3C"
+signing-key = "7F10E12BC852B7EF"
 
 [aliases]
 l = ["log"]

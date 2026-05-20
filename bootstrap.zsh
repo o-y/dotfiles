@@ -60,7 +60,15 @@ dependencies_common=(
 ################# STOWS #################
 #########################################
 
-function is_google() [[ "$(hostname)" =~ '\.corp\.goo(gle|glers)\.com$' || 'razorback.roam.internal' ]]
+# is corp laptop
+function is_google_local() [[ "$(hostname)" =~ 'razorback.roam.internal' ]]
+# is corp workstation/cloudtop
+function is_google_remote()  [[ "$(hostname)" =~ '\.corp\.goo(gle|glers)\.com$' ]]
+# is either local and remote corp device
+function is_google() {
+  is_google_local || is_google_remote 
+}
+
 function is_macos() [[ "$(uname)" == "Darwin" ]]
 function is_linux() [[ "$(uname)" == "Linux" ]]
 
@@ -83,12 +91,13 @@ stows_common=(
   "tmux/base/config:~/.tmux"
 
   # ---- jj -----
-  "jj/google    when: is_google"
+  "jj/google    when: is_google_remote"
   "jj/personal  when: ! is_google"
 
   # ---- git ----
-  "git/google   when: is_google"
-  "git/personal when: ! is_google"
+  "git/google/local    when: is_google_local"
+  "git/google/remote   when: is_google_remote"
+  "git/personal        when: ! is_google"
 
   # ---- ghostty ----
   # as "linux" and "macos" represent scoped-configuration
