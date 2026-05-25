@@ -5,6 +5,8 @@
 [[ -d "$HOME/.bun/bin" ]]      && path+=("$HOME/.bun/bin")
 [[ -d "$HOME/.pixi/bin" ]]     && path+=("$HOME/.pixi/bin")
 [[ -d "$HOME/.radicle/bin" ]]  && path+=("$HOME/.radicle/bin")
+[[ -d "/opt/homebrew/bin" ]]   && path+=("/opt/homebrew/bin")
+[[ -d "/usr/local/bin" ]]      && path+=("/usr/local/bin")
 [[ -d "$HOME/.antigravity/antigravity/bin" ]] && path+=("$HOME/.antigravity/antigravity/bin")
 [[ -d "/Applications/Visual Studio Code.app/Contents/Resources/app/bin" ]] && path+=("/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
 
