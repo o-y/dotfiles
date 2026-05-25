@@ -42,12 +42,11 @@ File Encryption:
   - two keys exist; personal (default) and corp (secondary).
 
 Zsh Initialization:
-  - static loader (~/.zsh_static_loader.zsh) to reduce startup latency by caching the modules that should be sourced.
-  - structural change detection (add/remove/rename) in custom/modules triggers regeneration of this cache, this way Zsh doesn't need to iterate through the modules directory and determine which files should be sourced every time the shell starts.
-  - NOTE: I experimented with concatinating all modules into a single file and zcompiling this, but that had negligible impacts on prompt availability (literally, ~10ms) which didn't seem worth the trade-off of losing the modularity of the system. 
+  - static loader (~/.zsh_static_loader.zsh / ~/.zsh_static_loader.zsh.zwc) to reduce startup latency by creating a single zcompiled view of the entire custom/modules directory, where every non-deferred module is sourced after the prompt is ready.
+  - change detection (add/remove/rename/mutate) in custom/modules triggers regeneration of this cache, this happens off the critical path (i.e. not blocking zle), detects changes, regenerates the cache, and lets the user know.
   - filename metadata:
     - ".nodefer." - synchronous sourcing (prompt, critical dependencies).
-    - ".darwin.", ".linux." - platform filtering at cache-generation time.
+    - ".darwin.", ".linux." - platform filtering at cache-generation time, meaning the cache file is not portable.
 
 File Structure:
 - bootstrap.zsh       entrypoint (installer)
