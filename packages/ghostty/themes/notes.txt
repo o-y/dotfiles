@@ -1,8 +1,35 @@
-; menu background lightened 80% = #c6cedd
-; menu background lightened 20% = #36435B
-; menu background = #141922
+-------------------------
 
+EDITOR_BACKGROUND   = #1C2433
+    │
+    ├──┐                         
+    │  ├─> 05P_LIGHTER = #242e41
+    │  ├─> 10P_LIGHTER = #2b384f (MENU DISABLED FG)
+    │  ├─> 20P_LIGHTER = #3b4b6b
+    │  ├─> 40P_LIGHTER = #5973a2
+    │  ├─> 60P_LIGHTER = #90a1c2
+    └──┐
+       ├─> 10P_DARKER = #19202e
+       ├─> 20P_DARKER = #161d29 (MENU BG)
+       ├─> 30P_DARKER = #141924
 
-; editor background = #1C2433
-;     lighted 10% = #2b384f
-;     ighted 20% = 
+--------------------------
+
+GHOSTTY CONFIG ::
+
+palette = 0=#000000
+palette = 1=#ff6e6f
+palette = 2=#5aaa58
+palette = 3=#f3f59d
+palette = 4=#caaafe
+palette = 5=#ff92cf
+palette = 6=#9ae6f0
+palette = 7=#c7c7c7
+palette = 8=#686868
+palette = 9=#ff6e6f
+palette = 10=#5aaa58
+palette = 11=#f3f59d
+palette = 12=#caaafe
+palette = 13=#ff92cf
+palette = 14=#9ae6f0
+palette = 15=#ffffff

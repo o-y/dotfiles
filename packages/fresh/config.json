@@ -1,4 +1,4 @@
 {
   "version": 1,
-  "theme": "custom"
+  "theme": "builtin://terminal"
 }

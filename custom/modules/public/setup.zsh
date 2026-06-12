@@ -24,11 +24,23 @@
 # thefuck (cached)
 (( $+commands[thefuck] )) && _eval_cache thefuck --alias
 
+# pixi completions (cached)
+(( $+commands[pixi] )) && _eval_cache pixi completion --shell zsh
+
 # bun completions (cached)
 [[ -f "$HOME/.bun/_bun" ]] && _eval_cache source "$HOME/.bun/_bun"
 
 # jj completions (cached)
 (( $+commands[jj] )) && _eval_cache COMPLETE=zsh jj
+
+# direnv (cached)
+(( $+commands[direnv] )) && _eval_cache direnv hook zsh
+
+# atuin (cached)
+(( $+commands[atuin] )) && _eval_cache atuin init zsh --disable-ctrl-r --disable-up-arrow
+
+# mise (cached)
+[[ -x "$HOME/.local/bin/mise" ]] && _eval_cache $HOME/.local/bin/mise activate zsh
 
 # nvm (lazy-loaded)
 export NVM_DIR="$HOME/.nvm"
@@ -44,8 +56,3 @@ if [[ -d "$NVM_DIR" ]]; then
     done
 fi
 
-# atuin (cached)
-(( $+commands[atuin] )) && _eval_cache atuin init zsh --disable-ctrl-r
-
-# mise (cached)
-[[ -x "$HOME/.local/bin/mise" ]] && _eval_cache $HOME/.local/bin/mise activate zsh

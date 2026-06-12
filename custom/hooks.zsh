@@ -29,6 +29,9 @@ _load_compinit() {
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
     zstyle :compinstall filename "$PWD"
     setopt local_options extended_glob
+    zstyle ':completion:*:descriptions' format '%F{yellow}%B%d%b%f'
+    zstyle ':completion:*' menu select
+    zstyle ':completion:*' list-cols 1 
 
     unset -f compdef
     autoload -Uz compinit
@@ -53,11 +56,7 @@ _load_compinit() {
 ### HOOK: Called after modules are sourced
 ###
 zsh_post_init() {
-    if (( $+functions[zsh-defer] )); then
-        zsh-defer _load_compinit
-    else
-        _load_compinit
-    fi
+    _load_compinit
 }
 
 start_tmux() {

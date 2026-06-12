@@ -19,6 +19,3 @@
 if [ -e "$HOME/.pixi/bin" ]; then
     export PATH="$PATH:$HOME/.pixi/bin"
 fi
-
-
-echo hiu

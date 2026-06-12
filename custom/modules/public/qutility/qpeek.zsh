@@ -39,7 +39,7 @@ typeset -gA QPEEK_MAP=(
   "csv tsv"                                      "csv"
   "png jpg jpeg gif webp svg bmp"                "image"
   "pdf"                                          "pdf"
-  "zip tar gz bz2 xz tgz 7z"                     "archive"
+  "zip tar gz bz2 xz tgz 7z rar zst deb Z"       "archive"
   "html htm"                                     "html"
   "bin exe dll so a o class pyc"                 "binary"
 
@@ -85,7 +85,6 @@ _qpeek_expand() {
   echo "${resolved[@]}"
 }
 
-# The main UI and execution wrapper
 qpeek() {
   local file="$1"
   
@@ -93,11 +92,11 @@ qpeek() {
   if [[ "$file" == "--clear-cache" ]]; then
     local cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/qpeek/history"
     [[ -f "$cache_file" ]] && rm -f "$cache_file"
-    echo "Qpeek cache cleared."
+    echo "[qpeek] cache cleared."
     return 0
   fi
 
-  [[ ! -f "$file" ]] && { echo "File not found: $file"; return 1; }
+  [[ ! -f "$file" ]] && { echo "[qpeak] file not found: $file"; return 1; }
 
   local ext="${file:e}"
   local handler_name="${_QPEEK_FLAT_MAP[$ext]:-text}"
@@ -147,7 +146,6 @@ qpeek() {
     done
   fi
 
-  # Pure Zsh array shuffle for colors 1 through 6
   local pool=(1 2 3 4 5 6)
   local shuffled_pool=()
   while (( ${#pool[@]} > 0 )); do
@@ -204,7 +202,7 @@ qpeek() {
       $'\n'|$'\r') # Enter
         break
         ;;
-      'q') # Quit gracefully
+      'q') # Exit
         print -n "${esc}[?25h${esc}[3A\r${esc}[J" 
         return 0
         ;;
@@ -223,11 +221,9 @@ qpeek() {
   if [[ "$saved_opt" != "$raw_option" ]]; then
     if [[ -f "$cache_file" ]]; then
       local tmp_file="${cache_file}.tmp"
-      # Strip out any existing line for this extension
       grep -v "^${ext}=" "$cache_file" > "$tmp_file" 2>/dev/null || : > "$tmp_file"
       mv "$tmp_file" "$cache_file"
     fi
-    # Append the new preference cleanly
     echo "${ext}=${raw_option}" >> "$cache_file"
   fi
   
@@ -237,17 +233,46 @@ qpeek() {
 # --- HANDLERS ---
 _qpeek_handler_extract() {
   local file="$1"
-  case "$file" in
-    *.tar.bz2|*.tbz2) tar xvjf "$file" ;;
-    *.tar.gz|*.tgz)   tar xvzf "$file" ;;
-    *.tar.xz|*.txz)   tar xvJf "$file" ;;
-    *.tar)            tar xvf "$file" ;;
-    *.zip)            unzip "$file" ;;
-    *.gz)             gunzip -k "$file" ;;
-    *.bz2)            bunzip2 -k "$file" ;;
-    *.xz)             unxz -k "$file" ;;
-    *.7z)             7z x "$file" ;;
-    *)                echo "Unsupported archive format: $file" ;;
+  
+  local mime
+  mime=$(file --brief --mime-type -- "$file")
+
+  case "$mime" in
+    application/zip)
+      unzip "$file" ;;
+    application/x-7z-compressed)
+      7z x "$file" ;;
+    application/x-rar|application/vnd.rar)
+      unrar x "$file" ;;
+    application/x-tar)
+      tar xf "$file" ;;
+    application/gzip)
+      tar xzf "$file" 2>/dev/null || gunzip -k "$file" ;;
+    application/x-bzip2)
+      tar xjf "$file" 2>/dev/null || bunzip2 -k "$file" ;;
+    application/x-xz)
+      tar xJf "$file" 2>/dev/null || unxz -k "$file" ;;
+    application/zstd)
+      tar --zstd -xf "$file" 2>/dev/null || unzstd "$file" ;;
+    application/x-compress)
+      uncompress "$file" ;;
+    application/vnd.debian.binary-package)
+      ar x "$file" ;;
+    *)
+      # Fallback to extension matching if MIME type is ambiguous
+      case "$file" in
+        *.tar.bz2|*.tbz2) tar xvjf "$file" ;;
+        *.tar.gz|*.tgz)   tar xvzf "$file" ;;
+        *.tar.xz|*.txz)   tar xvJf "$file" ;;
+        *.tar)            tar xvf "$file" ;;
+        *.zip)            unzip "$file" ;;
+        *.gz)             gunzip -k "$file" ;;
+        *.bz2)            bunzip2 -k "$file" ;;
+        *.xz)             unxz -k "$file" ;;
+        *.7z)             7z x "$file" ;;
+        *)                echo "[qpeak] archive extractor - unsupported archive format/MIME type: $mime for $file" ;;
+      esac
+      ;;
   esac
 }
 
@@ -272,3 +297,6 @@ _qpeek_handler_run_rust() {
 _qpeek_handler_run_go() {
   go run "$1"
 }
+
+# --- ALIAS ---
+alias q=qpeek

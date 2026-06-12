@@ -5,9 +5,11 @@
 # Unset TTY control characters inside tmux to allow custom keybindings
 # to work. This prevents the terminal driver from intercepting keys
 # like Ctrl-Z (suspend) before they reach the zsh line editor.
-if [[ -n "$TMUX" ]]; then
-  stty stop undef start undef susp undef flush undef  # Free up Ctrl-S/Q/Z/O
-fi
+
+# TODO work out whether this should be conditioned...
+# if [[ -n "$TMUX" ]]; then
+stty stop undef start undef susp undef flush undef  # Free up Ctrl-S/Q/Z/O
+# fi
 
 # Ensure precmds are run after cd
 fzf-redraw-prompt() {
@@ -38,7 +40,6 @@ bindkey '^Z' zoxide-filepicker
 ###########################################
 ###########################################
 function tmux-session-manager {
-  # Renamed 'session' to 'selected_session' to avoid conflicts
   local selected_session=$(sesh list --tmux --hide-attached --icons | fzf-tmux -p 100%,60% \
       --no-sort --ansi \
       --prompt=' ' --border="rounded" --border-label="<  >" --color="label:#caaafe" \
@@ -144,3 +145,18 @@ bindkey '^O' clear-scrollback
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '^E' edit-command-line
+
+###########################################
+###########################################
+### UP/DOWN ARROWS - open Atuin history
+###########################################
+###########################################
+_atuin_search_with_clear() {
+  # Fix: clear zsh-autosuggestions ghost text 
+  #      before Atuin replaces the buffer.
+  zle autosuggest-clear 2>/dev/null || true
+  zle _atuin_search_widget
+}
+zle -N _atuin_search_with_clear
+bindkey '^[[A' _atuin_search_with_clear  # Up arrow
+bindkey '^[OA' _atuin_search_with_clear  # Up arrow (alternate terminfo)
