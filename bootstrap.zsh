@@ -53,7 +53,7 @@ dependencies_common=(
   "dumbpipe:cargo" "cargo install dumbpipe --locked"
 
   ## -- dependencies on go --
-  "snitch" "go install github.com/karol-broda/snitch@latest"
+  "snitch:go" "go install github.com/karol-broda/snitch@latest"
 )
 
 #########################################
@@ -84,6 +84,7 @@ stows_common=(
   "jjui:~/.config/jjui"
   "atuin:~/.config/atuin"
   "fresh:~/.config/fresh"
+  "zsh-patina:~/.config/zsh-patina"
 
   # ---- tmux ----
   "tmux/config" # for some stupid reason, tpm only works if the config exists at ~/.tmux.conf
