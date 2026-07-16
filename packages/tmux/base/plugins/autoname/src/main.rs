@@ -1,8 +1,41 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 
-mod parser;
-mod retriever;
-mod validator;
+pub mod appearance;
+pub mod bottombar;
+pub mod config;
+pub mod constants;
+pub mod tabs;
+pub mod vcs;
+
+#[derive(ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RetrieveTarget {
+    #[value(name = "bottombar_formatted")]
+    BottombarFormatted,
+    #[value(name = "bottombar_pill")]
+    BottombarPill,
+    #[value(name = "tab_icon")]
+    TabIcon,
+    #[value(name = "tab_name")]
+    TabName,
+    #[value(name = "tab_colour")]
+    TabColour,
+    #[value(name = "tab_formatted")]
+    TabFormatted,
+    #[value(name = "tab_pill_active")]
+    TabPillActive,
+    #[value(name = "tab_pill_inactive")]
+    TabPillInactive,
+    #[value(name = "vcs_icon")]
+    VcsIcon,
+    #[value(name = "vcs_branch")]
+    VcsBranch,
+    #[value(name = "vcs_colour")]
+    VcsColour,
+    #[value(name = "vcs_formatted")]
+    VcsFormatted,
+    #[value(name = "vcs_pill")]
+    VcsPill,
+}
 
 #[derive(Parser, Debug, PartialEq, Eq)]
 #[command(version, about, long_about = None)]
@@ -10,31 +43,44 @@ pub struct Args {
     #[arg(
         short = 'p',
         long,
+        default_value = "",
         help = "Name of the currently running process (e.g. zsh, cargo, nvim, gradle, etc.)"
     )]
     pub process_name: String,
 
-    #[arg(
-        short = 'd',
-        long,
-        help = "The current working directory of the pane",
-    )]
+    #[arg(short = 'd', long, help = "The current working directory of the pane")]
     pub working_directory: String,
 
     #[arg(
         short = 'c',
         long,
         help = "The number of panes open in the current window",
-        default_value_t = 1
+        default_value_t = 1,
+        value_parser = clap::value_parser!(u8).range(1..)
     )]
     pub pane_count: u8,
 
     #[arg(
+        short = 't',
+        long,
+        help = "The current title of the pane (#{pane_title})",
+        default_value = ""
+    )]
+    pub pane_title: String,
+
+    #[arg(
+        short = 'P',
+        long,
+        help = "The process ID (PID) of the current pane (#{pane_pid})"
+    )]
+    pub pane_pid: Option<u32>,
+
+    #[arg(
         short = 'r',
         long,
-        help = "Defines what metadata should be retrieved given the process name and directory, valid values are: 'tab_colour', 'tab_icon', 'tab_name' and 'tab_name_expanded'.",
+        help = "Defines what metadata should be retrieved given the process name and directory"
     )]
-    pub retrieve: String,
+    pub retrieve: RetrieveTarget,
 
     #[arg(
         short = 'v',
@@ -48,46 +94,51 @@ pub struct Args {
 fn main() {
     let args = Args::parse();
 
-    if let Err(e) = validator::validate_args(&args) {
-        handle_error(e, args.verbose, args.retrieve.as_str());
-        std::process::exit(1);
-    }
-
-    match parser::parse_autoname_config() {
-        Ok(app_config) => {
-            let tab_appearance = retriever::compute_tab_appearance(
-                &args.process_name,
-                &args.working_directory,
-                &app_config,
+    match args.retrieve {
+        RetrieveTarget::VcsIcon
+        | RetrieveTarget::VcsBranch
+        | RetrieveTarget::VcsColour
+        | RetrieveTarget::VcsFormatted
+        | RetrieveTarget::VcsPill => {
+            println!("{}", vcs::output::render(args.retrieve, &args.working_directory));
+        }
+        RetrieveTarget::BottombarFormatted | RetrieveTarget::BottombarPill => {
+            println!(
+                "{}",
+                bottombar::output::render(
+                    args.retrieve,
+                    args.pane_pid,
+                    &args.working_directory,
+                    &args.process_name
+                )
             );
-
-            let output_value = match args.retrieve.as_str() {
-                "tab_icon" => tab_appearance.icon + " ",
-                "tab_name" => tab_appearance.name,
-                "tab_colour" => tab_appearance.colour,
-                "tab_name_expanded" => tab_appearance.name_expanded,
-                _ => unreachable!(),
-            };
-            println!("{}", output_value);
         }
-        Err(e) => {
-            handle_error(e, args.verbose, args.retrieve.as_str());
-            std::process::exit(1);
-        }
+        RetrieveTarget::TabIcon
+        | RetrieveTarget::TabName
+        | RetrieveTarget::TabColour
+        | RetrieveTarget::TabFormatted
+        | RetrieveTarget::TabPillActive
+        | RetrieveTarget::TabPillInactive => match config::parser::AppConfig::load() {
+            Ok(app_config) => {
+                println!(
+                    "{}",
+                    tabs::output::render(
+                        args.retrieve,
+                        &args.process_name,
+                        &args.working_directory,
+                        args.pane_count,
+                        &args.pane_title,
+                        &app_config
+                    )
+                );
+            }
+            Err(e) => {
+                if args.verbose {
+                    eprintln!("[autoname] encountered exception: {}", e);
+                }
+                println!("{}", tabs::output::render_error(args.retrieve));
+                std::process::exit(1);
+            }
+        },
     }
-}
-
-fn handle_error(error: String, should_verbose_log: bool, retrieve: &str) {
-    if should_verbose_log {
-        eprintln!("[autoname] encountered exception: {}", error);
-    }
-
-    let output_value = match retrieve {
-        "tab_icon" => "󱎘 ",
-        "tab_name" => "! N/A !",
-        "tab_colour" => "#ff6e6f",
-        "tab_name_expanded" => "! N/A !",
-        _ => unreachable!(),
-    };
-    println!("{}", output_value);
 }

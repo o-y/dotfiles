@@ -1,82 +1,134 @@
-[defaults]
-process_icon = ""
-process_colour = "#8caaee"
+# =====================================================================
+# Style & Typography System
+# =====================================================================
+[style.font]
+bold = true
+text_colour = "match_icon"
 
-[shell_override]
+[style.process_divider]
+symbol = "›"
+colour = "#c3c7d8"
+
+[style.badge_divider]
+symbol = "│"
+colour = "#c3c7d8"
+
+# =====================================================================
+# Multi-Pane Indicator
+# =====================================================================
+[panes]
 enabled = true
-shell_name = "zsh"
+icon = "󰝘"
+colour = "match_left"
+
+# =====================================================================
+# Custom Directory Rules
+# =====================================================================
+[[directories.rules]]
+path = "/"
 icon = ""
 colour = "#f3f59d"
+process_context = true
 
-[directories.google]
+# When sitting exactly in the home directory (`~`), hide directory context (`~ › cli` becomes just `cli`).
+[[directories.rules]]
+path = "~"
+exact = true
+icon = ""
+colour = "#f3f59d"
+process_context = false
+
+[[directories.rules]]
 path = "/google/src/cloud/"
 icon = ""
 colour = "#ea999c"
-extract_tab_name = "^/google/src/cloud/[^/]+/([^/]+)/[^/]+$"
+display_name_pattern = "^/google/src/cloud/[^/]+/([^/]+)/[^/]+$"
+process_context = true
 
-[[process]]
-names = ["zsh"]
+# =====================================================================
+# Process Mapping Rules
+# =====================================================================
+[processes.default]
 icon = ""
+colour = "#8caaee"
 
-[[process]]
+[[processes.rules]]
+names = ["zsh", "bash", "fish", "sh", "nu"]
+icon = ""
+ignored = true
+
+[[processes.rules]]
+names = ["cli", "jetski"]
+icon = "󰚩"
+colour = "#caaafe"
+static_display_name = "jetski"
+
+[[processes.rules]]
 names = ["nvim"]
 icon = ""
 colour = "#81c8be"
 
-[[process]]
+[[processes.rules]]
 names = ["hwatch", "watch"]
 icon = ""
 colour = "#ca9ee6"
 
-[[process]]
+[[processes.rules]]
 names = ["cargo", "rustc"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["go"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["apt"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["brew"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["docker"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["node"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["tmux"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["top", "btop"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["gcc", "clang"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["make", "cmake"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["pip", "pip3", "python", "python3"]
 icon = ""
 
-[[process]]
+[[processes.rules]]
 names = ["jj"]
 icon = ""
 
-[[process]]
-names = ["blaze", "bazel"]
+[[processes.rules]]
+names = ["blaze", "bazel", "rabbit"]
 icon = ""
 colour = "#4A9A4C"
+static_display_name = "blaze"
+
+[[processes.rules]]
+names = ["ssh", "mosh"]
+icon = "󰣀"
+colour = "#ca9ee6"
+display_name_pattern = "(?:ssh|mosh)\\s+(?:[^@\\s]+@)?([^\\s]+)"
