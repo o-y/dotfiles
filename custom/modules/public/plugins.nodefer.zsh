@@ -4,7 +4,7 @@ S_PLUGINS=(
     zsh-completions/zsh-completions.plugin.zsh
     fzf-tab/fzf-tab.zsh
     zsh-autosuggestions/zsh-autosuggestions.zsh
-    zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    zsh-patina/zsh-patina.zsh
 )
 
 local -a deferred_plugins

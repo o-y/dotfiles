@@ -26,10 +26,21 @@ _compiler_process_file() {
     return
   fi
 
+  local is_post=0
+  [[ "$file" == *.post.* ]] && is_post=1
+
   if _compiler_should_defer "$file" "$mode"; then
-    defer_files+=("$file")
+    if (( is_post )); then
+      defer_post_files+=("$file")
+    else
+      defer_files+=("$file")
+    fi
   else
-    sync_files+=("$file")
+    if (( is_post )); then
+      sync_post_files+=("$file")
+    else
+      sync_files+=("$file")
+    fi
   fi
 }
 
@@ -56,7 +67,7 @@ generate_static_loader() {
   local output_file="$STATIC_LOADER"
   local tmp_zsh="${output_file}.tmp"
   local tmp_zwc="${output_file}.zwc.tmp"
-  local sync_files=() defer_files=() skipped_files=()
+  local sync_files=() sync_post_files=() defer_files=() defer_post_files=() skipped_files=()
 
   for file in "$MODULES_DIR"/dependencies/**/*.zsh(N); do
     _compiler_process_file "$file" "sync"
@@ -76,12 +87,22 @@ generate_static_loader() {
       _compiler_emit_file "$f"
     done
 
+    # Synchronous post files are emitted at the end of the sync block
+    for f in "${sync_post_files[@]}"; do
+      _compiler_emit_file "$f"
+    done
+
     echo "zsh_post_init"
     echo ""
 
-    if (( ${#defer_files} )); then
+    if (( ${#defer_files} || ${#defer_post_files} )); then
       echo "_zsh_deferred_load() {"
       for f in "${defer_files[@]}"; do
+        _compiler_emit_file "$f" "  "
+      done
+
+      # Deferred post files are emitted at the absolute end of the deferred block
+      for f in "${defer_post_files[@]}"; do
         _compiler_emit_file "$f" "  "
       done
       echo "}"

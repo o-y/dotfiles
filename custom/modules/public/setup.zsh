@@ -55,4 +55,3 @@ if [[ -d "$NVM_DIR" ]]; then
         eval "$cmd() { _lazy_load_nvm $cmd \"\$@\" }"
     done
 fi
-
