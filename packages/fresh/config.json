@@ -1,4 +1,18 @@
 {
-  "version": 1,
-  "theme": "builtin://terminal"
+  "version": 2,
+  "theme": "builtin://terminal",
+  "active_keybinding_map": "vscode",
+  "plugins": {
+    "vi_mode": {
+      "enabled": true,
+      "settings": {
+        "autoStart": false,
+        "arrowKeys": true,
+        "searchWordUnderCursor": true
+      }
+    }
+  },
+  "file_explorer": {
+    "follow_active_buffer": true
+  }
 }

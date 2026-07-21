@@ -106,3 +106,10 @@ keybind = ctrl+i=text:
 ##
 # Reciever: tmux - ctrl+shift+o -> sends  (E013)
 keybind = ctrl+shift+o=text:
+
+
+##
+## Create a new floating pane
+##
+# Reciever: tmux - ctrl+shift+n -> sends  (E014)
+keybind = ctrl+shift+n=text:
