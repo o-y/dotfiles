@@ -1,5 +1,5 @@
-S_PLUGINS_DIRECTORY="$HOME/dotfiles/custom/static/zsh-custom/plugins"
-S_PLUGINS=(
+local S_PLUGINS_DIRECTORY="$HOME/dotfiles/custom/static/zsh-custom/plugins"
+local S_PLUGINS=(
     zsh-autocomplete/zsh-autocomplete.plugin.zsh
     zsh-completions/zsh-completions.plugin.zsh
     fzf-tab/fzf-tab.zsh
