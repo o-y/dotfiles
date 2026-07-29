@@ -1,12 +1,5 @@
-patina_bins=(
-    $commands[zsh-patina]
-    ~/.cargo/bin/zsh-patina
-    /usr/local/bin/zsh-patina
-)
-
-for bin in $patina_bins; do
-    if [[ -x $bin ]]; then
-        eval "$("$bin" activate)"
-        return
-    fi
-done
+_eval_binary \
+    "$commands[zsh-patina]" \
+    "/usr/local/bin/zsh-patina" \
+    "~/.cargo/bin/zsh-patina" \
+    -- activate || return 1

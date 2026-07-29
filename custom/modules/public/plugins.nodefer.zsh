@@ -1,40 +1,74 @@
 local S_PLUGINS_DIRECTORY="$HOME/dotfiles/custom/static/zsh-custom/plugins"
 local S_PLUGINS=(
-    zsh-autocomplete/zsh-autocomplete.plugin.zsh
-    zsh-completions/zsh-completions.plugin.zsh
-    fzf-tab/fzf-tab.zsh
-    zsh-autosuggestions/zsh-autosuggestions.zsh
-    zsh-patina/zsh-patina.zsh
+    # ---- Syntax highlighting
+    "zsh-patina/zsh-patina.zsh || zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    
+    # ---- Completions
+        # ~ Registry
+       "zsh-completions/zsh-completions.plugin.zsh"
+
+        # ~ Inline ghost completions
+        # "zsh-autosuggestions/zsh-autosuggestions.zsh || deja/deja.zsh"
+
+        # ~ Live completions
+        # "zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+    
+        # ~ Fig-like completions
+        "iris/iris.zsh"
+
+        # Completions on tab
+        # "fzf-tab/fzf-tab.zsh"
 )
 
 local -a deferred_plugins
 
-for plugin in $S_PLUGINS; do
+_source_plugin() {
+    local entry="$1"
+    # Parse candidate fallbacks
+    local -a candidates=("${(@s/||/)entry}")
+    local candidate target_file
+    
+    for candidate in "${candidates[@]}"; do
+        candidate="$(echo "$candidate" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+        target_file="$S_PLUGINS_DIRECTORY/$candidate"
+        
+        if [[ ! -f "$target_file" ]]; then
+            continue
+        fi
+        
+        if source "$target_file"; then
+            return 0
+        else
+            echo "[!] plugin :: initialisation failed for: $candidate. trying fallback..." >&2
+        fi
+    done
+    
+    return 1
+}
+
+for plugin_entry in "${S_PLUGINS[@]}"; do
     local is_deferred=0
     
-    if [[ $plugin == ^* ]]; then
+    if [[ $plugin_entry == ^* ]]; then
         is_deferred=1
-        plugin="${plugin#^}" 
-    fi
-
-    target_file="$S_PLUGINS_DIRECTORY/$plugin"
-    
-    if [[ ! -f "$target_file" ]]; then
-        echo "[Warn] Plugin not found: $target_file" >&2
-        continue
+        plugin_entry="${plugin_entry#^}" 
     fi
 
     if (( is_deferred )); then
-        deferred_plugins+=("$target_file")
+        deferred_plugins+=("$plugin_entry")
     else
-        source "$target_file"
+        if ! _source_plugin "$plugin_entry"; then
+            echo "[Error] All candidates failed for plugin entry: $plugin_entry" >&2
+        fi
     fi
 done
 
 _load_deferred_batch() {
-    local plugin
-    for plugin in "$@"; do
-        source "$plugin"
+    local entry
+    for entry in "$@"; do
+        if ! _source_plugin "$entry"; then
+            echo "[Error] All deferred candidates failed for plugin entry: $entry" >&2
+        fi
     done
 }
 
