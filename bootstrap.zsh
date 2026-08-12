@@ -19,6 +19,8 @@ dependencies_darwin=(
   "navi" "brew install navi"
   "zoxide" "brew install zoxide"
   "pipx" "brew install pipx"
+  "skhd" "brew install jackielii/tap/skhd-zig"
+  "yabai" "brew install asmvik/formulae/yabai"
 )
 
 # dependencies for Linux
