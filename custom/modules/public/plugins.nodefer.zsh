@@ -1,23 +1,23 @@
 local S_PLUGINS_DIRECTORY="$HOME/dotfiles/custom/static/zsh-custom/plugins"
 local S_PLUGINS=(
     # ---- Syntax highlighting
-    "zsh-patina/zsh-patina.zsh || zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || zsh-patina/zsh-patina.zsh"
     
     # ---- Completions
         # ~ Registry
        "zsh-completions/zsh-completions.plugin.zsh"
 
         # ~ Inline ghost completions
-        # "zsh-autosuggestions/zsh-autosuggestions.zsh || deja/deja.zsh"
+        "zsh-autosuggestions/zsh-autosuggestions.zsh || deja/deja.zsh"
 
         # ~ Live completions
-        # "zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+        "zsh-autocomplete/zsh-autocomplete.plugin.zsh"
     
         # ~ Fig-like completions
-        "iris/iris.zsh"
+        # "iris/iris.zsh"
 
         # Completions on tab
-        # "fzf-tab/fzf-tab.zsh"
+        "fzf-tab/fzf-tab.zsh"
 )
 
 local -a deferred_plugins

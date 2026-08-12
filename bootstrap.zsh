@@ -118,8 +118,10 @@ stows_common=(
 # symlinks for MacOS
 stows_darwin=(
   skhd
-  yabai
+  aegis:~/.config/aegis
+  yabai:~/.config/yabai
   aerospace:~/.config/aerospace
+  sketchybar:~/.config/sketchybar
 )
 
 # symlinks for Linux

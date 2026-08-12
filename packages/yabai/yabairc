@@ -1,0 +1,86 @@
+#!/usr/bin/env sh
+
+# load yabai
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+# global settings
+yabai -m config mouse_follows_focus          off
+yabai -m config focus_follows_mouse          off
+yabai -m config window_placement             second_child
+yabai -m config window_topmost               off
+yabai -m config window_shadow                off
+yabai -m config window_opacity               off
+yabai -m config window_opacity_duration      0.0
+yabai -m config active_window_opacity        1.0
+yabai -m config normal_window_opacity        0.90
+yabai -m config insert_feedback_color        0xff6e6f
+yabai -m config split_ratio                  0.50
+yabai -m config auto_balance                 off
+yabai -m config mouse_modifier               fn
+yabai -m config mouse_action1                move
+yabai -m config mouse_action2                resize
+yabai -m config mouse_drop_action            stack
+
+# borders
+borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0 &
+
+# general space settings
+yabai -m config layout                       bsp
+yabai -m config top_padding                  12
+yabai -m config bottom_padding               12
+yabai -m config left_padding                 12
+yabai -m config right_padding                12
+yabai -m config window_gap                   12
+
+# Ignore Applications
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Activity Monitor$" manage=off
+yabai -m rule --add app="^Archive Utility$" manage=off
+yabai -m rule --add app="^JetBrains Toolbox" manage=off
+yabai -m rule --add app="^QuickTime Player" manage=off
+yabai -m rule --add app="^Tailscale" manage=off
+
+# Finder (moving spaces forces yabai to recompose, which works around the fact macos treats tabs as new windows)
+yabai -m signal --add app='^Finder$' event=window_created action='yabai -m space --focus next; sleep 0.01; yabai -m space --focus prev'
+yabai -m signal --add app='^Finder$' event=window_destroyed action='yabai -m space --focus next; sleep 0.01; yabai -m space --focus prev'
+
+# Sticky Applications
+yabai -m rule --add app="^Google Chrome$" title="^Picture in Picture$" manage=off sticky=on
+yabai -m rule --add app="^Digital Colour Meter$" manage=off sticky=on
+
+echo "yabai configuration loaded..."
+
+# AEGIS_INTEGRATION_START
+# Aegis window manager integration - DO NOT EDIT THIS SECTION
+AEGIS_NOTIFY="$HOME/.config/aegis/aegis-yabai-notify"
+yabai -m signal --remove aegis_space_changed 2>/dev/null || true
+yabai -m signal --remove aegis_space_created 2>/dev/null || true
+yabai -m signal --remove aegis_space_destroyed 2>/dev/null || true
+yabai -m signal --remove aegis_window_focused 2>/dev/null || true
+yabai -m signal --remove aegis_window_created 2>/dev/null || true
+yabai -m signal --remove aegis_window_destroyed 2>/dev/null || true
+yabai -m signal --remove aegis_window_moved 2>/dev/null || true
+yabai -m signal --remove aegis_window_minimized 2>/dev/null || true
+yabai -m signal --remove aegis_window_deminimized 2>/dev/null || true
+yabai -m signal --remove aegis_application_launched 2>/dev/null || true
+yabai -m signal --remove aegis_application_terminated 2>/dev/null || true
+yabai -m signal --remove aegis_application_front_switched 2>/dev/null || true
+yabai -m signal --remove aegis_application_hidden 2>/dev/null || true
+yabai -m signal --remove aegis_application_visible 2>/dev/null || true
+yabai -m signal --add event=space_changed action="YABAI_EVENT_TYPE=space_changed $AEGIS_NOTIFY" label=aegis_space_changed
+yabai -m signal --add event=space_created action="YABAI_EVENT_TYPE=space_created $AEGIS_NOTIFY" label=aegis_space_created
+yabai -m signal --add event=space_destroyed action="YABAI_EVENT_TYPE=space_destroyed $AEGIS_NOTIFY" label=aegis_space_destroyed
+yabai -m signal --add event=window_focused action="YABAI_EVENT_TYPE=window_focused $AEGIS_NOTIFY" label=aegis_window_focused
+yabai -m signal --add event=window_created action="YABAI_EVENT_TYPE=window_created $AEGIS_NOTIFY" label=aegis_window_created
+yabai -m signal --add event=window_destroyed action="YABAI_EVENT_TYPE=window_destroyed $AEGIS_NOTIFY" label=aegis_window_destroyed
+yabai -m signal --add event=window_moved action="YABAI_EVENT_TYPE=window_moved $AEGIS_NOTIFY" label=aegis_window_moved
+yabai -m signal --add event=window_minimized action="YABAI_EVENT_TYPE=window_minimized $AEGIS_NOTIFY" label=aegis_window_minimized
+yabai -m signal --add event=window_deminimized action="YABAI_EVENT_TYPE=window_deminimized $AEGIS_NOTIFY" label=aegis_window_deminimized
+yabai -m signal --add event=application_launched action="YABAI_EVENT_TYPE=application_launched $AEGIS_NOTIFY" label=aegis_application_launched
+yabai -m signal --add event=application_terminated action="YABAI_EVENT_TYPE=application_terminated $AEGIS_NOTIFY" label=aegis_application_terminated
+yabai -m signal --add event=application_front_switched action="YABAI_EVENT_TYPE=application_front_switched $AEGIS_NOTIFY" label=aegis_application_front_switched
+yabai -m signal --add event=application_hidden action="YABAI_EVENT_TYPE=application_hidden $AEGIS_NOTIFY" label=aegis_application_hidden
+yabai -m signal --add event=application_visible action="YABAI_EVENT_TYPE=application_visible $AEGIS_NOTIFY" label=aegis_application_visible
+# AEGIS_INTEGRATION_END
