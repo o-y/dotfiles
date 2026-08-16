@@ -3,8 +3,18 @@
 # ==============================================================================
 # Note: cmd + space is taken for Raycast
 
-# --- ALIASES ---
+# --- DEFINITIONS ---
+
+.device my_keyboard { vendor: 0x05AC, product: 0x0342 }
+.remap caps_lock [device my_keyboard] : f19
+
+# Default leader key for all actions
 .alias $mod alt
+.alias $secondary_mod ctrl
+.alias $chord f19
+
+# Set sequence timeout for chords 
+.sequence_timeout 400ms
 
 # --- COMMAND DEFINITIONS ---
 .define focus_window         : yabai -m window --focus {{1}} || yabai -m display --focus {{1}}
@@ -14,7 +24,10 @@
 .define resize_window_v      : yabai -m window --resize top:0:{{1}}; yabai -m window --resize bottom:0:{{1}}
 .define resize_window_h      : yabai -m window --resize right:{{1}}:0; yabai -m window --resize left:{{1}}:0
 
+.define focus_space          : yabai -m space --focus {{1}}
 .define send_to_space        : yabai -m window --space {{1}}
+.define send_and_focus_space : yabai -m window --space {{1}}; yabai -m space --focus {{1}}
+
 .define toggle_window_state  : yabai -m window --toggle {{1}}
 .define cycle_stack          : yabai -m window --focus stack.{{1}} || yabai -m window --focus stack.{{2}}
 
@@ -37,7 +50,6 @@ cmd + shift - j   : yabai -m display --focus west
 
 # Focus window under mouse (`)
 $mod - 0x32       : yabai -m window --focus mouse
-
 
 # ==============================================================================
 # 2. WINDOW MOVEMENT
@@ -69,27 +81,42 @@ $mod + fn - j     : @resize_window_h("-50")
 # 4. WINDOW INSERTION
 # ==============================================================================
 
+#
 # Set insertion point of new window for focused container
-$mod + ctrl - i   : @insert_window("north")
-$mod + ctrl - l   : @insert_window("east")
-$mod + ctrl - k   : @insert_window("south")
-$mod + ctrl - j   : @insert_window("west")
+#
+# DISABLED - I never used this, $mod + $secondary_mod is better used elsewhere.
+#
+# $mod + $secondary_mod - i   : @insert_window("north")
+# $mod + $secondary_mod - l   : @insert_window("east")
+# $mod + $secondary_mod - k   : @insert_window("south")
+# $mod + $secondary_mod - j   : @insert_window("west")
 
 
 # ==============================================================================
 # 5. SPACES MANAGEMENT
 # ==============================================================================
 
-# Send window to space
-$mod + shift - 1  : @send_to_space("1")
-$mod + shift - 2  : @send_to_space("2")
-$mod + shift - 3  : @send_to_space("3")
-$mod + shift - 4  : @send_to_space("4")
-$mod + shift - 5  : @send_to_space("5")
-$mod + shift - 6  : @send_to_space("6")
-$mod + shift - 7  : @send_to_space("7")
-$mod + shift - 8  : @send_to_space("8")
-$mod + shift - 9  : @send_to_space("9")
+# Focus a space
+$chord, 1   : @focus_space("1")
+$chord, 2   : @focus_space("2")
+$chord, 3   : @focus_space("3")
+$chord, 4   : @focus_space("4")
+$chord, 5   : @focus_space("5")
+$chord, 6   : @focus_space("6")
+$chord, 7   : @focus_space("7")
+$chord, 8   : @focus_space("8")
+$chord, 9   : @focus_space("9")
+
+# Send window to space AND follow
+$chord, 1, 1  : @send_and_focus_space("1")
+$chord, 2, 2  : @send_and_focus_space("2")
+$chord, 3, 3  : @send_and_focus_space("3")
+$chord, 4, 4  : @send_and_focus_space("4")
+$chord, 5, 5  : @send_and_focus_space("5")
+$chord, 6, 6  : @send_and_focus_space("6")
+$chord, 7, 7  : @send_and_focus_space("7")
+$chord, 8, 8  : @send_and_focus_space("8")
+$chord, 9, 9  : @send_and_focus_space("9")
 
 # Go back to recent space
 $mod - z          : yabai -m space --focus recent
@@ -140,11 +167,11 @@ $mod - m  : id=$(yabai -m query --windows | jq -re '.[] | select(.["is-minimized
 # ==============================================================================
 
 # Cycle backward/forward through the current stack
-$mod + cmd - j     : @cycle_stack("prev", "last")
-$mod + cmd - l     : @cycle_stack("next", "first")
+$mod + cmd - j    : @cycle_stack("prev", "last")
+$mod + cmd - l    : @cycle_stack("next", "first")
 
 # Toggle stack script
-$mod + shift - s  : ~/.config/yabai/scripts/toggle_stack.zsh
+$mod + cmd - s    : ~/.config/yabai/scripts/toggle_stack.zsh
 
 # Restart Yabai service
 $mod - c          : yabai --restart-service

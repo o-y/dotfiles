@@ -1,35 +1,39 @@
 local S_PLUGINS_DIRECTORY="$HOME/dotfiles/custom/static/zsh-custom/plugins"
 local S_PLUGINS=(
     # ---- Syntax highlighting
-    "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh || zsh-patina/zsh-patina.zsh"
+    "^zsh-patina/zsh-patina.zsh || ^zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
     
     # ---- Completions
         # ~ Registry
-       "zsh-completions/zsh-completions.plugin.zsh"
+       "^zsh-completions/zsh-completions.plugin.zsh"
 
         # ~ Inline ghost completions
-        "zsh-autosuggestions/zsh-autosuggestions.zsh || deja/deja.zsh"
+        "^zsh-autosuggestions/zsh-autosuggestions.zsh || ^deja/deja.zsh"
 
         # ~ Live completions
-        "zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+        "^zsh-autocomplete/zsh-autocomplete.plugin.zsh"
     
         # ~ Fig-like completions
         # "iris/iris.zsh"
 
         # Completions on tab
-        "fzf-tab/fzf-tab.zsh"
+        "^fzf-tab/fzf-tab.zsh"
 )
 
 local -a deferred_plugins
 
 _source_plugin() {
     local entry="$1"
-    # Parse candidate fallbacks
+    # Parse candidate fallbacks (supports infinite || chains)
     local -a candidates=("${(@s/||/)entry}")
     local candidate target_file
     
     for candidate in "${candidates[@]}"; do
+        # 1. Strip whitespace
         candidate="$(echo "$candidate" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+        # 2. Strip the leading '^' from the individual candidate to ensure a clean file path
+        candidate="${candidate#^}"
+        
         target_file="$S_PLUGINS_DIRECTORY/$candidate"
         
         if [[ ! -f "$target_file" ]]; then
@@ -49,9 +53,9 @@ _source_plugin() {
 for plugin_entry in "${S_PLUGINS[@]}"; do
     local is_deferred=0
     
-    if [[ $plugin_entry == ^* ]]; then
+    # Check if the string starts with ^, OR if any fallback starts with ^
+    if [[ $plugin_entry == ^* ]] || [[ $plugin_entry == *"|| ^"* ]] || [[ $plugin_entry == *"||^"* ]]; then
         is_deferred=1
-        plugin_entry="${plugin_entry#^}" 
     fi
 
     if (( is_deferred )); then

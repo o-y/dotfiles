@@ -62,7 +62,7 @@ _eval_cache() {
 # executes the binary.
 #
 # Usage:
-#   _eval_binary PATH_CANDIDATE... -- INIT_ARG...
+#   _eval_binary [--no-eval-cache] PATH_CANDIDATE... -- INIT_ARG...
 #
 # Example:
 #   _eval_binary "$commands[foo]" "~/.cargo/bin/foo" -- init zsh
@@ -71,16 +71,20 @@ _eval_binary() {
   local candidates=()
   local args=()
   local parsing_paths=1
+  local use_cache=1
   local arg bin
 
   for arg in "$@"; do
+    # Stop parsing paths/flags once we hit the -- separator
     if [[ "$arg" == "--" && $parsing_paths -eq 1 ]]; then
       parsing_paths=0
       continue
     fi
 
     if (( parsing_paths )); then
-      if [[ -n "$arg" ]]; then 
+      if [[ "$arg" == "--no-eval-cache" ]]; then
+        use_cache=0
+      elif [[ -n "$arg" ]]; then 
         candidates+=("${~arg}")
       fi
     else
@@ -90,7 +94,7 @@ _eval_binary() {
 
   for bin in "${candidates[@]}"; do
     if [[ -x $bin ]]; then
-      if (( $+functions[_eval_cache] || $+commands[_eval_cache] )); then
+      if [[ $use_cache -eq 1 ]] && (( $+functions[_eval_cache] || $+commands[_eval_cache] )); then
         _eval_cache "$bin" "${args[@]}" 2>/dev/null
         return $? 
       else

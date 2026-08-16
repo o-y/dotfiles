@@ -25,13 +25,27 @@ zsh_pre_init() {
 }
 
 _load_compinit() {
+    setopt local_options extended_glob
+
     zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
     zstyle :compinstall filename "$PWD"
-    setopt local_options extended_glob
-    zstyle ':completion:*:descriptions' format '%F{yellow}%B%d%b%f'
     zstyle ':completion:*' menu select
     zstyle ':completion:*' list-cols 1 
+
+    # Colour descriptions, messages, warnings, etc.
+    zstyle ':completion:*:*:*:*:descriptions' format '%F{yellow}%B%d%b%f'
+    zstyle ':completion:*:*:*:*:messages' format '%F{purple}%B%d%b%f'
+    zstyle ':completion:*:*:*:*:warnings' format '%F{red}%BNo matches for: %d%b%f'
+
+    # Remove the prefix . whilst in fzf-tab
+    zstyle ':fzf-tab:*' prefix ''
+
+    # Remove the header if in fzf-tab.
+    zstyle ':fzf-tab:*' show-group none
+
+    # Force Zsh to group matches by their tag name
+    zstyle ':completion:*' group-name ''
 
     unset -f compdef
     autoload -Uz compinit

@@ -23,6 +23,7 @@
   "buttonLabelExpandedWidth" : 95,
   "collapseAnimationDamping" : 0.8,
   "collapseAnimationResponse" : 0.25,
+  "customBorderColor" : "#ecf0f1",
   "dateFormat" : "long",
   "deviceHUDAutoHideDelay" : 3,
   "dragDistanceThreshold" : 3,
