@@ -1,29 +1,3 @@
-###
-### HOOK: Called before any modules are sourced
-###
-zsh_pre_init() {
-    # 1. Cache: stub compdef to queue completion requests until compinit is loaded
-    typeset -ga _comp_def_queue
-    compdef() { 
-      _comp_def_queue+=("$*")
-    }
-
-    ###
-    ### Execute Tmux
-    ###
-    ### In the interest of entering tmux in the fast path, we attempt
-    ### to extract the binary location, as we haven't yet sourced the
-    ### modules which add cargo, brew, etc to the $PATH.
-    ###
-    if [[ -e "$HOME/.execute-tmux-on-init" ]]; then
-        if [ -e "/opt/homebrew/bin/tmux" ]; then
-            start_tmux "/opt/homebrew/bin/tmux"
-        elif type tmux &> /dev/null; then
-            start_tmux "tmux"
-        fi
-    fi
-}
-
 _load_compinit() {
     setopt local_options extended_glob
 
@@ -61,16 +35,42 @@ _load_compinit() {
 
     # 3. Replay: Use the global _comp_def_queue array and load these into the context
     for cmd in "${_comp_def_queue[@]}"; do
-        compdef ${(z)cmd}
+        eval "compdef $cmd"
     done
     unset _comp_def_queue
+}
+
+###
+### HOOK: Called before any modules are sourced
+###
+zsh_pre_init() {
+    # 1. Cache: stub compdef to queue completion requests until compinit is loaded
+    typeset -ga _comp_def_queue
+    compdef() { 
+      _comp_def_queue+=("${(j: :)${(q)@}}")
+    }
+
+    ###
+    ### Execute Tmux
+    ###
+    ### In the interest of entering tmux in the fast path, we attempt
+    ### to extract the binary location, as we haven't yet sourced the
+    ### modules which add cargo, brew, etc to the $PATH.
+    ###
+    if [[ -e "$HOME/.execute-tmux-on-init" ]]; then
+        if [ -e "/opt/homebrew/bin/tmux" ]; then
+            start_tmux "/opt/homebrew/bin/tmux"
+        elif type tmux &> /dev/null; then
+            start_tmux "tmux"
+        fi
+    fi
 }
 
 ###
 ### HOOK: Called after modules are sourced
 ###
 zsh_post_init() {
-    _load_compinit
+    zsh-defer _load_compinit
 }
 
 start_tmux() {
