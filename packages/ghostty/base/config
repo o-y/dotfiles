@@ -15,6 +15,7 @@ shell-integration-features = title,sudo,cursor,ssh-env,ssh-terminfo
 ### PLATFORM-SPECIFIC
 ###
 config-file = ?platform-config
+config-file = ?tode/keybinds.ghostty
 
 ###
 ### LINK DETECTION

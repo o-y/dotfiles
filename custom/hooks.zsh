@@ -70,7 +70,7 @@ zsh_pre_init() {
 ### HOOK: Called after modules are sourced
 ###
 zsh_post_init() {
-    zsh-defer _load_compinit
+    _load_compinit
 }
 
 start_tmux() {
