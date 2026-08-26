@@ -168,19 +168,19 @@ _qpeek_prompt_selection() {
 
     local key="" rest=""
     if (( auto_execute == 1 )); then
-      # Non-blocking read with 0.1s timeout
+      # non-blocking read with 0.1s timeout
       if read -rs -t 0.1 -k 1 key; then
-        auto_execute=0 # User intervened, cancel auto-execute
+        auto_execute=0 # user intervened, cancel auto-execute
       else
         (( ticks-- ))
         if (( ticks <= 0 )); then
-          break # Timer reached 0, execute
+          break # timer reached 0, execute
         fi
         print -n "${esc}[3A\r${esc}[J"
         continue
       fi
     else
-      # Standard blocking read
+      # standard blocking read
       read -rs -k 1 key
     fi
 
@@ -192,21 +192,21 @@ _qpeek_prompt_selection() {
           '[C') (( current = current == count ? 1 : current + 1 )) ;; # Right
         esac
         ;;
-      $'\n'|$'\r') # Enter
+      $'\n'|$'\r') # enter
         break
         ;;
-      'q') # Exit
+      'q') # exit
         print -n "${esc}[?25h${esc}[4A\r${esc}[J" 
         trap - INT
         return 1
         ;;
     esac
 
-    # Clear UI for the next loop iteration (3 lines: options, gap, timer/empty)
+    # clear UI for the next loop iteration (3 lines: options, gap, timer/empty)
     print -n "${esc}[3A\r${esc}[J"
   done
 
-  # Clear UI completely, restore cursor, and pass back selection
+  # clear UI completely, restore cursor, and pass back selection
   print -n "${esc}[?25h${esc}[4A\r${esc}[J"
   trap - INT
   
@@ -221,7 +221,7 @@ qpeek() {
   shift
   local args=("$@")
   
-  # Allow clearing cache manually
+  # allow clearing cache manually
   if [[ "$file" == "--clear-cache" ]]; then
     local cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/qpeek/history"
     [[ -f "$cache_file" ]] && rm -f "$cache_file"
