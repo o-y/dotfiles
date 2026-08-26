@@ -13,18 +13,3 @@ alias zsh_bench="hyperfine --runs 150 --warmup 40 'zsh -i -c exit'"
 
 # cd util
 mkcd () { mkdir "$@" && cd "$@"; }
-
-# edit
-function edit() {
-    local editor
-    (( $+commands[fresh] )) && editor="fresh" || editor="nano"
-
-    if [[ ! -t 0 ]]; then
-        local tmpfile=$(mktemp "${TMPDIR:-/tmp}/edit.XXXXXX")
-        cat > "$tmpfile"
-        $editor "$tmpfile" < /dev/tty > /dev/tty
-        rm -f "$tmpfile"
-    else
-        $editor "$@"
-    fi
-}
