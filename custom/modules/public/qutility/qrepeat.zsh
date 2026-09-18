@@ -62,39 +62,3 @@ _qrepeat() {
     _normal
 }
 compdef _qrepeat qrepeat
-
-##
-## qrepeat live hints
-##
-# _qrepeat_live_hints() {
-#     if [[ "$BUFFER" == qrepeat\ * ]]; then
-#         _QREPEAT_HINT_ACTIVE=1
-#         local -a current_words
-#         current_words=(${(z)BUFFER})
-        
-#         local word_count=${#current_words[@]}
-#         [[ "$BUFFER" =~ " $" ]] && ((word_count++))
-
-#         local hint=""
-#         case $word_count in
-#             2) 
-#                 hint="󰁔 <interval> (e.g. 5s, 2m, 1h, 3d)" 
-#                 ;;
-#             *) 
-#                 hint="󰁔 <command> (to execute every ${current_words[2]})"
-#                 ;;
-#         esac
-
-#         if [[ -n "$hint" ]]; then
-#             zle -M "$hint"
-#         else
-#             zle -M ""
-#         fi
-#     elif (( _QREPEAT_HINT_ACTIVE == 1 )); then
-#         _QREPEAT_HINT_ACTIVE=0
-#         zle -M ""
-#     fi
-# }
-
-# autoload -Uz add-zle-hook-widget
-# add-zle-hook-widget line-pre-redraw _qrepeat_live_hints
