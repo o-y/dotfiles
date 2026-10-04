@@ -26,18 +26,23 @@ link-url = true
 ### KEYBINDS
 ###
 
-# Unbind new tab (used by tmux)
-keybind = cmd+t=unbind
-# Unbind new window (used by tmux)
+# Unbind new tab
+# keybind = cmd+t=unbind
+# Unbind new window
 # keybind = cmd+n=unbind
+
 # Unbind detatch (used by tmux)
 keybind = ctrl+d=unbind
+
 # Unbind up (used by tmux)
 keybind = ctrl+i=unbind
+
 # Unbind down (used by tmux)
 keybind = ctrl+k=unbind
+
 # Unbind left (used by tmux)
 keybind = ctrl+j=unbind
+
 # Unbind right (used by tmux)
 keybind = ctrl+l=unbind
 

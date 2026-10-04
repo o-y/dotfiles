@@ -5,8 +5,8 @@
 
 # --- DEFINITIONS ---
 
-.device my_keyboard { vendor: 0x05AC, product: 0x0342 }
-.remap caps_lock [device my_keyboard] : f19
+.device internal { vendor:  0x0000, product: 0x0000 }
+.remap caps_lock [device internal] : f19
 
 # Default leader key for all actions
 .alias $mod alt
@@ -31,6 +31,12 @@
 .define toggle_window_state  : yabai -m window --toggle {{1}}
 .define cycle_stack          : yabai -m window --focus stack.{{1}} || yabai -m window --focus stack.{{2}}
 
+
+# ==============================================================================
+# 0. SYSTEM
+# ==============================================================================
+
+$chord, $chord   : ~/.config/yabai/scripts/toggle_caps.zsh
 
 # ==============================================================================
 # 1. WINDOW FOCUS
