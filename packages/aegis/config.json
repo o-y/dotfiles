@@ -35,8 +35,8 @@
   "enableLayoutActionHaptics" : true,
   "enableWallpaperBlur" : false,
   "excludedApps" : [
-    "Finder",
-    "Aegis"
+    "Aegis",
+    "Finder"
   ],
   "excludedBluetoothDevices" : [
     "watch"

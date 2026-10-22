@@ -5,7 +5,7 @@ __zoxide_max_width=42
 _zoxide_collapse_path() {
   local full="$1"
 
-  # Replace $HOME prefix with a literal ~ (string comparison, not glob)
+  # Replace $HOME prefix with a literal ~
   local short="$full"
   if [[ "$full" == "$HOME/"* ]]; then
     short="~/${full#"$HOME/"}"
