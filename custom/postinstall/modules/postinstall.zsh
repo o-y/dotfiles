@@ -30,6 +30,9 @@ if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
     fi
 fi
 
+################ Configure Git Remotes ###############
+git -C "$HOME/dotfiles" config --local include.path "$HOME/dotfiles/.gitremotes"
+
 ################ Install Dependencies ################
 
 # ==============================================================================

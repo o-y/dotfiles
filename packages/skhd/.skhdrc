@@ -180,4 +180,4 @@ $mod + cmd - l    : @cycle_stack("next", "first")
 $mod + cmd - s    : ~/.config/yabai/scripts/toggle_stack.zsh
 
 # Restart Yabai service
-$mod - c          : yabai --restart-service
+$mod - c          : yabai --restart-service 
