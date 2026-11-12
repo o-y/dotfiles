@@ -1,5 +1,0 @@
-[remote "origin"]
-	url = https://github.com/o-y/dotfiles
-	fetch = +refs/heads/*:refs/remotes/origin/*
-	pushurl = https://github.com/o-y/dotfiles
-	pushurl = git@depot.code.corp.goog:personal/s.git
